@@ -61,14 +61,6 @@ void cekKosong () {
 	
 }
 
-void menu() {
-	printf("|+|======================================================================================|+|\n");
-	printf("|+|                                                                                      |+|\n");
-	printf("|+|                                         GaAntre                                      |+|\n");
-	printf("|+|                                Ga Perlu CAPE-CAPE Ngantre                            |+|\n");
-	printf("|+|                                                                                      |+|\n");
-	printf("|+|======================================================================================|+|\n");
-}
 
 Tree push () {
 	
@@ -100,4 +92,5 @@ void daftarPengguna () {
 void antrianSekarang () {
 	// menampilkan antrian sekarang (root)
 }
+
 
