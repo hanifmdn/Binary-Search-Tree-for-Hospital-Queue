@@ -29,5 +29,16 @@ typedef struct {
 	
 
 void membuatAkun();
+void login ();
+Tree createNode ();
+void cekKosong ();
+void menu();
+Tree push ();
+Tree push ();
+void daftarAdmin ();
+void popAntrian ();
+void daftarPengguna ();
+void antrianSekarang ();
+
 
 #endif

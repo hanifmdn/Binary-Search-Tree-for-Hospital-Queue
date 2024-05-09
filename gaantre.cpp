@@ -1,12 +1,16 @@
 #include "GAANTRE.h"
 
+
 void membuatAkun () {
 	FILE *akunPengguna;
 	account akun;
-	
-	printf("Masukan username: ");
+	printf("|+|                                                                                      |+|\n");
+	printf("|+|                                      Buat Akun                                       |+|\n");
+	printf("|+|                                                                                      |+|\n");
+	printf("|+|======================================================================================|+|\n");
+	printf("|+|Masukan username: ");
 	scanf(" %[^\n]", akun.username);
-	printf("Masukan password: ");
+	printf("|+|Masukan password: ");
 	scanf(" %[^\n]", akun.password);
 	
 	akunPengguna = fopen("akunPengguna.txt", "a+");
@@ -26,8 +30,17 @@ void membuatAkun () {
 	}
 }
 
+void punyaAkun(){
+	
+}
+
+
 void login () {
 	account masuk;
+	printf("|+|                                                                                      |+|\n");
+	printf("|+|                                         LOGIN                                        |+|\n");
+	printf("|+|                                                                                      |+|\n");
+	printf("|+|======================================================================================|+|\n");
 	printf("Masukan username: ");
 	scanf(" %[^\n]", masuk.username);
 	printf("Masukan password: ");
@@ -46,6 +59,15 @@ Tree createNode () {
 
 void cekKosong () {
 	
+}
+
+void menu() {
+	printf("|+|======================================================================================|+|\n");
+	printf("|+|                                                                                      |+|\n");
+	printf("|+|                                         GaAntre                                      |+|\n");
+	printf("|+|                                Ga Perlu CAPE-CAPE Ngantre                            |+|\n");
+	printf("|+|                                                                                      |+|\n");
+	printf("|+|======================================================================================|+|\n");
 }
 
 Tree push () {
@@ -78,3 +100,4 @@ void daftarPengguna () {
 void antrianSekarang () {
 	// menampilkan antrian sekarang (root)
 }
+
