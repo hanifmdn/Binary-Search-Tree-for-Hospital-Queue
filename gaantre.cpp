@@ -82,13 +82,43 @@ void login (int *display) {
 }
 
 
-void daftarAdmin () {
+void daftarAdmin (address *root) {
+	char opsi;
+	Pasien daftar;
+	address newNode;
+	
+	printf("|+|Nama       : "); scanf(" %[^\n]", daftar.nama);
+	printf("|+|Usia       : "); scanf(" %c", &daftar.usia);  while ((getchar()) != '\n');
+	printf("|+|No.Telepon : "); scanf(" %[^\n]", daftar.noTelp);
+	printf("|+|                                                                                      |+|\n");
+	printf("|+|Pilih Prioritas Pasien:                                                               |+|\n");
+	printf("|+|1.  Prioritas 1 (Tidak Darurat)                                                       |+|\n");
+    printf("|+|2.  Prioritas 2                                                                       |+|\n");
+	printf("|+|3.  Prioritas 3                                                                       |+|\n");
+	printf("|+|4.  Prioritas 4 (Darurat)                                                             |+|\n");
+	printf("|+|Pilih opsi: "); 
+	scanf("%d", &daftar.prioritas);
+	printf("|+|edit? (y/n)");
+	scanf(" %c", &opsi);
+		if (opsi == 'y') {
+		daftarAdmin(root);
+		} 
+		newNode = createNode (daftar);
+		printf("new node ada\n");
+		if (newNode == NULL) {
+			printf("Alokasi gagal!\n");
+		} else {
+			printf("newnode tidak null");
+		}
+		*root = push(*root, daftar);
+    	printf("Pasien berhasil didaftarkan.\n");
 	// mendaftar
 	// isi nama, usia, no telp, prioritas
 	// masukan keluhan sebagai keterangan untuk dokter
 	// push ke tree
-	// menampilkan hasil daftar beserta jam daftar dan nomor antrian beliau
-}
+	// menampilkan hasil daftar beserta jam daftar dan nomor antrian beliau	
+	}
+
 
 
 void daftarPengguna (address *root) {
@@ -117,7 +147,8 @@ void daftarPengguna (address *root) {
 	printf("|+|14. Infark Miokard Non-stemi (Nyeri dada, Berkeringat dingin, Sesak napas, Mual)      |+|\n");
 	printf("|+|15. Abses Hati (Kulit Kuning, Demam Tinggi, Nyeri Abdomen, Penggumpalan Darah)        |+|\n");
 	printf("|+|--------------------------------------------------------------------------------------|+|\n");
-	printf("|+|Pilih opsi: "); scanf("%d", &daftar.penyakit);
+	printf("|+|Pilih opsi: "); 
+	scanf("%d", &daftar.penyakit);
 	printf("|+|edit? (y/n)");
 	scanf(" %c", &opsi);
 	if (opsi == 'y') {
@@ -140,9 +171,9 @@ void daftarPengguna (address *root) {
 		} else {
 			printf("newnode tidak null");
 		}
-		
+		*root = push(*root, daftar);
+    	printf("Pasien berhasil didaftarkan.\n");
 	}
-
 	// pengguna mendaftarkan
 	// isi nama, usia, no telp, pilih penyakit, ceritakan keluhan
 	// dari pilihan penyakit, di tentukan prioritasnya (bisa dibuat function)
@@ -165,16 +196,43 @@ bool cekKosong (address *root) {
 	return (root == NULL);
 }
 
-address push () {
-	
+address push(address root, Pasien info) {
+    if (root == NULL) {
+        root = createNode(info);
+    } else {
+        if (info.prioritas < root->info.prioritas) {
+            root->kiri = push(root->kiri, info);
+        } else {
+            root->kanan = push(root->kanan, info);
+        }
+    }
+    return root;
 }
 
 
-void popAntrian () {
-	// mengeluarkan node dari tree ketika orang tersebut sudah selesai konsultasi dengan dokter
+address popAntrian(address root) {
+    if (root == NULL) {
+        return NULL;
+    }
+
+    if (root->kiri == NULL) {
+        address temp = root->kanan;
+        free(root);
+        return temp;
+    }
+
 }
+
 
 
 void antrianSekarang () {
 	// menampilkan antrian sekarang (root)
 }
+
+//void displayTree(Tree root) {
+//    if (root != NULL) {
+//        displayTree(root->kiri);
+//        printf("Nama: %s, Prioritas: %d\n", root->info.nama, root->info.prioritas);
+//        displayTree(root->kanan);
+//    }
+//}

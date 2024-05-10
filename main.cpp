@@ -90,7 +90,22 @@ int main() {
 				opsi = 0;
 				break;
 			case 6:
-				// daftar antrian admin
+				printf("|+|======================================================================================|+|\n");
+				printf("|+|                                                                                      |+|\n");
+				printf("|+|                                        GaAntre                                       |+|\n");
+				printf("|+|                               Ga Perlu CAPE-CAPE Ngantre                             |+|\n");
+				printf("|+|                                                                                      |+|\n");
+				printf("|+|======================================================================================|+|\n");
+				printf("|+|                                                                                      |+|\n");
+				printf("|+|                                        Daftar                                        |+|\n");
+				printf("|+|                                                                                      |+|\n");
+				printf("|+|======================================================================================|+|\n");
+				printf("|+|Isi Formulir di bawah ini                                                             |+|\n");
+				daftarAdmin(&root);
+				//printf("Keseluruhan Antrian:\n");
+    			//displayTree(root);
+    			opsi = 0;
+				break;
 			case 7:
 				system("cls");
 				printf("|+|======================================================================================|+|\n");
@@ -129,7 +144,8 @@ int main() {
 				printf("|+|======================================================================================|+|\n");
 				printf("|+|Isi Formulir di bawah ini                                                             |+|\n");
 				daftarPengguna(&root);
-				
+				//printf("Keseluruhan Antrian:\n");
+    			//displayTree(root);
 				opsi = 0;
 				break;
 			case 9:
