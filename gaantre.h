@@ -2,7 +2,8 @@
 #define GAANTRE_H
 #include <stdio.h>
 #include <time.h>
-#include <cstring>
+#include <string.h>
+#include "boolean.h"
 
 typedef struct {
 	char nama[50];
@@ -22,23 +23,13 @@ typedef struct Tree {
 } Tree;
 
 typedef struct {
-		char username[16];
-		char password[16];	
+		char username[20];
+		char password[20];	
 		int identifier;
 } account;
 	
 
-void membuatAkun();
-void login ();
-Tree createNode ();
-void cekKosong ();
-void menu();
-Tree push ();
-Tree push ();
-void daftarAdmin ();
-void popAntrian ();
-void daftarPengguna ();
-void antrianSekarang ();
-
+void membuatAkun(int *display);
+void login (int *display);
 
 #endif
