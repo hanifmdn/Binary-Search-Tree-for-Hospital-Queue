@@ -110,8 +110,12 @@ void daftarAdmin (address *root) {
 		} else {
 			printf("newnode tidak null");
 		}
-		*root = push(*root, daftar);
-    	printf("Pasien berhasil didaftarkan.\n");
+		newNode = push(*root, daftar);
+	    if (newNode == NULL) {
+	        printf("Alokasi gagal!\n");
+	    } else {
+	        *root = newNode;
+	    }
 	// mendaftar
 	// isi nama, usia, no telp, prioritas
 	// masukan keluhan sebagai keterangan untuk dokter
@@ -166,13 +170,19 @@ void daftarPengguna (address *root) {
 		
 		newNode = createNode (daftar);
 		printf("new node ada\n");
+		
 		if (newNode == NULL) {
 			printf("Alokasi gagal!\n");
 		} else {
 			printf("newnode tidak null");
 		}
-		*root = push(*root, daftar);
-    	printf("Pasien berhasil didaftarkan.\n");
+		
+		newNode = push(*root, daftar);
+	    if (newNode == NULL) {
+	        printf("Alokasi gagal!\n");
+	    } else {
+	        *root = newNode;
+	    }
 	}
 	// pengguna mendaftarkan
 	// isi nama, usia, no telp, pilih penyakit, ceritakan keluhan
@@ -197,30 +207,34 @@ bool cekKosong (address *root) {
 }
 
 address push(address root, Pasien info) {
-    if (root == NULL) {
-        root = createNode(info);
-    } else {
-        if (info.prioritas < root->info.prioritas) {
-            root->kiri = push(root->kiri, info);
-        } else {
-            root->kanan = push(root->kanan, info);
-        }
+	if (cekKosong(root)) {
+        return createNode(info);
     }
+
+    if (info.prioritas < root->info.prioritas) {
+        root->kiri = push(root->kiri, info);
+    } else {
+        root->kanan = push(root->kanan, info);
+    }
+
     return root;
 }
 
 
+
 address popAntrian(address root) {
-    if (root == NULL) {
-        return NULL;
-    }
-
-    if (root->kiri == NULL) {
-        address temp = root->kanan;
-        free(root);
-        return temp;
-    }
-
+//    if (cekKosong(root)) {
+//        return NULL;
+//    }
+//
+//    if (root->kiri == NULL) {
+//        address temp = root->kanan;
+//        free(root);
+//        return temp;
+//    }
+//    
+//	root->kiri = popAntrian(root->kiri);
+//    return root;
 }
 
 
