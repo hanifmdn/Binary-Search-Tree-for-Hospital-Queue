@@ -1,6 +1,7 @@
 #ifndef GAANTRE_H
 #define GAANTRE_H
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 #include <string.h>
 #include "boolean.h"
@@ -31,5 +32,11 @@ typedef struct {
 
 void membuatAkun(int *display);
 void login (int *display);
+void daftarAdmin (address *root);
+void daftarPengguna (address *root);
+address createNode (Pasien info);
+bool cekKosong (address *root);
+address push(address root, Pasien info);
+void displayTree(Tree root); 
 
 #endif
