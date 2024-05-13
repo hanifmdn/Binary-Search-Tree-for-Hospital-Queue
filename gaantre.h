@@ -36,7 +36,8 @@ void daftarAdmin (address *root);
 void daftarPengguna (address *root);
 address createNode (Pasien info);
 bool cekKosong (address *root);
-address push(address root, Pasien info);
+address push (address root, Pasien info);
+address pop (address root, Pasien *info);
 void displayTree(Tree root); 
 
 #endif

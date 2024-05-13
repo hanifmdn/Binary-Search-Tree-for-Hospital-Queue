@@ -27,7 +27,7 @@ void membuatAkun (int *display) {
 	}
 		
 	if (!ditemukan) {
-		fprintf(akunPengguna, "%s %s %d\n", akun.username, akun.password, 0);
+		fprintf(akunPengguna, "%s %s %d\n", akun.username, akun.password, 0, 0);
 		printf("|+|Akun berhasil dibuat!\n\n");
 		*display = 4;
 		fclose(akunPengguna);
@@ -168,21 +168,8 @@ void daftarPengguna (address *root) {
 			daftar.prioritas = 3;
 		}
 		
-		newNode = createNode (daftar);
-		printf("new node ada\n");
-		
-		if (newNode == NULL) {
-			printf("Alokasi gagal!\n");
-		} else {
-			printf("newnode tidak null");
-		}
-		
-		newNode = push(*root, daftar);
-	    if (newNode == NULL) {
-	        printf("Alokasi gagal!\n");
-	    } else {
-	        *root = newNode;
-	    }
+	
+		*root = push (*root, daftar);
 	}
 	// pengguna mendaftarkan
 	// isi nama, usia, no telp, pilih penyakit, ceritakan keluhan
@@ -202,15 +189,15 @@ address createNode (Pasien info) {
 }
 
 
-bool cekKosong (address *root) {
+bool cekKosong (address root) {
 	return (root == NULL);
 }
 
-address push(address root, Pasien info) {
-	if (cekKosong(root)) {
-        return createNode(info);
-    }
-
+address push (address root, Pasien info) {
+	if (cekKosong (root)) {
+		return createNode (info);
+	}
+	
     if (info.prioritas < root->info.prioritas) {
         root->kiri = push(root->kiri, info);
     } else {
@@ -222,19 +209,19 @@ address push(address root, Pasien info) {
 
 
 
-address popAntrian(address root) {
-//    if (cekKosong(root)) {
-//        return NULL;
-//    }
-//
-//    if (root->kiri == NULL) {
-//        address temp = root->kanan;
-//        free(root);
-//        return temp;
-//    }
-//    
-//	root->kiri = popAntrian(root->kiri);
-//    return root;
+address pop (address root, Pasien *info) {
+	if (cekKosong(root)) {
+		return root;
+	}
+	if (root->kanan != NULL) {
+		root->kanan = pop(root->kanan, info);
+	} else {
+		address temp = root->kiri;
+		*info = root->info;
+		free(root);
+		return temp;
+	}
+	return root;
 }
 
 
