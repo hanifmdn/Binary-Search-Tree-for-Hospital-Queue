@@ -9,6 +9,7 @@ int main() {
 	char opsichar;
 	int display = 1;
 	address root = NULL;
+	account sedangLogin;
 	
 	while (opsi != 0) {
 		switch (display) {
@@ -31,7 +32,7 @@ int main() {
 				break;
 				
 			case 2:
-				system("cls");
+//				system("cls");
 				printf("|+|======================================================================================|+|\n");
 				printf("|+|                                                                                      |+|\n");
 				printf("|+|                                         GaAntre                                      |+|\n");
@@ -58,7 +59,7 @@ int main() {
 				break;
 
 			case 3:
-				system("cls");
+//				system("cls");
 				printf("|+|======================================================================================|+|\n");
 				printf("|+|                                                                                      |+|\n");
 				printf("|+|                                       GaAntre                                        |+|\n");
@@ -75,7 +76,7 @@ int main() {
 				
 
 			case 4:
-				system("cls");
+//				system("cls");
 				printf("|+|======================================================================================|+|\n");
 				printf("|+|                                                                                      |+|\n");
 				printf("|+|                                        GaAntre                                       |+|\n");
@@ -87,11 +88,11 @@ int main() {
 				printf("|+|                                                                                      |+|\n");
 				printf("|+|======================================================================================|+|\n");
 				printf("|+|Silahkan Login                                                                        |+|\n");
-				login(&display);
+				login(&display, &sedangLogin);
 				break;
 	
 			case 5:
-				system("cls");
+//				system("cls");
                 printf("|+|======================================================================================|+|\n");
                 printf("|+|                                                                                      |+|\n");
                 printf("|+|                                        GaAntre                                       |+|\n");
@@ -118,7 +119,7 @@ int main() {
                 break;
 
 			case 6:
-				system("cls");
+//				system("cls");
                 printf("|+|======================================================================================|+|\n");
                 printf("|+|                                                                                      |+|\n");
                 printf("|+|                                        GaAntre                                       |+|\n");
@@ -137,7 +138,7 @@ int main() {
                 break;
 				
 			case 7:
-				system("cls");
+//				system("cls");
 				printf("|+|======================================================================================|+|\n");
 				printf("|+|                                                                                      |+|\n");
 				printf("|+|                                        GaAntre                                       |+|\n");
@@ -164,6 +165,7 @@ int main() {
 				
 			case 8:
 //				system("cls");
+				printf("yang lagi login: %s %s", sedangLogin.username, sedangLogin.password);
                 printf("|+|======================================================================================|+|\n");
                 printf("|+|                                                                                      |+|\n");
                 printf("|+|                                        GaAntre                                       |+|\n");
@@ -175,10 +177,10 @@ int main() {
                 printf("|+|                                                                                      |+|\n");
                 printf("|+|======================================================================================|+|\n");
                 printf("|+|Isi Formulir di bawah ini                                                             |+|\n");
-                daftarPengguna(&root);
+                daftarPengguna(&root, &sedangLogin);
                 printf("Keseluruhan Antrian:\n");
                 displayTree(root); 
-                opsi = 0;
+                display = 2;
                 break;
 				
 			case 9:

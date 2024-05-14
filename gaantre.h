@@ -32,9 +32,9 @@ typedef struct {
 	
 
 void membuatAkun(int *display);
-void login (int *display);
+void login (int *display, account *sedangLogin);
 void daftarAdmin (address *root);
-void daftarPengguna (address *root);
+void daftarPengguna (address *root, account *sedangLogin);
 address createNode (Pasien info);
 bool cekKosong (address *root);
 address push (address root, Pasien info);

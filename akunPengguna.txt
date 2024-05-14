@@ -1,5 +1,4 @@
 admin 123 1 0
 hanif ahmad 0 0
-udin bandung 0 1
-akunbaru 12345 0 1
-naufal hanif 0 1
+udin 123 0 0
+ahmad 123 0 0

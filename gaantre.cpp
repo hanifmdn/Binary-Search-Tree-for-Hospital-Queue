@@ -34,7 +34,7 @@ void membuatAkun (int *display) {
 	}
 }
 
-void login (int *display) {
+void login (int *display, account *sedangLogin) {
 	FILE *akunPengguna;
 	account masuk;
 	account cek[100];
@@ -59,6 +59,8 @@ void login (int *display) {
 		}
 		pengguna++;
 	}
+	*sedangLogin = cek[pengguna];
+	printf("nama pengguna: %s password: %s sudah login: %d", sedangLogin->username, sedangLogin->password, sedangLogin->loggedIn);
 	
 	if (ditemukan) {
 		if (strcmp(cek[pengguna].password, masuk.password) == 0) {
@@ -67,9 +69,11 @@ void login (int *display) {
 				*display = 5;
 			} else
 			if (cek[pengguna].identifier == 0) {
+				*sedangLogin = cek[pengguna];
 				printf("masuk ke pengguna");
 				if (cek[pengguna].loggedIn == 1) {
 					printf("sudah login bro");
+					*display = 2;
 				} else {
 					*display = 7;
 				}
@@ -119,7 +123,9 @@ void daftarAdmin (address *root) {
 
 
 
-void daftarPengguna (address *root) {
+void daftarPengguna (address *root, account *sedangLogin) {
+	FILE *akunPengguna;
+	account cek[100];
 	char opsi;
 	Pasien daftar;
 	address newNode;
@@ -150,7 +156,7 @@ void daftarPengguna (address *root) {
 	printf("|+|edit? (y/n)");
 	scanf(" %c", &opsi);
 	if (opsi == 'y') {
-		daftarPengguna(root);
+		daftarPengguna(root, sedangLogin);
 	} else {
 		if (daftar.penyakit == 1 || daftar.penyakit == 2 || daftar.penyakit == 3 || daftar.penyakit == 4) {
 			daftar.prioritas = 1;
@@ -164,12 +170,37 @@ void daftarPengguna (address *root) {
 		
 	
 		*root = push (*root, daftar);
+		if (*root != NULL) {
+			printf("Berhasil daftar");
+			// tampilkan nomor antrian dia
+			
+//			akunPengguna = fopen("akunPengguna.txt", "r+");
+//	
+//			if (akunPengguna == NULL) {
+//				printf("|+|\n|+|Tidak dapat membuka file akunPengguna.txt");
+//			} else {
+//				int pengguna = 0;
+//				while (fscanf(akunPengguna, "%s %s %d %d", &cek[pengguna].username, &cek[pengguna].password, &cek[pengguna].identifier, &cek[pengguna].loggedIn) == 4) {
+//					if (strcmp(cek[pengguna].username, sedangLogin->username) == 0) {
+//						cek[pengguna].loggedIn = 1;
+//						break;
+//					}
+//					pengguna++;
+//				}
+//			
+//				
+//				int batas = pengguna;
+//				
+//				pengguna = 0;
+//				while (pengguna != batas) {
+//					fprintf(akunPengguna, "%s %s %d %d\n", cek[pengguna].username, cek[pengguna].password, cek[pengguna].identifier, cek[pengguna].loggedIn);
+//				}	
+//			}
+		} else {
+			printf("Gagal untuk mendaftar!");
+		}
 	}
-	// pengguna mendaftarkan
-	// isi nama, usia, no telp, pilih penyakit, ceritakan keluhan
-	// dari pilihan penyakit, di tentukan prioritasnya (bisa dibuat function)
-	// push ke tree
-	// menampilkan hasil daftar beserta jam daftar dan nomor antrian beliau
+	
 }
 
 
