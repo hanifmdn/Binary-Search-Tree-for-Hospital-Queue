@@ -27,7 +27,7 @@ void membuatAkun (int *display) {
 	}
 		
 	if (!ditemukan) {
-		fprintf(akunPengguna, "%s %s %d\n", akun.username, akun.password, 0, 0);
+		fprintf(akunPengguna, "%s %s %d %d\n", akun.username, akun.password, 0, 0);
 		printf("|+|Akun berhasil dibuat!\n\n");
 		*display = 4;
 		fclose(akunPengguna);
@@ -109,19 +109,7 @@ void daftarAdmin (address *root) {
 		if (opsi == 'y') {
 			daftarAdmin(root);
 		} 
-		newNode = createNode (daftar);
-		printf("new node ada\n");
-		if (newNode == NULL) {
-			printf("Alokasi gagal!\n");
-		} else {
-			printf("newnode tidak null\n");
-		}
-		newNode = push(*root, daftar);
-	    if (newNode == NULL) {
-	        printf("Alokasi gagal!\n");
-	    } else {
-	        *root = newNode;
-	    }
+		*root = push (*root, daftar);
 	// mendaftar
 	// isi nama, usia, no telp, prioritas
 	// masukan keluhan sebagai keterangan untuk dokter
@@ -219,6 +207,7 @@ address pop (address root, Pasien *info) {
 	if (cekKosong(root)) {
 		return root;
 	}
+	
 	if (root->kanan != NULL) {
 		root->kanan = pop(root->kanan, info);
 	} else {
@@ -230,16 +219,16 @@ address pop (address root, Pasien *info) {
 	return root;
 }
 
-void displayPreorder(Tree *node) {
-    if (node == NULL) {
+void displayPreorder(address root) {
+    if (root == NULL) {
         return;
     }
-	printf("%s\n", node->info.nama);
-	displayPreorder(node->kiri);
-	displayPreorder(node->kanan);
+	printf("%s\n", root->info.nama);
+	displayPreorder(root->kiri);
+	displayPreorder(root->kanan);
 }
 
-void displayTree(Tree *root) {
+void displayTree(address root) {
     if (root == NULL) {
         printf("Tree kosong.\n");
     } else {
