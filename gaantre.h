@@ -39,6 +39,7 @@ address createNode (Pasien info);
 bool cekKosong (address *root);
 address push (address root, Pasien info);
 address pop (address root, Pasien *info);
-void displayTree(Tree root); 
+void displayPreorder(Tree *node); 
+void displayTree(Tree *root);
 
 #endif

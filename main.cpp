@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdio.h>
+#include <stdlib.h>
 #include "GAANTRE.h"
 
 int main() {
@@ -12,6 +13,7 @@ int main() {
 	while (opsi != 0) {
 		switch (display) {
 			case 1:
+				system("cls");
 				printf("|+|======================================================================================|+|\n");
                 printf("|+|                                                                                      |+|\n");
                 printf("|+|                                Selamat Datang di GaAntre                             |+|\n");
@@ -27,6 +29,7 @@ int main() {
 					opsi = 0;
 				}
 				break;
+				
 			case 2:
 				system("cls");
 				printf("|+|======================================================================================|+|\n");
@@ -55,6 +58,7 @@ int main() {
 				break;
 
 			case 3:
+				system("cls");
 				printf("|+|======================================================================================|+|\n");
 				printf("|+|                                                                                      |+|\n");
 				printf("|+|                                       GaAntre                                        |+|\n");
@@ -71,6 +75,7 @@ int main() {
 				
 
 			case 4:
+				system("cls");
 				printf("|+|======================================================================================|+|\n");
 				printf("|+|                                                                                      |+|\n");
 				printf("|+|                                        GaAntre                                       |+|\n");
@@ -86,26 +91,51 @@ int main() {
 				break;
 	
 			case 5:
-				printf("masuk menu admin");
-				opsi = 0;
-				break;
+				system("cls");
+                printf("|+|======================================================================================|+|\n");
+                printf("|+|                                                                                      |+|\n");
+                printf("|+|                                        GaAntre                                       |+|\n");
+                printf("|+|                               Ga Perlu CAPE-CAPE Ngantre                             |+|\n");
+                printf("|+|                                                                                      |+|\n");
+                printf("|+|======================================================================================|+|\n");
+                printf("|+|                                                                                      |+|\n");
+                printf("|+|                                         MENU                                         |+|\n");
+                printf("|+|                                                                                      |+|\n");
+                printf("|+|======================================================================================|+|\n");
+                printf("|+|1. Daftar Antrian                                                                     |+|\n");
+                printf("|+|2. Mengeluarkan pasian yang selesai                                                   |+|\n");
+                printf("|+|0. Keluar                                                                             |+|\n");
+                printf("|+|--------------------------------------------------------------------------------------|+|\n");
+                printf("|+|Pilih opsi: ");
+                scanf("%d", &opsi);
+                if (opsi == 1) {
+                    display = 6;
+                } else if (opsi == 2) {
+                    //panggil Fungsi untuk pop
+                }
+                break;
+                opsi = 0;
+                break;
+
 			case 6:
-				printf("|+|======================================================================================|+|\n");
-				printf("|+|                                                                                      |+|\n");
-				printf("|+|                                        GaAntre                                       |+|\n");
-				printf("|+|                               Ga Perlu CAPE-CAPE Ngantre                             |+|\n");
-				printf("|+|                                                                                      |+|\n");
-				printf("|+|======================================================================================|+|\n");
-				printf("|+|                                                                                      |+|\n");
-				printf("|+|                                        Daftar                                        |+|\n");
-				printf("|+|                                                                                      |+|\n");
-				printf("|+|======================================================================================|+|\n");
-				printf("|+|Isi Formulir di bawah ini                                                             |+|\n");
-				daftarAdmin(&root);
-				//printf("Keseluruhan Antrian:\n");
-    			//displayTree(root);
-    			opsi = 0;
-				break;
+				system("cls");
+                printf("|+|======================================================================================|+|\n");
+                printf("|+|                                                                                      |+|\n");
+                printf("|+|                                        GaAntre                                       |+|\n");
+                printf("|+|                               Ga Perlu CAPE-CAPE Ngantre                             |+|\n");
+                printf("|+|                                                                                      |+|\n");
+                printf("|+|======================================================================================|+|\n");
+                printf("|+|                                                                                      |+|\n");
+                printf("|+|                                        Daftar                                        |+|\n");
+                printf("|+|                                                                                      |+|\n");
+                printf("|+|======================================================================================|+|\n");
+                printf("|+|Isi Formulir di bawah ini                                                             |+|\n");
+                daftarAdmin(&root);
+                printf("Keseluruhan Antrian:\n");
+                displayTree(root); 
+                opsi = 0;
+                break;
+				
 			case 7:
 				system("cls");
 				printf("|+|======================================================================================|+|\n");
@@ -131,25 +161,33 @@ int main() {
 					display = 9;
 				} else 
 				break;
+				
 			case 8:
-				printf("|+|======================================================================================|+|\n");
-				printf("|+|                                                                                      |+|\n");
-				printf("|+|                                        GaAntre                                       |+|\n");
-				printf("|+|                               Ga Perlu CAPE-CAPE Ngantre                             |+|\n");
-				printf("|+|                                                                                      |+|\n");
-				printf("|+|======================================================================================|+|\n");
-				printf("|+|                                                                                      |+|\n");
-				printf("|+|                                        Daftar                                        |+|\n");
-				printf("|+|                                                                                      |+|\n");
-				printf("|+|======================================================================================|+|\n");
-				printf("|+|Isi Formulir di bawah ini                                                             |+|\n");
-				daftarPengguna(&root);
-				//printf("Keseluruhan Antrian:\n");
-    			//displayTree(root);
-				opsi = 0;
-				break;
+				system("cls");
+                printf("|+|======================================================================================|+|\n");
+                printf("|+|                                                                                      |+|\n");
+                printf("|+|                                        GaAntre                                       |+|\n");
+                printf("|+|                               Ga Perlu CAPE-CAPE Ngantre                             |+|\n");
+                printf("|+|                                                                                      |+|\n");
+                printf("|+|======================================================================================|+|\n");
+                printf("|+|                                                                                      |+|\n");
+                printf("|+|                                        Daftar                                        |+|\n");
+                printf("|+|                                                                                      |+|\n");
+                printf("|+|======================================================================================|+|\n");
+                printf("|+|Isi Formulir di bawah ini                                                             |+|\n");
+                daftarPengguna(&root);
+                printf("Keseluruhan Antrian:\n");
+                displayTree(root); 
+                opsi = 0;
+                break;
+				
 			case 9:
-				// nomor antrian sekarang
+				system("cls");
+                printf("Nomor Antrian Sekarang:\n");
+                // Implementasi untuk menampilkan nomor antrian sekarang
+                opsi = 0;
+                break;
+                
 			default:
 				printf("Pilih opsi yang sesuai!");
 		}
