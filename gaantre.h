@@ -41,5 +41,6 @@ address push (address root, Pasien info);
 address pop (address root, Pasien *info);
 void displayPreorder(address root); 
 void displayTree(address root);
+void antrianSekarang (address root);
 
 #endif

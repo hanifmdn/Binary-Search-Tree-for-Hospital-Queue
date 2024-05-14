@@ -109,14 +109,18 @@ int main() {
                 printf("|+|--------------------------------------------------------------------------------------|+|\n");
                 printf("|+|Pilih opsi: ");
                 scanf("%d", &opsi);
-                if (opsi == 1) {
+				if (opsi == 1) {
                     display = 6;
                 } else if (opsi == 2) {
-                    //panggil Fungsi untuk pop
-                }
-                break;
-                opsi = 0;
-                break;
+					Pasien pasienSelesai;
+                    root = pop(root, &pasienSelesai);
+                    displayTree(root);
+                    system("pause");
+                    display = 5;
+                } else if (opsi == 0){
+                	display = 2;
+				} 
+					display = 5;
 
 			case 6:
 //				system("cls");
@@ -157,10 +161,11 @@ int main() {
 				scanf("%d", &opsi);
 				if (opsi == 1) {
 					display = 8;
-				} else 
-				if (opsi == 2) {
+				} else if (opsi == 2) {
 					display = 9;
-				} else 
+				} else if (opsi == 0){
+					display  = 7;
+				}
 				break;
 				
 			case 8:
@@ -185,7 +190,7 @@ int main() {
 				
 			case 9:
 				system("cls");
-                printf("Nomor Antrian Sekarang:\n");
+                antrianSekarang (root);
                 // Implementasi untuk menampilkan nomor antrian sekarang
                 opsi = 0;
                 break;

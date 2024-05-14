@@ -60,17 +60,16 @@ void login (int *display, account *sedangLogin) {
 		pengguna++;
 	}
 	*sedangLogin = cek[pengguna];
-	printf("nama pengguna: %s password: %s sudah login: %d", sedangLogin->username, sedangLogin->password, sedangLogin->loggedIn);
+	//printf("|+|nama pengguna: %s \n|+|password: %s \n|+|sudah login: %d\n", sedangLogin->username, sedangLogin->password, sedangLogin->loggedIn);
 	
 	if (ditemukan) {
 		if (strcmp(cek[pengguna].password, masuk.password) == 0) {
-			printf("|+|Berhasil masuk!\n\n");
+			//printf("|+|Berhasil Masuk                                                                        |+|\n");
 			if (cek[pengguna].identifier == 1) {
 				*display = 5;
 			} else
 			if (cek[pengguna].identifier == 0) {
 				*sedangLogin = cek[pengguna];
-				printf("masuk ke pengguna");
 				if (cek[pengguna].loggedIn == 1) {
 					printf("sudah login bro");
 					*display = 2;
@@ -254,7 +253,7 @@ void displayPreorder(address root) {
     if (root == NULL) {
         return;
     }
-	printf("%s\n", root->info.nama);
+	printf("nama: %s  prioritas: %d\n", root->info.nama, root->info.prioritas);
 	displayPreorder(root->kiri);
 	displayPreorder(root->kanan);
 }
@@ -268,8 +267,18 @@ void displayTree(address root) {
     }
 }
 
-void antrianSekarang () {
-	// menampilkan antrian sekarang (root)
+void antrianSekarang (address root) {
+	address kini;
+	if (root == NULL) {
+        printf("Antrian kosong.\n");
+        return;
+    }
+
+    kini = root;
+    while (kini->kiri != NULL) {
+        kini = kini->kiri;
+    }
+    printf("Nomor Antrian Sekarang: %d\n", kini->info.nama);
 }
 
 //void displayTree(Tree root) {
