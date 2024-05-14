@@ -9,7 +9,7 @@
 typedef struct {
 	char nama[50];
 	char usia;
-	char noTelp;
+	char noTelp[16];
 	char jamDaftar;
 	int penyakit;
 	char keluhan[500];
@@ -27,6 +27,7 @@ typedef struct {
 		char username[20];
 		char password[20];	
 		int identifier;
+		int loggedIn;
 } account;
 	
 

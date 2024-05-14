@@ -3,7 +3,7 @@
 void membuatAkun (int *display) {
 	char username[20];
 	FILE *akunPengguna;
-	bool ditemukan = false;
+	int ditemukan = 0;
 	account akun;
 	
 	printf("|+|Username: "); 
@@ -38,8 +38,8 @@ void login (int *display) {
 	FILE *akunPengguna;
 	account masuk;
 	account cek[100];
-	int pengguna = 0;
-	bool ditemukan = false;
+	int pengguna;
+	int ditemukan = 0;
 	
 	akunPengguna = fopen("akunPengguna.txt", "r");
 	
@@ -51,26 +51,31 @@ void login (int *display) {
 	printf("|+|Password: ");
 	scanf(" %[^\n]", masuk.password);
 	
-	while (fscanf(akunPengguna, "%s %s %d", &cek[pengguna].username, &cek[pengguna].password, &cek[pengguna].identifier) == 3) {
+	pengguna = 0;
+	while (fscanf(akunPengguna, "%s %s %d %d", &cek[pengguna].username, &cek[pengguna].password, &cek[pengguna].identifier, &cek[pengguna].loggedIn) == 4) {
 		if (strcmp(cek[pengguna].username, masuk.username) == 0) {
-			ditemukan = true;
+			ditemukan = 1;
 			break;
 		}
 		pengguna++;
 	}
-	if (ditemukan) {
+	if (ditemukan == 1) {
 		if (strcmp(cek[pengguna].password, masuk.password) == 0) {
 			printf("|+|Berhasil masuk!\n\n");
 			if (cek[pengguna].identifier == 1) {
 				*display = 5;
-			} else {
-				*display = 6;
+			} else
+			if (cek[pengguna].identifier == 0) {
+				printf("masuk ke pengguna");
+				if (cek[pengguna].loggedIn == 1) {
+					printf("sudah login bro");
+				} else {
+					*display = 6;
+				}
 			}
 		} else {
-			printf("|+|Password Salah!\n\n");
-			
+			printf("|+|Password Salah!\n\n");	
 		}
-		
 	} else {
 		printf("|+|Username tidak ada! Silahkan buat akun terlebih dahulu!\n\n");
 	}
