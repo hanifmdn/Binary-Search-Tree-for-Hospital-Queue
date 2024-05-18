@@ -1,4 +1,2 @@
-admin 123 1 0
-hanif ahmad 0 0
-udin 123 0 0
-ahmad 123 0 0
+admin 123 1
+hanif ahmad 0

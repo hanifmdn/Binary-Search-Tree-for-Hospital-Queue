@@ -1,9 +1,32 @@
 #include "GAANTRE.h"
 
-void membuatAkun (int *display) {
+waktu timeSekarang;
+
+void updateTime() {
+	time_t jam = time(NULL);
+	timeSekarang = *localtime(&jam);
+}
+
+bool cariUsername (FILE *dataAkun, char namaCari[20]) {
+	bool ditemukan;
 	char username[20];
+	
+	if (dataAkun == NULL) {
+		printf("|+|\n|+|Tidak dapat membuka file akunPengguna.txt\n");
+	} else {
+		while (fscanf(dataAkun, "%s", username) == 1) {
+			if (strcmp(username, namaCari) == 0) {
+				ditemukan = true;
+				break;
+			}
+		}
+	}
+	return ditemukan;
+}
+
+void membuatAkun (int *display) {
 	FILE *akunPengguna;
-	int ditemukan = 0;
+	bool ditemukan = false;
 	account akun;
 	
 	printf("|+|Username: "); 
@@ -13,69 +36,81 @@ void membuatAkun (int *display) {
 	
 	akunPengguna = fopen("akunPengguna.txt", "a+");
 	
-	if (akunPengguna == NULL) {
-		printf("|+|\n|+|Tidak dapat membuka file akunPengguna.txt\n");
-	}
-	
-	while (fscanf(akunPengguna, "%s", username) == 1) {
-		if (strcmp(akun.username, username) == 0) {
-			printf("|+|Username sudah tersedia!\n\n");
-			ditemukan = true;
-			*display = 3;
-			break;
-		}
-	}
+	ditemukan = cariUsername(akunPengguna, akun.username);
 		
-	if (!ditemukan) {
-		fprintf(akunPengguna, "%s %s %d %d\n", akun.username, akun.password, 0, 0);
+	if (ditemukan) {
+		printf("Username sudah tersedia!\n\n");
+		*display = 3;
+	} else {
+		fprintf(akunPengguna, "%s %s %d\n", akun.username, akun.password, 0);
 		printf("|+|Akun berhasil dibuat!\n\n");
 		*display = 4;
 		fclose(akunPengguna);
 	}
 }
 
+bool cariAkun (FILE *dataAkun, account *cek, char cariUsername[20]) {
+	bool ditemukan;
+	if (dataAkun == NULL) {
+		printf("|+|\n|+|Tidak dapat membuka file akunPengguna.txt");
+	} else {
+		while (fscanf(dataAkun, "%s %s %d", &cek->username, &cek->password, &cek->identifier) == 3) {
+			if (strcmp(cek->username, cariUsername) == 0) {
+				ditemukan = true;
+				break;
+			}
+		}
+	}
+	return ditemukan;	
+}
+
+bool cekTodayList (char namaCari[20]) {
+	bool ditemukan = false;
+	FILE *todayList;
+	char filename[30];
+	char username[20];
+	
+	updateTime();
+	strftime(filename, sizeof(filename), "Data_Pasien_%d-%m-%Y.txt", &timeSekarang);
+	
+	
+	todayList = fopen(filename, "a+");
+	if (todayList == NULL) {
+		printf("|+|\n|+|Tidak dapat membuka file %s\n", filename);
+	} else {
+		while (fscanf(todayList, "%s%*[^\n]", username) == 1) {
+				if (strcmp(username, namaCari) == 0) {
+					ditemukan = true;
+					break;
+			}
+		}
+		fclose (todayList);
+	}
+	return ditemukan;	
+}
+
 void login (int *display, account *sedangLogin) {
 	FILE *akunPengguna;
 	account masuk;
-	account cek[100];
-	int pengguna;
-	int ditemukan = 0;
+	account cek;
+	bool ditemukan = false;
 	
-	akunPengguna = fopen("akunPengguna.txt", "r");
-	
-	if (akunPengguna == NULL) {
-		printf("|+|\n|+|Tidak dapat membuka file akunPengguna.txt");
-	}
 	printf("|+|Username: "); 
 	scanf(" %[^\n]", masuk.username);
 	printf("|+|Password: ");
 	scanf(" %[^\n]", masuk.password);
 	
-	pengguna = 0;
-	while (fscanf(akunPengguna, "%s %s %d %d", &cek[pengguna].username, &cek[pengguna].password, &cek[pengguna].identifier, &cek[pengguna].loggedIn) == 4) {
-		if (strcmp(cek[pengguna].username, masuk.username) == 0) {
-			ditemukan = 1;
-			break;
-		}
-		pengguna++;
-	}
-	*sedangLogin = cek[pengguna];
-	//printf("|+|nama pengguna: %s \n|+|password: %s \n|+|sudah login: %d\n", sedangLogin->username, sedangLogin->password, sedangLogin->loggedIn);
-	
+	akunPengguna = fopen("akunPengguna.txt", "r");
+	ditemukan = cariAkun(akunPengguna, &cek, masuk.username);
+		
 	if (ditemukan) {
-		if (strcmp(cek[pengguna].password, masuk.password) == 0) {
-			//printf("|+|Berhasil Masuk                                                                        |+|\n");
-			if (cek[pengguna].identifier == 1) {
+		*sedangLogin = cek;
+		if (strcmp(cek.password, masuk.password) == 0) {
+			printf("|+|Berhasil Masuk                                                                        |+|\n");
+			if (cek.identifier == 1) {
 				*display = 5;
-			} else
-			if (cek[pengguna].identifier == 0) {
-				*sedangLogin = cek[pengguna];
-				if (cek[pengguna].loggedIn == 1) {
-					printf("sudah login bro");
-					*display = 2;
-				} else {
+			} else {
 					*display = 7;
-				}
 			}
 		} else {
 			printf("|+|Password Salah!\n\n");	
@@ -91,10 +126,12 @@ void login (int *display, account *sedangLogin) {
 }
 
 
-void daftarAdmin (address *root) {
+void daftarAdmin (address *root, account *sedangLogin, int *display) {
 	char opsi;
 	Pasien daftar;
 	address newNode;
+	FILE *todayList;
+	char filename[30];
 	
 	printf("|+|Nama       : "); scanf(" %[^\n]", daftar.nama);
 	printf("|+|Usia       : "); scanf(" %c", &daftar.usia);  while ((getchar()) != '\n');
@@ -110,9 +147,34 @@ void daftarAdmin (address *root) {
 	printf("|+|edit? (y/n) ");
 	scanf(" %c", &opsi);
 		if (opsi == 'y') {
-			daftarAdmin(root);
-		} 
-		*root = push (*root, daftar);
+			daftarAdmin(root, sedangLogin, display);
+		} else {
+			updateTime();
+			strftime(daftar.jamDaftar, sizeof(daftar.jamDaftar), "%H:%M:%S", &timeSekarang);
+//			printf("waktu daftar: %s", daftar.jamDaftar);
+			strftime(filename, sizeof(filename), "Data_Pasien_%d-%m-%Y.txt", &timeSekarang);
+			
+			daftar.penyakit = 0;
+			daftar.urutan = 0;
+			todayList = fopen(filename, "a");
+			if (todayList == NULL) {
+				printf("|+|Gagal menyimpan data Pasien!");
+			} else {
+				fprintf(todayList, "%s %s %s %c %s %s %d %d %d\n", 
+					sedangLogin->username,
+					sedangLogin->password,
+					daftar.nama,
+					daftar.usia,
+					daftar.noTelp,
+					daftar.jamDaftar,
+					daftar.penyakit,
+					daftar.prioritas,
+					daftar.urutan);
+					
+					fclose(todayList);
+			}
+		}
+//		*root = push (*root, daftar);
 	// mendaftar
 	// isi nama, usia, no telp, prioritas
 	// masukan keluhan sebagai keterangan untuk dokter
@@ -120,86 +182,92 @@ void daftarAdmin (address *root) {
 	// menampilkan hasil daftar beserta jam daftar dan nomor antrian beliau	
 	}
 
+int setPriority (int penyakit) {
+	int prioritas = 0;
+	
+	if (penyakit == 1 || penyakit == 2 || penyakit == 3 || penyakit == 4) {
+			prioritas = 1;
+	} else 
+	if (penyakit == 5 || penyakit == 6 || penyakit == 7 || penyakit == 8 || penyakit == 9 || penyakit == 10) {
+			prioritas = 2;
+	} else 
+	if (penyakit == 11 || penyakit == 12 || penyakit == 13 || penyakit == 14 || penyakit == 15 ) {
+			prioritas = 3;
+	}
+	return (prioritas);
+	
+	
+}
 
-
-void daftarPengguna (address *root, account *sedangLogin) {
-	FILE *akunPengguna;
-	account cek[100];
+void daftarPengguna (address *root, account *sedangLogin, int *display) {
 	char opsi;
 	Pasien daftar;
 	address newNode;
-	
-	printf("|+|Nama       : "); scanf(" %[^\n]", daftar.nama);
-	printf("|+|Usia       : "); scanf(" %c", &daftar.usia);  while ((getchar()) != '\n');
-	printf("|+|No.Telepon : "); scanf(" %[^\n]", daftar.noTelp);
-	printf("|+|                                                                                      |+|\n");
-	printf("|+|Pilih jenis penyakit yang diderita:                                                   |+|\n");
-	printf("|+|1.  Pemeriksaan Rutin                                                                 |+|\n");
-    printf("|+|2.  Konsultasi Penyakit Diderita                                                      |+|\n");
-	printf("|+|3.  Kebutuhan Resep Ulang                                                             |+|\n");
-	printf("|+|4.  Luka Kecil (luka Goresan)                                                         |+|\n");
-	printf("|+|5.  Influenza (Demam, Pilek atau hidung tersumbat, Batuk, Sakit tenggorokan)          |+|\n");
-	printf("|+|6.  Gastritis (Kembung, Mulas, Mual)                                                  |+|\n");
-	printf("|+|7.  Dermatitis (Ruam kulit, Gatal-gatal, Kulit kemerahan)                             |+|\n");
-	printf("|+|8.  Infeksi Saluran Kemih (Nyeri saat buang air kecil, Urin keruh atau berbau)        |+|\n");
-	printf("|+|9.  Apendisitis (Nyeri perut di kanan bawah, Mual dan muntah, Demam)                  |+|\n");
-	printf("|+|10. Eksaserbasi Asma (Sesak Napas, Batuk, Nyeri Dada, Napas Pendek)                   |+|\n");
-    printf("|+|11. Fraktur Tulang (Patah Tulang, Dislokasi Tulang)                                   |+|\n");
-    printf("|+|12. Pneumonia Berat (Nyeri dada, Sesak napas, Demam tinggi, Batuk berdahak)           |+|\n");
-	printf("|+|13. Dehidrasi Berat (Mulut kering, Kulit kemerahan, Pusing, Detak jantung cepat)      |+|\n");
-	printf("|+|14. Infark Miokard Non-stemi (Nyeri dada, Berkeringat dingin, Sesak napas, Mual)      |+|\n");
-	printf("|+|15. Abses Hati (Kulit Kuning, Demam Tinggi, Nyeri Abdomen, Penggumpalan Darah)        |+|\n");
-	printf("|+|--------------------------------------------------------------------------------------|+|\n");
-	printf("|+|Pilih opsi: "); 
-	scanf("%d", &daftar.penyakit);
-	printf("|+|edit? (y/n)");
-	scanf(" %c", &opsi);
-	if (opsi == 'y') {
-		daftarPengguna(root, sedangLogin);
+	FILE *todayList;
+    char filename[30];
+    bool sudahDaftar;
+    
+    if (sudahDaftar = cekTodayList (sedangLogin->username)){
+    	printf("|+|Anda sudah melakukan pendaftaran hari ini!");
 	} else {
-		if (daftar.penyakit == 1 || daftar.penyakit == 2 || daftar.penyakit == 3 || daftar.penyakit == 4) {
-			daftar.prioritas = 1;
-		} else 
-		if (daftar.penyakit == 5 || daftar.penyakit == 6 || daftar.penyakit == 7 || daftar.penyakit == 8 || daftar.penyakit == 9 || daftar.penyakit == 10) {
-			daftar.prioritas = 2;
-		} else 
-		if (daftar.penyakit == 11 || daftar.penyakit == 12 || daftar.penyakit == 13 || daftar.penyakit == 14 || daftar.penyakit == 15 ) {
-			daftar.prioritas = 3;
-		}
-		
-	
-		*root = push (*root, daftar);
-		if (*root != NULL) {
-			printf("Berhasil daftar");
-			// tampilkan nomor antrian dia
-			
-//			akunPengguna = fopen("akunPengguna.txt", "r+");
-//	
-//			if (akunPengguna == NULL) {
-//				printf("|+|\n|+|Tidak dapat membuka file akunPengguna.txt");
-//			} else {
-//				int pengguna = 0;
-//				while (fscanf(akunPengguna, "%s %s %d %d", &cek[pengguna].username, &cek[pengguna].password, &cek[pengguna].identifier, &cek[pengguna].loggedIn) == 4) {
-//					if (strcmp(cek[pengguna].username, sedangLogin->username) == 0) {
-//						cek[pengguna].loggedIn = 1;
-//						break;
-//					}
-//					pengguna++;
-//				}
-//			
-//				
-//				int batas = pengguna;
-//				
-//				pengguna = 0;
-//				while (pengguna != batas) {
-//					fprintf(akunPengguna, "%s %s %d %d\n", cek[pengguna].username, cek[pengguna].password, cek[pengguna].identifier, cek[pengguna].loggedIn);
-//				}	
-//			}
+		printf("|+|Nama       : "); scanf(" %[^\n]", daftar.nama);
+		printf("|+|Usia       : "); scanf(" %c", &daftar.usia);  while ((getchar()) != '\n');
+		printf("|+|No.Telepon : "); scanf(" %[^\n]", daftar.noTelp);
+		printf("|+|                                                                                      |+|\n");
+		printf("|+|Pilih jenis penyakit yang diderita:                                                   |+|\n");
+		printf("|+|1.  Pemeriksaan Rutin                                                                 |+|\n");
+	    printf("|+|2.  Konsultasi Penyakit Diderita                                                      |+|\n");
+		printf("|+|3.  Kebutuhan Resep Ulang                                                             |+|\n");
+		printf("|+|4.  Luka Kecil (luka Goresan)                                                         |+|\n");
+		printf("|+|5.  Influenza (Demam, Pilek atau hidung tersumbat, Batuk, Sakit tenggorokan)          |+|\n");
+		printf("|+|6.  Gastritis (Kembung, Mulas, Mual)                                                  |+|\n");
+		printf("|+|7.  Dermatitis (Ruam kulit, Gatal-gatal, Kulit kemerahan)                             |+|\n");
+		printf("|+|8.  Infeksi Saluran Kemih (Nyeri saat buang air kecil, Urin keruh atau berbau)        |+|\n");
+		printf("|+|9.  Apendisitis (Nyeri perut di kanan bawah, Mual dan muntah, Demam)                  |+|\n");
+		printf("|+|10. Eksaserbasi Asma (Sesak Napas, Batuk, Nyeri Dada, Napas Pendek)                   |+|\n");
+	    printf("|+|11. Fraktur Tulang (Patah Tulang, Dislokasi Tulang)                                   |+|\n");
+	    printf("|+|12. Pneumonia Berat (Nyeri dada, Sesak napas, Demam tinggi, Batuk berdahak)           |+|\n");
+		printf("|+|13. Dehidrasi Berat (Mulut kering, Kulit kemerahan, Pusing, Detak jantung cepat)      |+|\n");
+		printf("|+|14. Infark Miokard Non-stemi (Nyeri dada, Berkeringat dingin, Sesak napas, Mual)      |+|\n");
+		printf("|+|15. Abses Hati (Kulit Kuning, Demam Tinggi, Nyeri Abdomen, Penggumpalan Darah)        |+|\n");
+		printf("|+|--------------------------------------------------------------------------------------|+|\n");
+		printf("|+|Pilih opsi: "); 
+		scanf("%d", &daftar.penyakit);
+		printf("|+|edit? (y/n)");
+		scanf(" %c", &opsi);
+		if (opsi == 'y') {
+			daftarPengguna(root, sedangLogin, display);
 		} else {
-			printf("Gagal untuk mendaftar!");
+			daftar.prioritas = setPriority(daftar.penyakit);
+			
+			updateTime();
+			strftime(daftar.jamDaftar, sizeof(daftar.jamDaftar), "%H:%M:%S", &timeSekarang);
+//			printf("waktu daftar: %s", daftar.jamDaftar);
+			strftime(filename, sizeof(filename), "Data_Pasien_%d-%m-%Y.txt", &timeSekarang);
+			
+//			*root = push (*root, daftar);
+			daftar.urutan = 0;
+			todayList = fopen(filename, "a");
+			if (todayList == NULL) {
+				printf("|+|Gagal menyimpan data Pasien!");
+			} else {
+				fprintf(todayList, "%s %s %s %c %s %s %d %d %d\n", 
+					sedangLogin->username,
+					sedangLogin->password,
+					daftar.nama,
+					daftar.usia,
+					daftar.noTelp,
+					daftar.jamDaftar,
+					daftar.penyakit,
+					daftar.prioritas,
+					daftar.urutan);
+					
+					fclose(todayList);
+			}
+				// tampilkan nomor antrian dia
+			}
+		*display = 7;
 		}
-	}
-	
 }
 
 

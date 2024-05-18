@@ -135,8 +135,7 @@ int main() {
                 printf("|+|                                                                                      |+|\n");
                 printf("|+|======================================================================================|+|\n");
                 printf("|+|Isi Formulir di bawah ini                                                             |+|\n");
-                daftarAdmin(&root);
-                printf("Keseluruhan Antrian:\n");
+                daftarAdmin(&root, &sedangLogin, &display);
                 displayTree(root); 
                 opsi = 0;
                 break;
@@ -182,8 +181,7 @@ int main() {
                 printf("|+|                                                                                      |+|\n");
                 printf("|+|======================================================================================|+|\n");
                 printf("|+|Isi Formulir di bawah ini                                                             |+|\n");
-                daftarPengguna(&root, &sedangLogin);
-                printf("Keseluruhan Antrian:\n");
+                daftarPengguna(&root, &sedangLogin, &display);
                 displayTree(root); 
                 display = 2;
                 break;

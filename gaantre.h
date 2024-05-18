@@ -6,16 +6,18 @@
 #include <string.h>
 #include "boolean.h"
 
+typedef struct tm waktu;
 typedef struct {
 	char nama[50];
 	char usia;
 	char noTelp[16];
-	char jamDaftar;
+	char jamDaftar[9];
 	int penyakit;
-	char keluhan[500];
 	int prioritas;
 	int urutan;
 } Pasien;
+
+extern waktu timeSekarang;
 
 typedef struct Tree* address;
 typedef struct Tree {
@@ -26,15 +28,17 @@ typedef struct Tree {
 typedef struct {
 		char username[20];
 		char password[20];	
-		int identifier;
-		int loggedIn;
+		bool identifier;
 } account;
 	
-
+void updateTime();
+bool cariUsername (FILE *dataAkun, char namaCari[20]);
 void membuatAkun(int *display);
+bool cariAkun (FILE *dataAkun, account *cek, char cariUsername[20]);
+bool cekTodayList (char namaCari[20]);
 void login (int *display, account *sedangLogin);
-void daftarAdmin (address *root);
-void daftarPengguna (address *root, account *sedangLogin);
+void daftarAdmin (address *root, account *sedangLogin, int *display);
+void daftarPengguna (address *root, account *sedangLogin, int *display);
 address createNode (Pasien info);
 bool cekKosong (address *root);
 address push (address root, Pasien info);
