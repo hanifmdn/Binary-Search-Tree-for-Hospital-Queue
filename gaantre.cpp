@@ -35,7 +35,6 @@ void membuatAkun (int *display) {
 	scanf(" %[^\n]", akun.password);
 	
 	akunPengguna = fopen("akunPengguna.txt", "a+");
-	
 	ditemukan = cariUsername(akunPengguna, akun.username);
 		
 	if (ditemukan) {
@@ -110,13 +109,14 @@ void login (int *display, account *sedangLogin) {
 			if (cek.identifier == 1) {
 				*display = 5;
 			} else {
-					*display = 7;
+				*display = 7;
 			}
 		} else {
 			printf("|+|Password Salah!\n\n");	
 		}
 	} else {
 		printf("|+|Username tidak ada! Silahkan buat akun terlebih dahulu!\n\n");
+		*display = 2;
 	}
 	// buka file
 	// cek satu satu
@@ -124,7 +124,27 @@ void login (int *display, account *sedangLogin) {
 	// kalo ngga gabisa masuk
 	// cek dia admin atau bukan
 }
+	
+bool cekNoTelp(char *noTelp) {
+	const char* listNomor[] = {"0811", "0812", "0813", "0821", "0822", "0852", "0853", 
+	"0823", "0851", "0814", "0815", "0816", "0855", "0856", "0857", "0858", 
+	"0817", "0818", "0819", "0859", "0877", "0878", "0895", "0896", "0897", "0898", 
+	"0899", "0881", "0882", "0883", "0884", "0885", "0886", "0887", "0888", "0889"};
+	
+    if (strlen(noTelp) < 10 || strlen(noTelp) > 15) {
+        return false;
+    }
 
+	int cekNomor = sizeof(listNomor) / sizeof(listNomor[0]);
+	
+	for (int i = 0; i < cekNomor; i++) {
+    if (strncmp(noTelp, listNomor[i], strlen(listNomor[i])) == 0) {
+        return true;
+    	}
+	}
+
+    return false;
+}
 
 void daftarAdmin (address *root, account *sedangLogin, int *display) {
 	char opsi;
@@ -135,7 +155,15 @@ void daftarAdmin (address *root, account *sedangLogin, int *display) {
 	
 	printf("|+|Nama       : "); scanf(" %[^\n]", daftar.nama);
 	printf("|+|Usia       : "); scanf(" %c", &daftar.usia);  while ((getchar()) != '\n');
-	printf("|+|No.Telepon : "); scanf(" %[^\n]", daftar.noTelp);
+	while (true) {
+	    printf("|+|No.Telepon : "); 
+	    scanf(" %[^\n]", daftar.noTelp);
+	    if (cekNoTelp(daftar.noTelp)) {
+	        break;
+	    } else {
+	        printf("|+|Nomor telepon tidak valid. Silakan masukkan nomor telepon yang valid.\n");
+	    }
+	}
 	printf("|+|                                                                                      |+|\n");
 	printf("|+|Pilih Prioritas Pasien:                                                               |+|\n");
 	printf("|+|1.  Prioritas 1 (Tidak Darurat)                                                       |+|\n");
@@ -154,6 +182,7 @@ void daftarAdmin (address *root, account *sedangLogin, int *display) {
 //			printf("waktu daftar: %s", daftar.jamDaftar);
 			strftime(filename, sizeof(filename), "Data_Pasien_%d-%m-%Y.txt", &timeSekarang);
 			
+			*root = push (*root, daftar);
 			daftar.penyakit = 0;
 			daftar.urutan = 0;
 			todayList = fopen(filename, "a");
@@ -172,15 +201,15 @@ void daftarAdmin (address *root, account *sedangLogin, int *display) {
 					daftar.urutan);
 					
 					fclose(todayList);
+				*display = 5;
 			}
 		}
-//		*root = push (*root, daftar);
 	// mendaftar
 	// isi nama, usia, no telp, prioritas
 	// masukan keluhan sebagai keterangan untuk dokter
 	// push ke tree
 	// menampilkan hasil daftar beserta jam daftar dan nomor antrian beliau	
-	}
+}
 
 int setPriority (int penyakit) {
 	int prioritas = 0;
@@ -208,12 +237,19 @@ void daftarPengguna (address *root, account *sedangLogin, int *display) {
     bool sudahDaftar;
     
     if (sudahDaftar = cekTodayList (sedangLogin->username)){
-    	printf("|+|Anda sudah melakukan pendaftaran hari ini!");
+    	printf("|+|Anda sudah melakukan pendaftaran hari ini!\n");
 	} else {
 		printf("|+|Nama       : "); scanf(" %[^\n]", daftar.nama);
 		printf("|+|Usia       : "); scanf(" %c", &daftar.usia);  while ((getchar()) != '\n');
-		printf("|+|No.Telepon : "); scanf(" %[^\n]", daftar.noTelp);
-		printf("|+|                                                                                      |+|\n");
+		while (true) {
+	        printf("|+|No.Telepon : "); 
+	        scanf(" %[^\n]", daftar.noTelp);
+	        if (cekNoTelp(daftar.noTelp)) {
+	            break;
+	        } else {
+	            printf("|+|Nomor telepon tidak valid. Silakan masukkan nomor telepon yang valid.\n");
+	        }
+	    }
 		printf("|+|Pilih jenis penyakit yang diderita:                                                   |+|\n");
 		printf("|+|1.  Pemeriksaan Rutin                                                                 |+|\n");
 	    printf("|+|2.  Konsultasi Penyakit Diderita                                                      |+|\n");
@@ -245,7 +281,7 @@ void daftarPengguna (address *root, account *sedangLogin, int *display) {
 //			printf("waktu daftar: %s", daftar.jamDaftar);
 			strftime(filename, sizeof(filename), "Data_Pasien_%d-%m-%Y.txt", &timeSekarang);
 			
-//			*root = push (*root, daftar);
+			*root = push (*root, daftar);
 			daftar.urutan = 0;
 			todayList = fopen(filename, "a");
 			if (todayList == NULL) {
@@ -263,23 +299,80 @@ void daftarPengguna (address *root, account *sedangLogin, int *display) {
 					daftar.urutan);
 					
 					fclose(todayList);
+				*display = 7;
 			}
 				// tampilkan nomor antrian dia
-			}
-		*display = 7;
 		}
+		
+	}
 }
 
+void writeInOrder(FILE *file, address root) {
+    if (root != NULL) {
+        writeInOrder(file, root->kiri);
+        fprintf(file, "%s %c %s %s %d %d %d\n", root->info.nama, root->info.usia, root->info.noTelp, root->info.jamDaftar, root->info.penyakit, root->info.prioritas, root->info.urutan);
+        writeInOrder(file, root->kanan);
+    }
+}
+
+void readData(const char *filename, address *root) {
+	int urutan = 1;
+    Pasien pasien;
+    
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        printf("Tidak dapat membuka file %s\n", filename);
+        return;
+    }
+
+    while (fscanf(file, "%s %c %s %s %d %d %d", pasien.nama, &pasien.usia, pasien.noTelp, pasien.jamDaftar, &pasien.penyakit, &pasien.prioritas, &pasien.urutan) == 7) {
+        pasien.urutan = urutan++; 
+        *root = push(*root, pasien);
+    	}
+	fclose(file);
+	
+	file = fopen(filename, "w");
+	if (file == NULL) {
+	    printf("Tidak dapat membuka file %s untuk menulis\n", filename);
+	    return;
+	}
+	writeInOrder(file, *root);
+    fclose(file);
+}
+
+//void readData(const char *filename) {
+//    FILE *file = fopen(filename, "r");
+//    if (file == NULL) {
+//        printf("Tidak dapat membuka file %s\n", filename);
+//        return;
+//    }
+//
+//    account akun;
+//    Pasien pasien;
+//
+//    while (fscanf(file, "%s %s %s %c %s %s %d %d %d", akun.username, akun.password, pasien.nama, &pasien.usia, pasien.noTelp, pasien.jamDaftar, &pasien.penyakit, &pasien.prioritas, &pasien.urutan) == 9) {
+//        printf("Username: %s\n", akun.username);
+//        printf("Password: %s\n", akun.password);
+//        printf("Nama: %s\n", pasien.nama);
+//        printf("Usia: %c\n", pasien.usia);
+//        printf("Nomor Telepon: %s\n", pasien.noTelp);
+//        printf("Waktu Pendaftaran: %s\n", pasien.jamDaftar);
+//        printf("Penyakit: %d\n", pasien.penyakit);
+//        printf("Prioritas: %d\n", pasien.prioritas);
+//        printf("Urutan: %d\n", pasien.urutan);
+//        printf("\n");
+//    }
+//
+//    fclose(file);
+//}
 
 address createNode (Pasien info) {
-	address node;
-	node = (address) malloc(sizeof (Tree));
+	address node = (address) malloc(sizeof (Tree));
 	node->info = info;
 	node->kanan = NULL;
 	node->kiri = NULL;
 	return (node);
 }
-
 
 bool cekKosong (address root) {
 	return (root == NULL);
@@ -290,7 +383,7 @@ address push (address root, Pasien info) {
 		return createNode (info);
 	}
 	
-    if (info.prioritas < root->info.prioritas) {
+    if (info.prioritas > root->info.prioritas) {
         root->kiri = push(root->kiri, info);
     } else {
         root->kanan = push(root->kanan, info);
@@ -298,8 +391,6 @@ address push (address root, Pasien info) {
 
     return root;
 }
-
-
 
 address pop (address root, Pasien *info) {
 	if (cekKosong(root)) {
@@ -348,11 +439,3 @@ void antrianSekarang (address root) {
     }
     printf("Nomor Antrian Sekarang: %d\n", kini->info.nama);
 }
-
-//void displayTree(Tree root) {
-//    if (root != NULL) {
-//        displayTree(root->kiri);
-//        printf("Nama: %s, Prioritas: %d\n", root->info.nama, root->info.prioritas);
-//        displayTree(root->kanan);
-//    }
-//}

@@ -7,11 +7,13 @@ int main() {
 	
 	int opsi = 1;
 	char opsichar;
+	bool running = true;
 	int display = 1;
 	address root = NULL;
 	account sedangLogin;
+	char filename[30];
 	
-	while (opsi != 0) {
+	while (running) {
 		switch (display) {
 			case 1:
 				system("cls");
@@ -27,10 +29,9 @@ int main() {
                 	display = 2;
 				} else
 				if (opsichar == 'n') {
-					opsi = 0;
+					break;
 				}
-				break;
-				
+
 			case 2:
 //				system("cls");
 				printf("|+|======================================================================================|+|\n");
@@ -105,6 +106,7 @@ int main() {
                 printf("|+|======================================================================================|+|\n");
                 printf("|+|1. Daftar Antrian                                                                     |+|\n");
                 printf("|+|2. Mengeluarkan pasian yang selesai                                                   |+|\n");
+                printf("|+|3. Pemberian nomor antrian                                                            |+|\n");
                 printf("|+|0. Keluar                                                                             |+|\n");
                 printf("|+|--------------------------------------------------------------------------------------|+|\n");
                 printf("|+|Pilih opsi: ");
@@ -117,11 +119,17 @@ int main() {
                     displayTree(root);
                     system("pause");
                     display = 5;
-                } else if (opsi == 0){
-                	display = 2;
-				} 
+                } else if (opsi == 3){
+                	updateTime();
+                	strftime(filename, sizeof(filename), "Data_Pasien_%d-%m-%Y.txt", &timeSekarang);
+                	readData(filename, &root);
+                	system("pause");
+                	display = 5;
+				} else if (opsi == 0){
+					display = 2;
+				}
 					display = 5;
-
+					
 			case 6:
 //				system("cls");
                 printf("|+|======================================================================================|+|\n");
@@ -163,13 +171,13 @@ int main() {
 				} else if (opsi == 2) {
 					display = 9;
 				} else if (opsi == 0){
-					display  = 7;
+					display  = 2;
 				}
-				break;
+					display = 7;
 				
 			case 8:
 //				system("cls");
-				printf("yang lagi login: %s %s", sedangLogin.username, sedangLogin.password);
+				printf("yang lagi login: %s %s\n", sedangLogin.username, sedangLogin.password);
                 printf("|+|======================================================================================|+|\n");
                 printf("|+|                                                                                      |+|\n");
                 printf("|+|                                        GaAntre                                       |+|\n");
