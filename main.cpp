@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,6 +30,7 @@ int main() {
                 	display = 2;
 				} else
 				if (opsichar == 'n') {
+					running = false;
 					break;
 				}
 
@@ -56,6 +58,9 @@ int main() {
 				} else 
 				if (opsi == 2) {
 					display = 3;
+				} else
+				if (opsi == 0) {
+					running = false;
 				}
 				break;
 
@@ -113,19 +118,20 @@ int main() {
                 scanf("%d", &opsi);
 				if (opsi == 1) {
                     display = 6;
-                } else if (opsi == 2) {
+                } else
+				if (opsi == 2) {
 					Pasien pasienSelesai;
                     root = pop(root, &pasienSelesai);
                     displayTree(root);
                     system("pause");
                     display = 5;
-                } else if (opsi == 3){
-                	updateTime();
-                	strftime(filename, sizeof(filename), "Data_Pasien_%d-%m-%Y.txt", &timeSekarang);
-                	readData(filename, &root);
+                } else 
+				if (opsi == 3) {
+                	sortBasedPriority() ;
                 	system("pause");
                 	display = 5;
-				} else if (opsi == 0){
+				} else
+				if (opsi == 0) {
 					display = 2;
 				}
 					display = 5;
@@ -210,3 +216,4 @@ int main() {
 
 	return 0;
 }
+

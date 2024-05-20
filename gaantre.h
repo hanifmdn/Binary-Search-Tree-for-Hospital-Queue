@@ -9,7 +9,7 @@
 typedef struct tm waktu;
 typedef struct {
 	char nama[50];
-	char usia;
+	char usia[3];
 	char noTelp[16];
 	char jamDaftar[9];
 	int penyakit;
@@ -30,6 +30,12 @@ typedef struct {
 		char password[20];	
 		bool identifier;
 } account;
+
+typedef struct {
+    	account akun;
+		Pasien pasien;
+} pasienAkun;
+	
 	
 void updateTime();
 bool cariUsername (FILE *dataAkun, char namaCari[20]);
@@ -37,11 +43,10 @@ void membuatAkun(int *display);
 bool cariAkun (FILE *dataAkun, account *cek, char cariUsername[20]);
 bool cekTodayList (char namaCari[20]);
 void login (int *display, account *sedangLogin);
-bool cekNoTelp(char *noTelp);
 void daftarAdmin (address *root, account *sedangLogin, int *display);
 void daftarPengguna (address *root, account *sedangLogin, int *display);
-void writeInOrder(FILE *file, address root);
-void readData(const char *filename, address *root);
+void totalBarisFile(char filename);
+void sortBasedPriority();
 address createNode (Pasien info);
 bool cekKosong (address *root);
 address push (address root, Pasien info);

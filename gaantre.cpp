@@ -224,8 +224,6 @@ int setPriority (int penyakit) {
 			prioritas = 3;
 	}
 	return (prioritas);
-	
-	
 }
 
 void daftarPengguna (address *root, account *sedangLogin, int *display) {
@@ -236,11 +234,18 @@ void daftarPengguna (address *root, account *sedangLogin, int *display) {
     char filename[30];
     bool sudahDaftar;
     
-    if (sudahDaftar = cekTodayList (sedangLogin->username)){
+    if (sudahDaftar = cekTodayList (sedangLogin->username)) {
     	printf("|+|Anda sudah melakukan pendaftaran hari ini!\n");
+    	*display = 7;
 	} else {
 		printf("|+|Nama       : "); scanf(" %[^\n]", daftar.nama);
-		printf("|+|Usia       : "); scanf(" %c", &daftar.usia);  while ((getchar()) != '\n');
+		int lenUser = strlen(daftar.nama);
+		for (int i = 0; i < lenUser; i++) {
+			if (daftar.nama[i] == ' ') {
+				daftar.nama[i] = '_';
+			}
+		}
+		printf("|+|Usia       : "); scanf(" %[^\n]", daftar.usia);  while ((getchar()) != '\n');
 		while (true) {
 	        printf("|+|No.Telepon : "); 
 	        scanf(" %[^\n]", daftar.noTelp);
@@ -287,7 +292,7 @@ void daftarPengguna (address *root, account *sedangLogin, int *display) {
 			if (todayList == NULL) {
 				printf("|+|Gagal menyimpan data Pasien!");
 			} else {
-				fprintf(todayList, "%s %s %s %c %s %s %d %d %d\n", 
+				fprintf(todayList, "%s %s %s %s %s %s %d %d %d\n", 
 					sedangLogin->username,
 					sedangLogin->password,
 					daftar.nama,
@@ -315,29 +320,155 @@ void writeInOrder(FILE *file, address root) {
     }
 }
 
-void readData(const char *filename, address *root) {
-	int urutan = 1;
-    Pasien pasien;
-    
-    FILE *file = fopen(filename, "r");
+int totalBarisFile(char filename[]) {
+	FILE *file = fopen(filename, "r");
+	pasienAkun temp;
+	int totBaris = 0;
     if (file == NULL) {
         printf("Tidak dapat membuka file %s\n", filename);
-        return;
-    }
-
-    while (fscanf(file, "%s %c %s %s %d %d %d", pasien.nama, &pasien.usia, pasien.noTelp, pasien.jamDaftar, &pasien.penyakit, &pasien.prioritas, &pasien.urutan) == 7) {
-        pasien.urutan = urutan++; 
-        *root = push(*root, pasien);
-    	}
-	fclose(file);
-	
-	file = fopen(filename, "w");
-	if (file == NULL) {
-	    printf("Tidak dapat membuka file %s untuk menulis\n", filename);
-	    return;
+    } else {
+    	while (fscanf(file, "%s %s %s %s %s %s %d %d %d\n", 
+					temp.akun.username,
+					temp.akun.password,
+					temp.pasien.nama,
+					temp.pasien.usia,
+					temp.pasien.noTelp,
+					temp.pasien.jamDaftar,
+					&temp.pasien.penyakit,
+					&temp.pasien.prioritas,
+					&temp.pasien.urutan) == 9) {
+					totBaris++;
+					}
+		fclose(file);
 	}
-	writeInOrder(file, *root);
-    fclose(file);
+	return totBaris;
+}
+
+void sortBasedPriority() {
+	FILE *todayList;
+	int urutan = 1;
+    char filename[30];
+    int i;
+	int lenOperasiFile;
+    
+    // Mendapatkan nama file hari ini
+    updateTime();
+	strftime(filename, sizeof(filename), "Data_Pasien_%d-%m-%Y.txt", &timeSekarang);
+    
+    // Mengambil banyaknya baris dalam file
+	lenOperasiFile = totalBarisFile(filename);
+    pasienAkun operasiFile[lenOperasiFile];
+    
+	todayList = fopen(filename, "r");
+    if (todayList == NULL) {
+        printf("Tidak dapat membuka file %s\n", filename);
+        return;
+    } else {
+    	printf("masuk else scan file\n");
+    	i = 0;
+    	while (fscanf(todayList, "%s %s %s %s %s %s %d %d %d\n", 
+					operasiFile[i].akun.username,
+					operasiFile[i].akun.password,
+					operasiFile[i].pasien.nama,
+					operasiFile[i].pasien.usia,
+					operasiFile[i].pasien.noTelp,
+					operasiFile[i].pasien.jamDaftar,
+					&operasiFile[i].pasien.penyakit,
+					&operasiFile[i].pasien.prioritas,
+					&operasiFile[i].pasien.urutan) == 9) {
+					i++;
+					}
+		fclose(todayList);
+		int len = i;
+		int min;
+		int hour1, minute1, second1, hour2, minute2, second2;
+//		printf("beres scan file mau masuk for\n");
+		for (i = 0; i < len - 1; i++) {
+			min = i;
+//			printf("masuk for pertama\n");
+			for (int j = i + 1; j < len; j++) {
+//				printf("masuk for kedua\n");
+				if (operasiFile[j].pasien.prioritas > operasiFile[min].pasien.prioritas) {
+					min = j;
+				} else 
+				if (operasiFile[j].pasien.prioritas == operasiFile[min].pasien.prioritas) {
+					sscanf(operasiFile[min].pasien.jamDaftar , "%d:%d:%d", &hour1, &minute1, &second1);
+					sscanf(operasiFile[j].pasien.jamDaftar, "%d:%d:%d", &hour2, &minute2, &second2);
+					
+					printf("jam min %d:%d:%d", hour1, minute1, second1);
+					printf("jam j %d:%d:%d", hour2, minute2, second2);
+					if (hour2 < hour1 || (hour2 == hour1 && minute2 < minute1) || (hour2 == hour1 && minute2 == minute1 && second2 < second1)) {
+						min = j;
+					}
+				}
+			}
+			
+			pasienAkun temp = operasiFile[min];
+			operasiFile[min] = operasiFile[i];
+			operasiFile[i] = temp;
+//			printf("berhasil swap\n");
+		}
+		for (i = 0; i < len; i++) {
+			operasiFile[i].pasien.urutan = i + 1;
+		}
+		
+//		// SORT TIME
+//		int hour1, minute1, second1, hour2, minute2, second2;
+//		
+//		for (i = 0; i < len - 1; i++) {
+//			min = i;
+////			printf("masuk for pertama\n");
+//			for (int j = i + 1; j < len; j++) {
+////				printf("masuk for kedua\n");
+//				sscanf(operasiFile[min].pasien.jamDaftar , "%d:%d:%d", &hour1, &minute1, &second1);
+//				sscanf(operasiFile[j].pasien.jamDaftar, "%d:%d:%d", &hour2, &minute2, &second2);
+//				
+//				printf("jam min %d:%d:%d", hour1, minute1, second1);
+//				printf("jam j %d:%d:%d", hour2, minute2, second2);
+//				
+//				
+//				if (hour2 <= hour1) {
+//					min = j;
+//					if (minute2 <= minute1) {
+//						min = j;
+//						if (second2 <= second1) {
+//							min = j;
+//						}
+//					}
+//				} 
+//			}
+//			
+//			pasienAkun temp = operasiFile[min];
+//			operasiFile[min] = operasiFile[i];
+//			operasiFile[i] = temp;
+////			printf("berhasil swap\n");
+//		}
+		
+//		printf("membuka file lagi untuk write ulang");
+		todayList = fopen(filename, "w");
+		if (todayList == NULL) {
+        printf("Tidak dapat membuka file %s\n", filename);
+        return;
+  		} else {
+//  			printf("siap menulis ulang");
+  				for (i = 0; i < len; i++) {
+					fprintf(todayList, "%s %s %s %s %s %s %d %d %d\n", 
+						operasiFile[i].akun.username,
+						operasiFile[i].akun.password,
+						operasiFile[i].pasien.nama,
+						operasiFile[i].pasien.usia,
+						operasiFile[i].pasien.noTelp,
+						operasiFile[i].pasien.jamDaftar,
+						operasiFile[i].pasien.penyakit,
+						operasiFile[i].pasien.prioritas,
+						operasiFile[i].pasien.urutan);
+				}
+				fclose(todayList);
+		}
+		
+	}
+	
+	
 }
 
 //void readData(const char *filename) {
