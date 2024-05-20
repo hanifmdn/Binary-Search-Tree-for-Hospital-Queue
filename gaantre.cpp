@@ -182,7 +182,7 @@ void daftarAdmin (address *root, account *sedangLogin, int *display) {
 //			printf("waktu daftar: %s", daftar.jamDaftar);
 			strftime(filename, sizeof(filename), "Data_Pasien_%d-%m-%Y.txt", &timeSekarang);
 			
-			*root = push (*root, daftar);
+//			*root = push (*root, daftar);
 			daftar.penyakit = 0;
 			daftar.urutan = 0;
 			todayList = fopen(filename, "a");
@@ -201,7 +201,7 @@ void daftarAdmin (address *root, account *sedangLogin, int *display) {
 					daftar.urutan);
 					
 					fclose(todayList);
-				*display = 5;
+				*display = 6;
 			}
 		}
 	// mendaftar
@@ -237,6 +237,7 @@ void daftarPengguna (address *root, account *sedangLogin, int *display) {
     if (sudahDaftar = cekTodayList (sedangLogin->username)) {
     	printf("|+|Anda sudah melakukan pendaftaran hari ini!\n");
     	*display = 7;
+    	return;
 	} else {
 		printf("|+|Nama       : "); scanf(" %[^\n]", daftar.nama);
 		int lenUser = strlen(daftar.nama);
@@ -286,7 +287,7 @@ void daftarPengguna (address *root, account *sedangLogin, int *display) {
 //			printf("waktu daftar: %s", daftar.jamDaftar);
 			strftime(filename, sizeof(filename), "Data_Pasien_%d-%m-%Y.txt", &timeSekarang);
 			
-			*root = push (*root, daftar);
+//			*root = push (*root, daftar);
 			daftar.urutan = 0;
 			todayList = fopen(filename, "a");
 			if (todayList == NULL) {
@@ -559,10 +560,10 @@ address pop (address root, Pasien *info) {
 		return root;
 	}
 	
-	if (root->kanan != NULL) {
-		root->kanan = pop(root->kanan, info);
+	if (root->kiri != NULL) {
+		root->kiri = pop(root->kiri, info);
 	} else {
-		address temp = root->kiri;
+		address temp = root->kanan;
 		*info = root->info;
 		free(root);
 		return temp;

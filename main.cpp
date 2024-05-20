@@ -13,6 +13,8 @@ int main() {
 	address root = NULL;
 	account sedangLogin;
 	char filename[30];
+	Pasien pasienSelesai;
+
 	
 	while (running) {
 		switch (display) {
@@ -120,8 +122,8 @@ int main() {
                     display = 6;
                 } else
 				if (opsi == 2) {
-					Pasien pasienSelesai;
                     root = pop(root, &pasienSelesai);
+                    
                     displayTree(root);
                     system("pause");
                     display = 5;
@@ -135,8 +137,8 @@ int main() {
 				} else
 				if (opsi == 0) {
 					display = 2;
-				}
-					display = 5;
+				} 
+				break;
 					
 			case 6:
 //				system("cls");
@@ -176,12 +178,14 @@ int main() {
 				scanf("%d", &opsi);
 				if (opsi == 1) {
 					display = 8;
-				} else if (opsi == 2) {
+				} else
+				if (opsi == 2) {
 					display = 9;
-				} else if (opsi == 0){
+				} else
+				if (opsi == 0) {
 					display  = 2;
 				}
-					display = 7;
+				break;
 				
 			case 8:
 //				system("cls");
@@ -198,15 +202,18 @@ int main() {
                 printf("|+|======================================================================================|+|\n");
                 printf("|+|Isi Formulir di bawah ini                                                             |+|\n");
                 daftarPengguna(&root, &sedangLogin, &display);
-                displayTree(root); 
-                display = 2;
+//                displayTree(root);
+                display = 7;
                 break;
 				
 			case 9:
-				system("cls");
-                antrianSekarang (root);
-                // Implementasi untuk menampilkan nomor antrian sekarang
-                opsi = 0;
+//				system("cls");
+                printf("Antrian Sekarang: ");
+                printf("Nama: %s", pasienSelesai.nama);
+                printf("Prioritas: %d", pasienSelesai.prioritas);
+                printf("Urutan: %d", pasienSelesai.urutan);
+                system("pause");
+                display = 7;
                 break;
                 
 			default:
