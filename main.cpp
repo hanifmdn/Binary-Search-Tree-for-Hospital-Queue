@@ -127,7 +127,9 @@ int main() {
                     display = 5;
                 } else 
 				if (opsi == 3) {
-                	sortBasedPriority() ;
+                	sortAntrian();
+                	buildBST(&root);
+                	displayTree(root); 
                 	system("pause");
                 	display = 5;
 				} else

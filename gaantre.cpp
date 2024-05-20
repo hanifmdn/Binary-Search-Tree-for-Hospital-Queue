@@ -344,7 +344,7 @@ int totalBarisFile(char filename[]) {
 	return totBaris;
 }
 
-void sortBasedPriority() {
+void sortAntrian() {
 	FILE *todayList;
 	int urutan = 1;
     char filename[30];
@@ -469,6 +469,37 @@ void sortBasedPriority() {
 	}
 	
 	
+}
+
+void buildBST(address *root) {
+	char filename[30];
+	FILE *todayList;
+	pasienAkun buatTree;
+	
+	// Mendapatkan nama file hari ini
+    updateTime();
+	strftime(filename, sizeof(filename), "Data_Pasien_%d-%m-%Y.txt", &timeSekarang);
+    
+	todayList = fopen(filename, "r");
+    if (todayList == NULL) {
+        printf("Tidak dapat membuka file %s\n", filename);
+        return;
+    } else {
+    	printf("masuk else scan file\n");
+    	while (fscanf(todayList, "%s %s %s %s %s %s %d %d %d\n", 
+					buatTree.akun.username,
+					buatTree.akun.password,
+					buatTree.pasien.nama,
+					buatTree.pasien.usia,
+					buatTree.pasien.noTelp,
+					buatTree.pasien.jamDaftar,
+					&buatTree.pasien.penyakit,
+					&buatTree.pasien.prioritas,
+					&buatTree.pasien.urutan) == 9) {
+					*root = push (*root, buatTree.pasien);
+					}
+		fclose(todayList);
+	}
 }
 
 //void readData(const char *filename) {
