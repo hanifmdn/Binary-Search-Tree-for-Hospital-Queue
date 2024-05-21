@@ -9,7 +9,7 @@ void updateTime() {
 
 bool isItAlreadyTheTime() {
 	updateTime();
-	if (timeSekarang.tm_hour >= 7 && timeSekarang.tm_min >= 47) {
+	if (timeSekarang.tm_hour >= 10 && timeSekarang.tm_min >= 1) {
 		return true;
 	} else {
 		return false;
@@ -163,7 +163,13 @@ void daftarAdmin (address *root, account *sedangLogin, int *display) {
 	char filename[30];
 	
 	printf("|+|Nama       : "); scanf(" %[^\n]", daftar.nama);
-	printf("|+|Usia       : "); scanf(" %c", &daftar.usia);  while ((getchar()) != '\n');
+	int lenUser = strlen(daftar.nama);
+	for (int i = 0; i < lenUser; i++) {
+			if (daftar.nama[i] == ' ') {
+				daftar.nama[i] = '_';
+			}
+	}
+	printf("|+|Usia       : "); scanf(" %[^\n]", daftar.usia);  while ((getchar()) != '\n');
 	while (true) {
 	    printf("|+|No.Telepon : "); 
 	    scanf(" %[^\n]", daftar.noTelp);
@@ -192,12 +198,12 @@ void daftarAdmin (address *root, account *sedangLogin, int *display) {
 			strftime(filename, sizeof(filename), "Data_Pasien_%d-%m-%Y.txt", &timeSekarang);
 			
 			daftar.penyakit = 0;
-			daftar.urutan = 0;
+			daftar.urutan = urutanTerakhir();
 			todayList = fopen(filename, "a");
 			if (todayList == NULL) {
-				printf("|+|Gagal menyimpan data Pasien!");
+				printf("|+|Gagal menyimpan data Pasien!\n");
 			} else {
-				fprintf(todayList, "%s %s %s %c %s %s %d %d %d\n", 
+				fprintf(todayList, "%s %s %s %s %s %s %d %d %d\n", 
 					sedangLogin->username,
 					sedangLogin->password,
 					daftar.nama,
@@ -210,6 +216,7 @@ void daftarAdmin (address *root, account *sedangLogin, int *display) {
 					
 					fclose(todayList);
 				*display = 5;
+				*root = push (*root, daftar);
 			}
 		}
 	// mendaftar
@@ -241,6 +248,12 @@ void daftarPengguna (address *root, account *sedangLogin, int *display) {
 	FILE *todayList;
     char filename[30];
     bool sudahDaftar;
+    
+    if (isItAlreadyTheTime) {
+    	printf("|+|Pendaftaran hari ini sudah ditutup!\n");
+    	*display = 7;
+    	return;
+	}
     
     if (sudahDaftar = cekTodayList (sedangLogin->username)) {
     	printf("|+|Anda sudah melakukan pendaftaran hari ini!\n");
@@ -353,6 +366,34 @@ int totalBarisFile(char filename[]) {
 	return totBaris;
 }
 
+int urutanTerakhir() {
+	char filename[30];
+	updateTime();
+	pasienAkun temp;
+	int totBaris = 0;
+	strftime(filename, sizeof(filename), "Data_Pasien_%d-%m-%Y.txt", &timeSekarang);
+	FILE *file = fopen(filename, "r");
+
+
+    if (file == NULL) {
+        printf("Tidak dapat membuka file %s\n", filename);
+    } else {
+    	while (fscanf(file, "%s %s %s %s %s %s %d %d %d\n", 
+					temp.akun.username,
+					temp.akun.password,
+					temp.pasien.nama,
+					temp.pasien.usia,
+					temp.pasien.noTelp,
+					temp.pasien.jamDaftar,
+					&temp.pasien.penyakit,
+					&temp.pasien.prioritas,
+					&temp.pasien.urutan) == 9) {
+					}
+		fclose(file);
+	}
+	return temp.pasien.urutan + 1;
+}
+
 void sortAntrian(address *root) {
 	FILE *todayList;
 	int urutan = 1;
@@ -376,7 +417,7 @@ void sortAntrian(address *root) {
 	        printf("Tidak dapat membuka file %s\n", filename);
 	        return;
 	    } else {
-	    	printf("masuk else scan file\n");
+//	    	printf("masuk else scan file\n");
 	    	i = 0;
 	    	while (fscanf(todayList, "%s %s %s %s %s %s %d %d %d\n", 
 						operasiFile[i].akun.username,
@@ -407,8 +448,8 @@ void sortAntrian(address *root) {
 						sscanf(operasiFile[min].pasien.jamDaftar , "%d:%d:%d", &hour1, &minute1, &second1);
 						sscanf(operasiFile[j].pasien.jamDaftar, "%d:%d:%d", &hour2, &minute2, &second2);
 						
-						printf("jam min %d:%d:%d", hour1, minute1, second1);
-						printf("jam j %d:%d:%d", hour2, minute2, second2);
+//						printf("jam min %d:%d:%d", hour1, minute1, second1);
+//						printf("jam j %d:%d:%d", hour2, minute2, second2);
 						if (hour2 < hour1 || (hour2 == hour1 && minute2 < minute1) || (hour2 == hour1 && minute2 == minute1 && second2 < second1)) {
 							min = j;
 						}
@@ -456,16 +497,21 @@ void buildBST(address *root) {
 	FILE *todayList;
 	pasienAkun buatTree;
 	
+	if (*root != NULL) {
+		printf("|+|Antrian sudah di bangun!\n|+|\n|+|\n");
+		return;
+	}
+	
 	// Mendapatkan nama file hari ini
     updateTime();
 	strftime(filename, sizeof(filename), "Data_Pasien_%d-%m-%Y.txt", &timeSekarang);
     
 	todayList = fopen(filename, "r");
     if (todayList == NULL) {
-        printf("Tidak dapat membuka file %s\n", filename);
+        printf("|+|Tidak dapat membuka file %s\n", filename);
         return;
     } else {
-    	printf("masuk else scan file\n");
+//    	printf("masuk else scan file\n");
     	while (fscanf(todayList, "%s %s %s %s %s %s %d %d %d\n", 
 					buatTree.akun.username,
 					buatTree.akun.password,
@@ -525,20 +571,46 @@ address pop (address root, Pasien *info) {
 	return root;
 }
 
-void displayPreorder(address root) {
+void displayPop(address root) {
     if (cekKosong(root)) {
         return;
     }
-	printf("|+| %s (%d)\n", root->info.nama, root->info.prioritas);
-	displayPreorder(root->kiri);
-	displayPreorder(root->kanan);
+	displayTree(root->kiri);
+	printf("|+|%d %s [%d]\n", root->info.urutan, root->info.nama, root->info.prioritas);
+	displayTree(root->kanan);
 }
+
 
 void displayTree(address root) {
     if (cekKosong(root)) {
-        printf("Tree kosong.\n");
+//        printf("Tree kosong.\n");
     } else {
-//        printf("Isi Tree (Preorder):\n");
-        displayPreorder(root);
+        displayPop(root);
     }
 }
+
+
+void antrianSekarang (Pasien pasien, int *display ) {
+	if (isItAlreadyTheTime()) {
+				printf("|+|======================================================================================|+|\n");
+                printf("|+|                                                                                      |+|\n");
+                printf("|+|                                        GaAntre                                       |+|\n");
+                printf("|+|                               Ga Perlu CAPE-CAPE Ngantre                             |+|\n");
+                printf("|+|                                    Nomor Antrean Kini                                |+|\n");
+                printf("|+|                                                                                      |+|\n");
+                printf("|+|======================================================================================|+|\n");
+            	printf("|+|                                                                                      |+|\n");
+                printf("|+|                                 Nomor Antrian Sekarang                               |+|\n");
+                printf("|+|                                          %d                                           |+|\n", pasien.urutan);
+                printf("|+|                                                                                      |+|\n");
+                printf("|+|======================================================================================|+|\n");
+
+    system("pause");
+    *display = 7;
+	} else {
+		printf("|+|Nomor antrian belum keluar! Silahkan coba saat sudah jam 9\n");
+		*display = 7;
+	}
+}
+
+

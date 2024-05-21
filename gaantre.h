@@ -47,6 +47,7 @@ void login (int *display, account *sedangLogin);
 void daftarAdmin (address *root, account *sedangLogin, int *display);
 void daftarPengguna (address *root, account *sedangLogin, int *display);
 void totalBarisFile(char filename);
+int urutanTerakhir();
 void sortAntrian(address *root);
 void buildBST(address *root);
 address createNode (Pasien info);
@@ -55,6 +56,6 @@ address push (address root, Pasien info);
 address pop (address root, Pasien *info);
 void displayPreorder(address root); 
 void displayTree(address root);
-void antrianSekarang (address root);
+void antrianSekarang (Pasien pasien, int *display);
 
 #endif

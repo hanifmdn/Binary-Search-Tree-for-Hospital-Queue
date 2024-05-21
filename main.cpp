@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,6 +6,7 @@
 int main() {
 	
 	int opsi = 1;
+	bool valid;
 	bool running = true;
 	int display = 1;
 	address root = NULL;
@@ -48,7 +48,17 @@ int main() {
 				printf("|+|0. Keluar                                                                             |+|\n");
 				printf("|+|--------------------------------------------------------------------------------------|+|\n");
 				printf("|+|Pilih opsi: ");
-				scanf("%d", &opsi);
+				valid = false;
+				do {
+			        if (scanf("%d", &opsi) == true) {
+			            valid = true;
+			        } else {
+			            printf("|+|Input tidak valid. Mohon masukkan input yang sesuai!\n");
+			            printf("|+|Pilih Opsi: ");
+			            fflush(stdin);
+			        }
+			    } while (!valid);
+				
 				if (opsi == 1) {
 					display = 4;
 				} else 
@@ -59,7 +69,7 @@ int main() {
 					running = false;
 				}
 				break;
-
+				
 			case 3:
 //				system("cls");
 				printf("|+|======================================================================================|+|\n");
@@ -106,27 +116,41 @@ int main() {
                 printf("|+|                                                                                      |+|\n");
                 printf("|+|======================================================================================|+|\n");
                 printf("|+|1. Daftar Antrian                                                                     |+|\n");
-                printf("|+|2. Mengeluarkan pasian yang selesai                                                   |+|\n");
+                printf("|+|2. Mengeluarkan pasian yang selesai dari antrian                                      |+|\n");
                 printf("|+|3. Pemberian nomor antrian                                                            |+|\n");
+                printf("|+|4. Menentukan pembukaan dan penutupan pendaftaran                                     |+|\n");
                 printf("|+|0. Keluar                                                                             |+|\n");
                 printf("|+|--------------------------------------------------------------------------------------|+|\n");
                 printf("|+|Pilih opsi: ");
-                scanf("%d", &opsi);
+                valid = false;
+				do {
+			        if (scanf("%d", &opsi) == true) {
+			            valid = true;
+			        } else {
+			            printf("|+|Input tidak valid. Mohon masukkan input yang sesuai!\n");
+			            printf("|+|Pilih Opsi: ");
+			            fflush(stdin);
+			        }
+			    } while (!valid);
+			    
+			    
 				if (opsi == 1) {
                     display = 6;
                 } else
 				if (opsi == 2) {
                     root = pop(root, &pasienSelesai);
-                    printf("|+|Pasien yang telah selesai\n");
-                    printf("|+|Nama: %s (%d)\n", pasienSelesai.nama, pasienSelesai.prioritas);
+                    printf("|+|Pasien yang sedang konsultasi\n");
+                    printf("|+|Nama: %s (%d)\n|+|\n|+|\n", pasienSelesai.nama, pasienSelesai.prioritas);
                     
                     displayTree(root);
+                    printf("|+|");
                     system("pause");
                     display = 5;
                 } else 
 				if (opsi == 3) {
                 	sortAntrian(&root);
                 	displayTree(root); 
+                	printf("|+|");
                 	system("pause");
                 	display = 5;
 				} else
@@ -170,7 +194,18 @@ int main() {
 				printf("|+|0. Keluar                                                                             |+|\n");
 				printf("|+|--------------------------------------------------------------------------------------|+|\n");
 				printf("|+|Pilih opsi: ");
-				scanf("%d", &opsi);
+				valid = false;
+				do {
+			        if (scanf("%d", &opsi) == true) {
+			            valid = true;
+			        } else {
+			            printf("|+|Input tidak valid. Mohon masukkan input yang sesuai!\n");
+			            printf("|+|Pilih Opsi: ");
+			            fflush(stdin);
+			        }
+			    } while (!valid);
+			    
+			    
 				if (opsi == 1) {
 					display = 8;
 				} else
@@ -202,19 +237,8 @@ int main() {
                 break;
 				
 			case 9:
-//				system("cls");
-				if (isItAlreadyTheTime()) {
-					printf("Antrian Sekarang");
-	                printf("Nama     : %s\n", pasienSelesai.nama);
-	                printf("Prioritas: %d\n", pasienSelesai.prioritas);
-	                printf("Urutan   : %d\n", pasienSelesai.urutan);
-	                system("pause");
-	                display = 7;
-				} else {
-					printf("Nomor antrian belum keluar! Silahkan coba saat sudah jam 9\n");
-					display = 7;
-				}
-                
+				antrianSekarang (pasienSelesai, &display);
+
                 break;
                 
 			default:
