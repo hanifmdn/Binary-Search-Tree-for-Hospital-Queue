@@ -7,7 +7,6 @@
 int main() {
 	
 	int opsi = 1;
-	char opsichar;
 	bool running = true;
 	int display = 1;
 	address root = NULL;
@@ -25,16 +24,12 @@ int main() {
                 printf("|+|                                Selamat Datang di GaAntre                             |+|\n");
                 printf("|+|                             Kamu Ga Perlu CAPE-CAPE Ngantre                          |+|\n");
                 printf("|+|                                                                                      |+|\n");
-                printf("|+|--------------------------------------------------------------------------------------|+|\n");
-                printf("|+|Lanjut? (y/n) ");
-                scanf(" %c", &opsichar);
-                if (opsichar == 'y') {
-                	display = 2;
-				} else
-				if (opsichar == 'n') {
-					running = false;
-					break;
-				}
+                printf("|+|--------------------------------------------------------------------------------------|+|\n|+|");
+                system("pause");
+                display = 2;
+                system("cls");
+				break;
+
 
 			case 2:
 //				system("cls");
@@ -48,9 +43,8 @@ int main() {
 				printf("|+|                                         Sign Up                                      |+|\n");
 				printf("|+|                                                                                      |+|\n");
 				printf("|+|======================================================================================|+|\n");
-				printf("|+|Sudah punya akun?                                                                     |+|\n");
-				printf("|+|1. Sudah                                                                              |+|\n");
-				printf("|+|2. Belum                                                                              |+|\n");
+				printf("|+|1. Log In                                                                             |+|\n");
+				printf("|+|2. Sign Up                                                                            |+|\n");
 				printf("|+|0. Keluar                                                                             |+|\n");
 				printf("|+|--------------------------------------------------------------------------------------|+|\n");
 				printf("|+|Pilih opsi: ");
@@ -123,14 +117,15 @@ int main() {
                 } else
 				if (opsi == 2) {
                     root = pop(root, &pasienSelesai);
+                    printf("|+|Pasien yang telah selesai\n");
+                    printf("|+|Nama: %s (%d)\n", pasienSelesai.nama, pasienSelesai.prioritas);
                     
                     displayTree(root);
                     system("pause");
                     display = 5;
                 } else 
 				if (opsi == 3) {
-                	sortAntrian();
-                	buildBST(&root);
+                	sortAntrian(&root);
                 	displayTree(root); 
                 	system("pause");
                 	display = 5;
@@ -208,12 +203,18 @@ int main() {
 				
 			case 9:
 //				system("cls");
-                printf("Antrian Sekarang: ");
-                printf("Nama: %s", pasienSelesai.nama);
-                printf("Prioritas: %d", pasienSelesai.prioritas);
-                printf("Urutan: %d", pasienSelesai.urutan);
-                system("pause");
-                display = 7;
+				if (isItAlreadyTheTime()) {
+					printf("Antrian Sekarang");
+	                printf("Nama     : %s\n", pasienSelesai.nama);
+	                printf("Prioritas: %d\n", pasienSelesai.prioritas);
+	                printf("Urutan   : %d\n", pasienSelesai.urutan);
+	                system("pause");
+	                display = 7;
+				} else {
+					printf("Nomor antrian belum keluar! Silahkan coba saat sudah jam 9\n");
+					display = 7;
+				}
+                
                 break;
                 
 			default:

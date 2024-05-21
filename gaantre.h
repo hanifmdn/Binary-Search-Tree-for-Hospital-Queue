@@ -38,6 +38,7 @@ typedef struct {
 	
 	
 void updateTime();
+bool isItAlreadyTheTime();
 bool cariUsername (FILE *dataAkun, char namaCari[20]);
 void membuatAkun(int *display);
 bool cariAkun (FILE *dataAkun, account *cek, char cariUsername[20]);
@@ -46,7 +47,8 @@ void login (int *display, account *sedangLogin);
 void daftarAdmin (address *root, account *sedangLogin, int *display);
 void daftarPengguna (address *root, account *sedangLogin, int *display);
 void totalBarisFile(char filename);
-void sortBasedPriority();
+void sortAntrian(address *root);
+void buildBST(address *root);
 address createNode (Pasien info);
 bool cekKosong (address *root);
 address push (address root, Pasien info);
