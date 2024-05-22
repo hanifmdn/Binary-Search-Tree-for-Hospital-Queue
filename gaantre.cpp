@@ -7,13 +7,47 @@ void updateTime() {
 	timeSekarang = *localtime(&jam);
 }
 
-bool isItAlreadyTheTime() {
-	updateTime();
-	if (timeSekarang.tm_hour >= 10 && timeSekarang.tm_min >= 1) {
-		return true;
-	} else {
-		return false;
-	}
+//bool isItAlreadyTheTime() {
+//	updateTime();
+//	if (timeSekarang.tm_hour >= 10 && timeSekarang.tm_min >= 1) {
+//		return true;
+//	} else {
+//		return false;
+//	}
+//}
+
+//bool waktuPendaftaran(int jamBuka, int menitBuka, int jamTutup, int menitTutup) {
+//    updateTime();
+//
+//    int bukaDalamMenit = jamBuka * 60 + menitBuka;
+//    int tutupDalamMenit = jamTutup * 60 + menitTutup;
+//    int sekarangDalamMenit = timeSekarang.tm_hour * 60 + timeSekarang.tm_min;
+//	
+//	if (sekarangDalamMenit >= bukaDalamMenit){
+//		if (sekarangDalamMenit >= tutupDalamMenit){
+//			return true;
+//		}
+//		printf("waktu telah ditutup");
+//	}
+//	printf("Waktu belum dibuka");
+//}
+	
+bool pendaftaranDibuka(int jamBuka, int menitBuka) {
+    updateTime();
+
+    int bukaDalamMenit = jamBuka * 60 + menitBuka;
+    int sekarangDalamMenit = timeSekarang.tm_hour * 60 + timeSekarang.tm_min;
+
+    return sekarangDalamMenit >= bukaDalamMenit;
+}
+
+bool pendaftaranDitutup(int jamTutup, int menitTutup) {
+    updateTime();
+
+    int tutupDalamMenit = jamTutup * 60 + menitTutup;
+    int sekarangDalamMenit = timeSekarang.tm_hour * 60 + timeSekarang.tm_min;
+
+    return sekarangDalamMenit >= tutupDalamMenit;
 }
 
 bool cariUsername (FILE *dataAkun, char namaCari[20]) {
@@ -248,12 +282,24 @@ void daftarPengguna (address *root, account *sedangLogin, int *display) {
 	FILE *todayList;
     char filename[30];
     bool sudahDaftar;
+    int jamBuka, menitBuka, jamTutup, menitTutup;
     
-    if (isItAlreadyTheTime) {
-    	printf("|+|Pendaftaran hari ini sudah ditutup!\n");
-    	*display = 7;
-    	return;
-	}
+    if (!pendaftaranDibuka(jamBuka, menitBuka)) {
+        printf("|+|Pendaftaran hari ini belum dibuka!\n");
+        *display = 7;
+        return;
+    } else
+	if (pendaftaranDitutup(jamBuka, menitBuka)) {
+        printf("|+|Pendaftaran hari ini sudah ditutup!\n");
+        *display = 7;
+        return;
+    }
+    
+//    if (isItAlreadyTheTime) {
+//    	printf("|+|Pendaftaran hari ini sudah ditutup!\n");
+//    	*display = 7;
+//    	return;
+//	}
     
     if (sudahDaftar = cekTodayList (sedangLogin->username)) {
     	printf("|+|Anda sudah melakukan pendaftaran hari ini!\n");
@@ -398,11 +444,13 @@ void sortAntrian(address *root) {
 	FILE *todayList;
 	int urutan = 1;
     char filename[30];
-    int i;
-	int lenOperasiFile;
+    int i, lenOperasiFile, jamBuka, menitBuka, jamTutup, menitTutup;
     
-    if (!isItAlreadyTheTime) {
-    	return;
+    if (!pendaftaranDibuka(jamBuka, menitBuka)) {
+        return;
+    } else
+    if (pendaftaranDitutup(jamBuka, menitBuka)) {
+        return;
 	} else {
 	    // Mendapatkan nama file hari ini
 	    updateTime();
@@ -591,26 +639,35 @@ void displayTree(address root) {
 
 
 void antrianSekarang (Pasien pasien, int *display ) {
-	if (isItAlreadyTheTime()) {
-				printf("|+|======================================================================================|+|\n");
-                printf("|+|                                                                                      |+|\n");
-                printf("|+|                                        GaAntre                                       |+|\n");
-                printf("|+|                               Ga Perlu CAPE-CAPE Ngantre                             |+|\n");
-                printf("|+|                                    Nomor Antrean Kini                                |+|\n");
-                printf("|+|                                                                                      |+|\n");
-                printf("|+|======================================================================================|+|\n");
-            	printf("|+|                                                                                      |+|\n");
-                printf("|+|                                 Nomor Antrian Sekarang                               |+|\n");
-                printf("|+|                                          %d                                           |+|\n", pasien.urutan);
-                printf("|+|                                                                                      |+|\n");
-                printf("|+|======================================================================================|+|\n");
+    int jamBuka, menitBuka, jamTutup, menitTutup;
+    
+    if (!pendaftaranDibuka(jamBuka, menitBuka)) {
+        printf("|+|Pendaftaran hari ini belum dibuka!\n");
+        *display = 7;
+        return;
+    } else
+	if (pendaftaranDitutup(jamBuka, menitBuka)) {
+        printf("|+|Pendaftaran hari ini sudah ditutup!\n");
+        *display = 7;
+        return;
+    }
+		printf("|+|======================================================================================|+|\n");
+        printf("|+|                                                                                      |+|\n");
+        printf("|+|                                        GaAntre                                       |+|\n");
+        printf("|+|                               Ga Perlu CAPE-CAPE Ngantre                             |+|\n");
+        printf("|+|                                    Nomor Antrean Kini                                |+|\n");
+        printf("|+|                                                                                      |+|\n");
+        printf("|+|======================================================================================|+|\n");
+    	printf("|+|                                                                                      |+|\n");
+        printf("|+|                                 Nomor Antrian Sekarang                               |+|\n");
+        printf("|+|                                          %d                                           |+|\n", pasien.urutan);
+        printf("|+|                                                                                      |+|\n");
+        printf("|+|======================================================================================|+|\n");
 
     system("pause");
     *display = 7;
-	} else {
-		printf("|+|Nomor antrian belum keluar! Silahkan coba saat sudah jam 9\n");
-		*display = 7;
-	}
+	
 }
+
 
 

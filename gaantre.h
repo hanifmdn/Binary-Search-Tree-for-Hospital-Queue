@@ -38,7 +38,9 @@ typedef struct {
 	
 	
 void updateTime();
-bool isItAlreadyTheTime();
+//bool isItAlreadyTheTime();
+bool pendaftaranDibuka(int jamBuka, int menitBuka);
+bool pendaftaranDitutup(int jamTutup, int menitTutup);
 bool cariUsername (FILE *dataAkun, char namaCari[20]);
 void membuatAkun(int *display);
 bool cariAkun (FILE *dataAkun, account *cek, char cariUsername[20]);

@@ -6,9 +6,10 @@
 int main() {
 	
 	int opsi = 1;
+	int display = 1;
+	int jamBuka, menitBuka, jamTutup, menitTutup;
 	bool valid;
 	bool running = true;
-	int display = 1;
 	address root = NULL;
 	account sedangLogin;
 	char filename[30];
@@ -153,6 +154,30 @@ int main() {
                 	printf("|+|");
                 	system("pause");
                 	display = 5;
+				} else
+				if (opsi == 4){
+				    printf("|+|Masukkan waktu buka pendaftaran (jam dan menit, pisahkan dengan spasi): ");
+				    scanf("%d %d", &jamBuka, &menitBuka);
+				
+				    printf("|+|Masukkan waktu tutup pendaftaran (jam dan menit, pisahkan dengan spasi): ");
+				    scanf("%d %d", &jamTutup, &menitTutup);
+				
+				    if (pendaftaranDibuka(jamBuka, menitBuka)) {
+				        printf("|+|Pendaftaran sudah dibuka                                                              |+|\n");
+				    } 
+				    printf("|+|Pendaftaran belum dibuka                                                              |+|\n");
+				    			
+//					updateTime();
+//					printf("Waktu buka pendaftaran: %02d:%02d\n", jamBuka, menitBuka);
+//    				printf("Waktu tutup pendaftaran: %02d:%02d\n", jamTutup, menitTutup);
+//					printf("Waktu sekarang: %02d:%02d\n", timeSekarang.tm_hour, timeSekarang.tm_min);
+				    
+				    if (pendaftaranDitutup(jamTutup, menitTutup)) {
+				    	printf("|+|0. Keluar                                                                             |+|\n");
+				        printf("|+|Pendaftaran sudah ditutup                                                             |+|\n");
+				    } 
+				    printf("|+|Pendaftaran belum ditutup                                                             |+|\n");
+				    
 				} else
 				if (opsi == 0) {
 					display = 2;
