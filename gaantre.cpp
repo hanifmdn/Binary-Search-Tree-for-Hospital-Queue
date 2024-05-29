@@ -7,47 +7,27 @@ void updateTime() {
 	timeSekarang = *localtime(&jam);
 }
 
-//bool isItAlreadyTheTime() {
-//	updateTime();
-//	if (timeSekarang.tm_hour >= 10 && timeSekarang.tm_min >= 1) {
-//		return true;
-//	} else {
-//		return false;
-//	}
-//}
-
-//bool waktuPendaftaran(int jamBuka, int menitBuka, int jamTutup, int menitTutup) {
-//    updateTime();
-//
-//    int bukaDalamMenit = jamBuka * 60 + menitBuka;
-//    int tutupDalamMenit = jamTutup * 60 + menitTutup;
-//    int sekarangDalamMenit = timeSekarang.tm_hour * 60 + timeSekarang.tm_min;
-//	
-//	if (sekarangDalamMenit >= bukaDalamMenit){
-//		if (sekarangDalamMenit >= tutupDalamMenit){
-//			return true;
-//		}
-//		printf("waktu telah ditutup");
-//	}
-//	printf("Waktu belum dibuka");
-//}
-	
-bool pendaftaranDibuka(int jamBuka, int menitBuka) {
+bool waktuPendaftaran(int jamBuka, int menitBuka, int jamTutup, int menitTutup) {
     updateTime();
 
     int bukaDalamMenit = jamBuka * 60 + menitBuka;
-    int sekarangDalamMenit = timeSekarang.tm_hour * 60 + timeSekarang.tm_min;
-
-    return sekarangDalamMenit >= bukaDalamMenit;
-}
-
-bool pendaftaranDitutup(int jamTutup, int menitTutup) {
-    updateTime();
-
     int tutupDalamMenit = jamTutup * 60 + menitTutup;
     int sekarangDalamMenit = timeSekarang.tm_hour * 60 + timeSekarang.tm_min;
-
-    return sekarangDalamMenit >= tutupDalamMenit;
+	
+	if (sekarangDalamMenit >= bukaDalamMenit && sekarangDalamMenit <= tutupDalamMenit ){
+		return true;
+	} else {
+		printf("Waktu belum dibuka \n");
+		return false;
+	}
+	
+	if (sekarangDalamMenit <= bukaDalamMenit){
+		printf("Waktu belum dibuka\n");
+	} else 
+	if (sekarangDalamMenit >= tutupDalamMenit ){
+		printf("Waktu telah ditutup");
+	}
+	
 }
 
 bool cariUsername (FILE *dataAkun, char namaCari[20]) {
@@ -282,30 +262,23 @@ void daftarPengguna (address *root, account *sedangLogin, int *display) {
 	FILE *todayList;
     char filename[30];
     bool sudahDaftar;
-    int jamBuka, menitBuka, jamTutup, menitTutup;
-    
-    if (!pendaftaranDibuka(jamBuka, menitBuka)) {
-        printf("|+|Pendaftaran hari ini belum dibuka!\n");
-        *display = 7;
-        return;
-    } else
-	if (pendaftaranDitutup(jamBuka, menitBuka)) {
-        printf("|+|Pendaftaran hari ini sudah ditutup!\n");
-        *display = 7;
-        return;
-    }
-    
-//    if (isItAlreadyTheTime) {
-//    	printf("|+|Pendaftaran hari ini sudah ditutup!\n");
-//    	*display = 7;
-//    	return;
-//	}
     
     if (sudahDaftar = cekTodayList (sedangLogin->username)) {
     	printf("|+|Anda sudah melakukan pendaftaran hari ini!\n");
     	*display = 7;
     	return;
 	} else {
+		printf("|+|======================================================================================|+|\n");
+        printf("|+|                                                                                      |+|\n");
+        printf("|+|                                        GaAntre                                       |+|\n");
+        printf("|+|                               Ga Perlu CAPE-CAPE Ngantre                             |+|\n");
+        printf("|+|                                                                                      |+|\n");
+        printf("|+|======================================================================================|+|\n");
+        printf("|+|                                                                                      |+|\n");
+        printf("|+|                                        Daftar                                        |+|\n");
+        printf("|+|                                                                                      |+|\n");
+        printf("|+|======================================================================================|+|\n");
+        printf("|+|Isi Formulir di bawah ini                                                             |+|\n");
 		printf("|+|Nama       : "); scanf(" %[^\n]", daftar.nama);
 		int lenUser = strlen(daftar.nama);
 		for (int i = 0; i < lenUser; i++) {
@@ -444,100 +417,92 @@ void sortAntrian(address *root) {
 	FILE *todayList;
 	int urutan = 1;
     char filename[30];
-    int i, lenOperasiFile, jamBuka, menitBuka, jamTutup, menitTutup;
+    int i, lenOperasiFile;
     
-    if (!pendaftaranDibuka(jamBuka, menitBuka)) {
+    // Mendapatkan nama file hari ini
+    updateTime();
+	strftime(filename, sizeof(filename), "Data_Pasien_%d-%m-%Y.txt", &timeSekarang);
+    
+    // Mengambil banyaknya baris dalam file
+	lenOperasiFile = totalBarisFile(filename);
+    pasienAkun operasiFile[lenOperasiFile];
+    
+	todayList = fopen(filename, "r");
+    if (todayList == NULL) {
+        printf("Tidak dapat membuka file %s\n", filename);
         return;
-    } else
-    if (pendaftaranDitutup(jamBuka, menitBuka)) {
-        return;
-	} else {
-	    // Mendapatkan nama file hari ini
-	    updateTime();
-		strftime(filename, sizeof(filename), "Data_Pasien_%d-%m-%Y.txt", &timeSekarang);
-	    
-	    // Mengambil banyaknya baris dalam file
-		lenOperasiFile = totalBarisFile(filename);
-	    pasienAkun operasiFile[lenOperasiFile];
-	    
-		todayList = fopen(filename, "r");
-	    if (todayList == NULL) {
-	        printf("Tidak dapat membuka file %s\n", filename);
-	        return;
-	    } else {
+    } else {
 //	    	printf("masuk else scan file\n");
-	    	i = 0;
-	    	while (fscanf(todayList, "%s %s %s %s %s %s %d %d %d\n", 
+    	i = 0;
+    	while (fscanf(todayList, "%s %s %s %s %s %s %d %d %d\n", 
+					operasiFile[i].akun.username,
+					operasiFile[i].akun.password,
+					operasiFile[i].pasien.nama,
+					operasiFile[i].pasien.usia,
+					operasiFile[i].pasien.noTelp,
+					operasiFile[i].pasien.jamDaftar,
+					&operasiFile[i].pasien.penyakit,
+					&operasiFile[i].pasien.prioritas,
+					&operasiFile[i].pasien.urutan) == 9) {
+					i++;
+					}
+		fclose(todayList);
+		int len = i;
+		int min;
+		int hour1, minute1, second1, hour2, minute2, second2;
+//		printf("beres scan file mau masuk for\n");
+		for (i = 0; i < len - 1; i++) {
+			min = i;
+//			printf("masuk for pertama\n");
+			for (int j = i + 1; j < len; j++) {
+//				printf("masuk for kedua\n");
+				if (operasiFile[j].pasien.prioritas > operasiFile[min].pasien.prioritas) {
+					min = j;
+				} else 
+				if (operasiFile[j].pasien.prioritas == operasiFile[min].pasien.prioritas) {
+					sscanf(operasiFile[min].pasien.jamDaftar , "%d:%d:%d", &hour1, &minute1, &second1);
+					sscanf(operasiFile[j].pasien.jamDaftar, "%d:%d:%d", &hour2, &minute2, &second2);
+					
+//						printf("jam min %d:%d:%d", hour1, minute1, second1);
+//						printf("jam j %d:%d:%d", hour2, minute2, second2);
+					if (hour2 < hour1 || (hour2 == hour1 && minute2 < minute1) || (hour2 == hour1 && minute2 == minute1 && second2 < second1)) {
+						min = j;
+					}
+				}
+			}
+			
+			pasienAkun temp = operasiFile[min];
+			operasiFile[min] = operasiFile[i];
+			operasiFile[i] = temp;
+//			printf("berhasil swap\n");
+		}
+		for (i = 0; i < len; i++) {
+			operasiFile[i].pasien.urutan = i + 1;
+		}
+		
+//		printf("membuka file lagi untuk write ulang");
+		todayList = fopen(filename, "w");
+		if (todayList == NULL) {
+        printf("Tidak dapat membuka file %s\n", filename);
+        return;
+  		} else {
+//  			printf("siap menulis ulang");
+  				for (i = 0; i < len; i++) {
+					fprintf(todayList, "%s %s %s %s %s %s %d %d %d\n", 
 						operasiFile[i].akun.username,
 						operasiFile[i].akun.password,
 						operasiFile[i].pasien.nama,
 						operasiFile[i].pasien.usia,
 						operasiFile[i].pasien.noTelp,
 						operasiFile[i].pasien.jamDaftar,
-						&operasiFile[i].pasien.penyakit,
-						&operasiFile[i].pasien.prioritas,
-						&operasiFile[i].pasien.urutan) == 9) {
-						i++;
-						}
-			fclose(todayList);
-			int len = i;
-			int min;
-			int hour1, minute1, second1, hour2, minute2, second2;
-	//		printf("beres scan file mau masuk for\n");
-			for (i = 0; i < len - 1; i++) {
-				min = i;
-	//			printf("masuk for pertama\n");
-				for (int j = i + 1; j < len; j++) {
-	//				printf("masuk for kedua\n");
-					if (operasiFile[j].pasien.prioritas > operasiFile[min].pasien.prioritas) {
-						min = j;
-					} else 
-					if (operasiFile[j].pasien.prioritas == operasiFile[min].pasien.prioritas) {
-						sscanf(operasiFile[min].pasien.jamDaftar , "%d:%d:%d", &hour1, &minute1, &second1);
-						sscanf(operasiFile[j].pasien.jamDaftar, "%d:%d:%d", &hour2, &minute2, &second2);
-						
-//						printf("jam min %d:%d:%d", hour1, minute1, second1);
-//						printf("jam j %d:%d:%d", hour2, minute2, second2);
-						if (hour2 < hour1 || (hour2 == hour1 && minute2 < minute1) || (hour2 == hour1 && minute2 == minute1 && second2 < second1)) {
-							min = j;
-						}
-					}
+						operasiFile[i].pasien.penyakit,
+						operasiFile[i].pasien.prioritas,
+						operasiFile[i].pasien.urutan);
 				}
-				
-				pasienAkun temp = operasiFile[min];
-				operasiFile[min] = operasiFile[i];
-				operasiFile[i] = temp;
-	//			printf("berhasil swap\n");
-			}
-			for (i = 0; i < len; i++) {
-				operasiFile[i].pasien.urutan = i + 1;
-			}
-			
-	//		printf("membuka file lagi untuk write ulang");
-			todayList = fopen(filename, "w");
-			if (todayList == NULL) {
-	        printf("Tidak dapat membuka file %s\n", filename);
-	        return;
-	  		} else {
-	//  			printf("siap menulis ulang");
-	  				for (i = 0; i < len; i++) {
-						fprintf(todayList, "%s %s %s %s %s %s %d %d %d\n", 
-							operasiFile[i].akun.username,
-							operasiFile[i].akun.password,
-							operasiFile[i].pasien.nama,
-							operasiFile[i].pasien.usia,
-							operasiFile[i].pasien.noTelp,
-							operasiFile[i].pasien.jamDaftar,
-							operasiFile[i].pasien.penyakit,
-							operasiFile[i].pasien.prioritas,
-							operasiFile[i].pasien.urutan);
-					}
-					fclose(todayList);
-			}	
-		}
-		buildBST(root);
+				fclose(todayList);
+		}	
 	}
-	
+	buildBST(root);
 }
 
 void buildBST(address *root) {
@@ -639,18 +604,6 @@ void displayTree(address root) {
 
 
 void antrianSekarang (Pasien pasien, int *display ) {
-    int jamBuka, menitBuka, jamTutup, menitTutup;
-    
-    if (!pendaftaranDibuka(jamBuka, menitBuka)) {
-        printf("|+|Pendaftaran hari ini belum dibuka!\n");
-        *display = 7;
-        return;
-    } else
-	if (pendaftaranDitutup(jamBuka, menitBuka)) {
-        printf("|+|Pendaftaran hari ini sudah ditutup!\n");
-        *display = 7;
-        return;
-    }
 		printf("|+|======================================================================================|+|\n");
         printf("|+|                                                                                      |+|\n");
         printf("|+|                                        GaAntre                                       |+|\n");
@@ -663,10 +616,8 @@ void antrianSekarang (Pasien pasien, int *display ) {
         printf("|+|                                          %d                                           |+|\n", pasien.urutan);
         printf("|+|                                                                                      |+|\n");
         printf("|+|======================================================================================|+|\n");
-
     system("pause");
     *display = 7;
-	
 }
 
 

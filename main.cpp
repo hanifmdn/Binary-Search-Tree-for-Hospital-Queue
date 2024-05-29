@@ -1,15 +1,9 @@
-#include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
 #include "GAANTRE.h"
 
 int main() {
 	
-	int opsi = 1;
-	int display = 1;
-	int jamBuka, menitBuka, jamTutup, menitTutup;
-	bool valid;
-	bool running = true;
+	int opsi = 1, display = 1, jamBuka = 0, menitBuka = 0, jamTutup = 0, menitTutup = 0;
+	bool valid, running = true;
 	address root = NULL;
 	account sedangLogin;
 	char filename[30];
@@ -19,7 +13,6 @@ int main() {
 	while (running) {
 		switch (display) {
 			case 1:
-				system("cls");
 				printf("|+|======================================================================================|+|\n");
                 printf("|+|                                                                                      |+|\n");
                 printf("|+|                                Selamat Datang di GaAntre                             |+|\n");
@@ -27,13 +20,13 @@ int main() {
                 printf("|+|                                                                                      |+|\n");
                 printf("|+|--------------------------------------------------------------------------------------|+|\n|+|");
                 system("pause");
-                display = 2;
                 system("cls");
+                display = 2;
+                
 				break;
 
 
 			case 2:
-//				system("cls");
 				printf("|+|======================================================================================|+|\n");
 				printf("|+|                                                                                      |+|\n");
 				printf("|+|                                         GaAntre                                      |+|\n");
@@ -61,9 +54,11 @@ int main() {
 			    } while (!valid);
 				
 				if (opsi == 1) {
+					//system("cls");
 					display = 4;
 				} else 
 				if (opsi == 2) {
+					//system("cls");
 					display = 3;
 				} else
 				if (opsi == 0) {
@@ -72,7 +67,6 @@ int main() {
 				break;
 				
 			case 3:
-//				system("cls");
 				printf("|+|======================================================================================|+|\n");
 				printf("|+|                                                                                      |+|\n");
 				printf("|+|                                       GaAntre                                        |+|\n");
@@ -85,11 +79,11 @@ int main() {
 				printf("|+|======================================================================================|+|\n");
 				printf("|+|Silahkan buat akun baru                                                               |+|\n");
 				membuatAkun(&display);
+				//system("cls");
 				break;
 				
 
 			case 4:
-//				system("cls");
 				printf("|+|======================================================================================|+|\n");
 				printf("|+|                                                                                      |+|\n");
 				printf("|+|                                        GaAntre                                       |+|\n");
@@ -102,10 +96,10 @@ int main() {
 				printf("|+|======================================================================================|+|\n");
 				printf("|+|Silahkan Login                                                                        |+|\n");
 				login(&display, &sedangLogin);
+				//system("cls");
 				break;
 	
 			case 5:
-//				system("cls");
                 printf("|+|======================================================================================|+|\n");
                 printf("|+|                                                                                      |+|\n");
                 printf("|+|                                        GaAntre                                       |+|\n");
@@ -136,6 +130,7 @@ int main() {
 			    
 			    
 				if (opsi == 1) {
+					//system("cls");
                     display = 6;
                 } else
 				if (opsi == 2) {
@@ -146,14 +141,20 @@ int main() {
                     displayTree(root);
                     printf("|+|");
                     system("pause");
+                    //system("cls");
                     display = 5;
                 } else 
 				if (opsi == 3) {
-                	sortAntrian(&root);
-                	displayTree(root); 
-                	printf("|+|");
-                	system("pause");
-                	display = 5;
+					if (!waktuPendaftaran(jamBuka, menitBuka, jamTutup, menitTutup)){
+						display = 5;
+					} else {
+						sortAntrian(&root);
+	                	displayTree(root); 
+	                	printf("|+|");
+	                	system("pause");
+	                	//system("cls");
+	                	display = 5;
+					}
 				} else
 				if (opsi == 4){
 				    printf("|+|Masukkan waktu buka pendaftaran (jam dan menit, pisahkan dengan spasi): ");
@@ -161,31 +162,15 @@ int main() {
 				
 				    printf("|+|Masukkan waktu tutup pendaftaran (jam dan menit, pisahkan dengan spasi): ");
 				    scanf("%d %d", &jamTutup, &menitTutup);
-				
-				    if (pendaftaranDibuka(jamBuka, menitBuka)) {
-				        printf("|+|Pendaftaran sudah dibuka                                                              |+|\n");
-				    } 
-				    printf("|+|Pendaftaran belum dibuka                                                              |+|\n");
-				    			
-//					updateTime();
-//					printf("Waktu buka pendaftaran: %02d:%02d\n", jamBuka, menitBuka);
-//    				printf("Waktu tutup pendaftaran: %02d:%02d\n", jamTutup, menitTutup);
-//					printf("Waktu sekarang: %02d:%02d\n", timeSekarang.tm_hour, timeSekarang.tm_min);
-				    
-				    if (pendaftaranDitutup(jamTutup, menitTutup)) {
-				    	printf("|+|0. Keluar                                                                             |+|\n");
-				        printf("|+|Pendaftaran sudah ditutup                                                             |+|\n");
-				    } 
-				    printf("|+|Pendaftaran belum ditutup                                                             |+|\n");
-				    
+					waktuPendaftaran(jamBuka, menitBuka, jamTutup, menitTutup);
 				} else
 				if (opsi == 0) {
+					//system("cls");
 					display = 2;
 				} 
 				break;
 					
 			case 6:
-//				system("cls");
                 printf("|+|======================================================================================|+|\n");
                 printf("|+|                                                                                      |+|\n");
                 printf("|+|                                        GaAntre                                       |+|\n");
@@ -199,11 +184,12 @@ int main() {
                 printf("|+|Isi Formulir di bawah ini                                                             |+|\n");
                 daftarAdmin(&root, &sedangLogin, &display);
                 displayTree(root); 
+                system("pause");
+                //system("cls");
                 opsi = 0;
                 break;
 				
 			case 7:
-//				system("cls");
 				printf("|+|======================================================================================|+|\n");
 				printf("|+|                                                                                      |+|\n");
 				printf("|+|                                        GaAntre                                       |+|\n");
@@ -232,47 +218,50 @@ int main() {
 			    
 			    
 				if (opsi == 1) {
+					//system("cls");
 					display = 8;
 				} else
 				if (opsi == 2) {
+					//system("cls");
 					display = 9;
 				} else
 				if (opsi == 0) {
+					//system("cls");
 					display  = 2;
 				}
 				break;
 				
 			case 8:
-//				system("cls");
 				printf("yang lagi login: %s %s\n", sedangLogin.username, sedangLogin.password);
-                printf("|+|======================================================================================|+|\n");
-                printf("|+|                                                                                      |+|\n");
-                printf("|+|                                        GaAntre                                       |+|\n");
-                printf("|+|                               Ga Perlu CAPE-CAPE Ngantre                             |+|\n");
-                printf("|+|                                                                                      |+|\n");
-                printf("|+|======================================================================================|+|\n");
-                printf("|+|                                                                                      |+|\n");
-                printf("|+|                                        Daftar                                        |+|\n");
-                printf("|+|                                                                                      |+|\n");
-                printf("|+|======================================================================================|+|\n");
-                printf("|+|Isi Formulir di bawah ini                                                             |+|\n");
-                daftarPengguna(&root, &sedangLogin, &display);
-//                displayTree(root);
-                display = 7;
-                break;
-				
+				if (!waktuPendaftaran(jamBuka, menitBuka, jamTutup, menitTutup)){
+					display = 7;
+				} else {
+	                daftarPengguna(&root, &sedangLogin, &display);
+	                //system("cls");
+	                display = 7;
+				}
+				break;	
 			case 9:
-				antrianSekarang (pasienSelesai, &display);
-
+				if (!waktuPendaftaran(jamBuka, menitBuka, jamTutup, menitTutup)){
+					display = 7;
+				} else {
+					antrianSekarang (pasienSelesai, &display);
+                	display = 7;
+				}
                 break;
-                
 			default:
 				printf("Pilih opsi yang sesuai!");
+				break;
 		}
 	}
-	
-
-
+	system("cls");
+	printf("|+|======================================================================================|+|\n");
+    printf("|+|                                                                                      |+|\n");
+    printf("|+|                           Terimakasi Telah Menggunakan GaAntre                       |+|\n");
+    printf("|+|                             Kamu Ga Perlu CAPE-CAPE Ngantre                          |+|\n");
+    printf("|+|                                                                                      |+|\n");
+    printf("|+|--------------------------------------------------------------------------------------|+|\n");
+    sleep(3);
 	return 0;
 }
 
