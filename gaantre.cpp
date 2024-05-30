@@ -8,26 +8,18 @@ void updateTime() {
 }
 
 bool waktuPendaftaran(int jamBuka, int menitBuka, int jamTutup, int menitTutup) {
+	bool buka = false;
     updateTime();
 
     int bukaDalamMenit = jamBuka * 60 + menitBuka;
     int tutupDalamMenit = jamTutup * 60 + menitTutup;
     int sekarangDalamMenit = timeSekarang.tm_hour * 60 + timeSekarang.tm_min;
-	
-	if (sekarangDalamMenit >= bukaDalamMenit && sekarangDalamMenit <= tutupDalamMenit ){
-		return true;
-	} else {
-		printf("Waktu belum dibuka \n");
-		return false;
+    
+
+	if (sekarangDalamMenit >= bukaDalamMenit && sekarangDalamMenit <= tutupDalamMenit ) { // waktu daftar dibuka dan tutup
+		buka = true;
 	}
-	
-	if (sekarangDalamMenit <= bukaDalamMenit){
-		printf("Waktu belum dibuka\n");
-	} else 
-	if (sekarangDalamMenit >= tutupDalamMenit ){
-		printf("Waktu telah ditutup");
-	}
-	
+	return buka;
 }
 
 bool cariUsername (FILE *dataAkun, char namaCari[20]) {
@@ -212,7 +204,7 @@ void daftarAdmin (address *root, account *sedangLogin, int *display) {
 			strftime(filename, sizeof(filename), "Data_Pasien_%d-%m-%Y.txt", &timeSekarang);
 			
 			daftar.penyakit = 0;
-			daftar.urutan = urutanTerakhir();
+			daftar.urutan = 0;
 			todayList = fopen(filename, "a");
 			if (todayList == NULL) {
 				printf("|+|Gagal menyimpan data Pasien!\n");
@@ -230,7 +222,11 @@ void daftarAdmin (address *root, account *sedangLogin, int *display) {
 					
 					fclose(todayList);
 				*display = 5;
-				*root = push (*root, daftar);
+				
+				if (*root != NULL) {
+					*root = push (*root, daftar);
+				}
+				
 			}
 		}
 	// mendaftar
@@ -255,7 +251,7 @@ int setPriority (int penyakit) {
 	return (prioritas);
 }
 
-void daftarPengguna (address *root, account *sedangLogin, int *display) {
+void daftarPengguna (address *root, account *sedangLogin, int *display, int maks) {
 	char opsi;
 	Pasien daftar;
 	address newNode;
@@ -318,7 +314,7 @@ void daftarPengguna (address *root, account *sedangLogin, int *display) {
 		printf("|+|edit? (y/n)");
 		scanf(" %c", &opsi);
 		if (opsi == 'y') {
-			daftarPengguna(root, sedangLogin, display);
+			daftarPengguna(root, sedangLogin, display, maks);
 		} else {
 			daftar.prioritas = setPriority(daftar.penyakit);
 			
@@ -330,7 +326,10 @@ void daftarPengguna (address *root, account *sedangLogin, int *display) {
 			daftar.urutan = 0;
 			todayList = fopen(filename, "a");
 			if (todayList == NULL) {
-				printf("|+|Gagal menyimpan data Pasien!");
+				printf("|+|Gagal menyimpan data!");
+			} else
+			if (urutanTerakhir() >= maks) {
+				printf("|+|Mohon maaf antrian sudah penuh!");
 			} else {
 				fprintf(todayList, "%s %s %s %s %s %s %d %d %d\n", 
 	
@@ -353,13 +352,6 @@ void daftarPengguna (address *root, account *sedangLogin, int *display) {
 	}
 }
 
-void writeInOrder(FILE *file, address root) {
-    if (root != NULL) {
-        writeInOrder(file, root->kiri);
-        fprintf(file, "%s %c %s %s %d %d %d\n", root->info.nama, root->info.usia, root->info.noTelp, root->info.jamDaftar, root->info.penyakit, root->info.prioritas, root->info.urutan);
-        writeInOrder(file, root->kanan);
-    }
-}
 
 int totalBarisFile(char filename[]) {
 	FILE *file = fopen(filename, "r");
@@ -389,10 +381,8 @@ int urutanTerakhir() {
 	char filename[30];
 	updateTime();
 	pasienAkun temp;
-	int totBaris = 0;
 	strftime(filename, sizeof(filename), "Data_Pasien_%d-%m-%Y.txt", &timeSekarang);
 	FILE *file = fopen(filename, "r");
-
 
     if (file == NULL) {
         printf("Tidak dapat membuka file %s\n", filename);
@@ -500,9 +490,10 @@ void sortAntrian(address *root) {
 						operasiFile[i].pasien.urutan);
 				}
 				fclose(todayList);
-		}	
+		}
+		buildBST(root);
 	}
-	buildBST(root);
+	
 }
 
 void buildBST(address *root) {
@@ -513,7 +504,7 @@ void buildBST(address *root) {
 	if (*root != NULL) {
 		printf("|+|Antrian sudah di bangun!\n|+|\n|+|\n");
 		return;
-	}
+	} 
 	
 	// Mendapatkan nama file hari ini
     updateTime();
@@ -596,11 +587,12 @@ void displayPop(address root) {
 
 void displayTree(address root) {
     if (cekKosong(root)) {
-//        printf("Tree kosong.\n");
+        printf("Tree kosong.\n");
     } else {
         displayPop(root);
     }
 }
+
 
 
 void antrianSekarang (Pasien pasien, int *display ) {
@@ -618,6 +610,35 @@ void antrianSekarang (Pasien pasien, int *display ) {
         printf("|+|======================================================================================|+|\n");
     system("pause");
     *display = 7;
+}
+
+int noAntrianUser (account *sedangLogin) {
+	char filename[30];
+	updateTime();
+	pasienAkun temp;
+	strftime(filename, sizeof(filename), "Data_Pasien_%d-%m-%Y.txt", &timeSekarang);
+	FILE *file = fopen(filename, "r");
+
+    if (file == NULL) {
+        printf("Tidak dapat membuka file %s\n", filename);
+    } else {
+    	while (fscanf(file, "%s %s %s %s %s %s %d %d %d\n", 
+					temp.akun.username,
+					temp.akun.password,
+					temp.pasien.nama,
+					temp.pasien.usia,
+					temp.pasien.noTelp,
+					temp.pasien.jamDaftar,
+					&temp.pasien.penyakit,
+					&temp.pasien.prioritas,
+					&temp.pasien.urutan) == 9) {
+						if (strcmp(temp.akun.username, sedangLogin->username) == 0) {
+							break;
+						}
+					}
+		fclose(file);
+	}
+	return temp.pasien.urutan;
 }
 
 

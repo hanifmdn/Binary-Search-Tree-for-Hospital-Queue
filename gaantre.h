@@ -47,8 +47,8 @@ bool cariAkun (FILE *dataAkun, account *cek, char cariUsername[20]);
 bool cekTodayList (char namaCari[20]);
 void login (int *display, account *sedangLogin);
 void daftarAdmin (address *root, account *sedangLogin, int *display);
-void daftarPengguna (address *root, account *sedangLogin, int *display);
-void totalBarisFile(char filename);
+void daftarPengguna (address *root, account *sedangLogin, int *display, int maks);
+int totalBarisFile(char filename);
 int urutanTerakhir();
 void sortAntrian(address *root);
 void buildBST(address *root);
@@ -59,5 +59,6 @@ address pop (address root, Pasien *info);
 void displayPreorder(address root); 
 void displayTree(address root);
 void antrianSekarang (Pasien pasien, int *display);
+int noAntrianUser (account *sedangLogin);
 
 #endif

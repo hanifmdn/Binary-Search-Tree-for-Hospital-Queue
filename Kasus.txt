@@ -1,0 +1,26 @@
+Kasus
+1. Mengeluarkan antrian gaboleh sebelum tree di bangun (admin 2) done
+2. Pemberian antrian setelah pendaftaran dibuka dan pendaftaran ditutup. (admin 3) (done)
+3. Daftar antrian di admin tidak langsung di bangun tree sebelum tree dibangun (admin 1). Cek if root == nULL jangan dulu dimasukin. Kalo ga null baru masuk (udah ada tree) (done)
+
+
+fitur pengguna
+tidak bisa melihat antrian Ketika tree belum dibangun (pendaftaran harus sudah ditutup)
+
+tambahkan antrian anda (done)
+
+pilihan
+tampilkan antrian di pasien
+
+rencana
+rapihkan tampilan
+bug fix, usia tidak terbaca, spasi ga ke ganti ke _
+bikin program baca balik _ ke spasi
+handling error input
+- usia 3 digit maks
+- username tanpa spasi maks sekian digit
+- password tanpa spasi maks sekian digit
+- pilih prioritas harus cuma yang ada disitu
+- nama gaboleh ada karakter khusus, harus cuman huruf
+- buat input jam perbaiki lagi
+
