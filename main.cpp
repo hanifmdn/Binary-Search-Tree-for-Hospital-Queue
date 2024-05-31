@@ -6,6 +6,7 @@ int main() {
 	bool running = true;
 	bool valid, setWaktu, setTree = false;
 	char edit;
+	char waktuBuka[6], waktuTutup[6];
 	address root = NULL;
 	account sedangLogin;
 	char filename[30];
@@ -193,17 +194,37 @@ int main() {
 						while (!setWaktu) {
 							printf("|+|Masukan maksimal jumlah pasien: ");
 							scanf("%d", &maksPasien);
-						    printf("|+|Masukan jam buka pendaftaran: ");
-						    scanf("%d", &jamBuka);
-						    printf("|+|Masukan menit buka pendaftaran: ");
-						    scanf("%d", &menitBuka);
+							clearBuffer();
+							valid = false;
+							while (!valid) {
+							    printf("|+|Masukan waktu buka pendaftaran (HH:MM): ");
+							    scanf("%s", waktuBuka);
+							    clearBuffer();
+							    if (validasiWaktu(waktuBuka, &jamBuka, &menitBuka)) {
+							    	valid = true;
+								} else {
+									printf("Format waktu tidak valid\n");
+								}
+							}
+							
+							valid = false;
+							while (!valid) {
+							    printf("|+|Masukan waktu tutup pendaftaran (HH:MM): ");
+							    scanf("%s", waktuTutup);
+							    clearBuffer();
+							    if (validasiWaktu(waktuTutup, &jamTutup, &menitTutup)) {
+							    	valid = true;
+							    	break;
+								} else {
+									printf("|+|Format waktu tidak valid\n");
+								}								
+							} 
+
+													
 						
-						    printf("|+|Masukan jam tutup pendaftaran: ");
-						    scanf("%d", &jamTutup);
-							printf("|+|Masukan menit tutup pendaftaran: ");
-						    scanf("%d", &menitTutup);
-							printf("|+|[NOTE] Anda tidak dapat mengubah waktu pendaftaran lagi\n");
-							printf("|+|Edit? (y/n) ");								scanf(" %c", &edit);
+							printf("|+|[INFO] Anda tidak dapat mengubah waktu pendaftaran lagi\n");
+							printf("|+|Edit? (y/n) ");
+							scanf(" %c", &edit);
 								
 							if (edit == 'n' || edit == 'N') {
 								waktuPendaftaran(jamBuka, menitBuka, jamTutup, menitTutup);
@@ -293,7 +314,7 @@ int main() {
 						printf("|+|Admin belum mengatur pembukaan pendaftaran, tidak dapat melakukan pendaftaran!\n");		
 					} else
 					if ((timeSekarang.tm_hour * 60 + timeSekarang.tm_min) <= (jamBuka * 60 + menitBuka)) {
-						printf("|+|Pendaftaran belum dibuka! Silahkan coba lagi saat pukul %d:%02d\n", jamBuka, menitBuka);
+						printf("|+|Pendaftaran belum dibuka! Silahkan coba lagi saat pukul %02d:%02d\n", jamBuka, menitBuka);
 					} else
 					if ((timeSekarang.tm_hour * 60 + timeSekarang.tm_min) >= (jamTutup * 60 + menitTutup)) {
 						printf("|+|Mohon maaf pendaftaran hari ini telah ditutup!\n");
@@ -311,7 +332,7 @@ int main() {
 						printf("|+|Admin belum mengatur pembukaan pendaftaran, tidak dapat menampilkan antrian!\n");
 					} else
 					if (waktuPendaftaran(jamBuka, menitBuka, jamTutup, menitTutup)) {
-						printf("|+|Mohon maaf antrian belum bisa ditampilkan. Coba lagi setelah pendaftaran ditutup\n");
+						printf("|+|Mohon maaf antrian belum bisa ditampilkan. Coba lagi setelah pendaftaran ditutup pukul %2d:%2d\n", jamTutup, menitTutup);
 					} else 
 					if ((timeSekarang.tm_hour * 60 + timeSekarang.tm_min) <= (jamBuka * 60 + menitBuka)) {
 						printf("|+|Pendaftaran belum dibuka! Tidak dapat menampilkan antrian!\n");

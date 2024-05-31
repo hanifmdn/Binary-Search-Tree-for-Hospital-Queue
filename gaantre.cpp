@@ -2,6 +2,11 @@
 
 waktu timeSekarang;
 
+void clearBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {}
+}
+
 void updateTime() {
 	time_t jam = time(NULL);
 	timeSekarang = *localtime(&jam);
@@ -168,17 +173,32 @@ void daftarAdmin (address *root, account *sedangLogin, int *display) {
 	FILE *todayList;
 	char filename[30];
 	
-	printf("|+|Nama       : "); scanf(" %[^\n]", daftar.nama);
+	printf("|+|Nama       : ");
+	scanf(" %[^\n]", daftar.nama);
+	clearBuffer();
 	int lenUser = strlen(daftar.nama);
 	for (int i = 0; i < lenUser; i++) {
 			if (daftar.nama[i] == ' ') {
 				daftar.nama[i] = '_';
 			}
 	}
-	printf("|+|Usia       : "); scanf(" %[^\n]", daftar.usia);  while ((getchar()) != '\n');
+	
+	
+	while (true) {
+		printf("|+|Usia       : ");
+		scanf(" %[^\n]", daftar.usia);
+		clearBuffer();
+		if (validasiUsia(daftar.usia)) {
+			break;
+		} else {
+			printf("|+|Usia tidak valid! Usia maksimum 3 digit dan harus berupa angka\n");
+		}
+	}
+	
 	while (true) {
 	    printf("|+|No.Telepon : "); 
 	    scanf(" %[^\n]", daftar.noTelp);
+	    clearBuffer();
 	    if (cekNoTelp(daftar.noTelp)) {
 	        break;
 	    } else {
@@ -641,5 +661,48 @@ int noAntrianUser (account *sedangLogin) {
 	return temp.pasien.urutan;
 }
 
+bool validasiWaktu(const char* waktu, int* jam, int* menit) {
+	bool valid = true;
+	if (strlen(waktu) != 5) {
+        valid = false;
+    }
+    
+    int ret = sscanf(waktu, "%2d:%2d", jam, menit);
+    if (ret != 2) {
+        valid = false;
+    }
+    
+    if (*jam < 0 || *jam > 23 || *menit < 0 || *menit > 59) {
+        valid = false;
+    }
+    return valid;
+}
 
+bool isAngka (const char* str) {
+	bool valid = true;
+	int len = strlen(str);
+	for (int i = 0; i < len; i++) {
+		if (!isdigit(str[i])) {
+			valid = false;
+		}
+	}
+	return valid;
+	
+}
 
+bool validasiUsia (const char* usia) {
+	bool valid = true;
+	if (strlen(usia) > 3) {
+		valid = false;
+	} else if (!isAngka(usia)) {
+		valid = false;
+	}
+	return valid;
+}
+
+bool validasiUsername (const char* username) {
+	bool valid = true;
+	if (strlen(username) < 3 || strlen(username) > 16) {
+		valid = false;
+	}
+}

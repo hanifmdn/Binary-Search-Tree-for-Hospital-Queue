@@ -38,7 +38,7 @@ typedef struct {
 		Pasien pasien;
 } pasienAkun;
 	
-	
+void clearBuffer();
 void updateTime();
 bool waktuPendaftaran(int jamBuka, int menitBuka, int jamTutup, int menitTutup);
 bool cariUsername (FILE *dataAkun, char namaCari[20]);
@@ -60,5 +60,7 @@ void displayPreorder(address root);
 void displayTree(address root);
 void antrianSekarang (Pasien pasien, int *display);
 int noAntrianUser (account *sedangLogin);
+bool validasiWaktu(const char* waktu, int* jam, int* menit);
+bool validasiUsia (const char* usia);
 
 #endif

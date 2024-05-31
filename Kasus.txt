@@ -17,10 +17,12 @@ rapihkan tampilan
 bug fix, usia tidak terbaca, spasi ga ke ganti ke _
 bikin program baca balik _ ke spasi
 handling error input
-- usia 3 digit maks
-- username tanpa spasi maks sekian digit
+- usia 3 digit maks (done)
+- username tanpa spasi maks sekian digit (proses)
 - password tanpa spasi maks sekian digit
 - pilih prioritas harus cuma yang ada disitu
 - nama gaboleh ada karakter khusus, harus cuman huruf
-- buat input jam perbaiki lagi
+- buat input jam perbaiki lagi (done)
+
+ngecek jam pendaftaran dibuka pake file
 
