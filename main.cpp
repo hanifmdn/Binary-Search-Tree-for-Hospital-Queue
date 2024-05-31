@@ -325,6 +325,17 @@ int main() {
 			case 9:
 				updateTime();
 				if (setTree && (timeSekarang.tm_hour * 60 + timeSekarang.tm_min) >= (jamTutup * 60 + menitTutup)) {
+					printf("|+|======================================================================================|+|\n");
+			        printf("|+|                                                                                      |+|\n");
+			        printf("|+|                                        GaAntre                                       |+|\n");
+			        printf("|+|                               Ga Perlu CAPE-CAPE Ngantre                             |+|\n");
+			        printf("|+|                                                                                      |+|\n");
+			        printf("|+|======================================================================================|+|\n");
+			    	printf("|+|                                                                                      |+|\n");
+			        printf("|+|                                   Nomor Antrian Anda                                 |+|\n");
+			        printf("|+|                                         %04d                                         |+|\n", noAntrianUser(&sedangLogin));
+			        printf("|+|                                                                                      |+|\n");
+			        printf("|+|======================================================================================|+|\n");
 					printf("|+|Nomor antrian anda adalah %d", noAntrianUser(&sedangLogin));
                 	display = 7;
 				} else {

@@ -62,5 +62,14 @@ void antrianSekarang (Pasien pasien, int *display);
 int noAntrianUser (account *sedangLogin);
 bool validasiWaktu(const char* waktu, int* jam, int* menit);
 bool validasiUsia (const char* usia);
+bool validasiUsername (const char* username);
+bool validasiPassword (const char* password);
+bool validasiPrioritas (int pilihan);
+bool validasiPenyakit (int pilihan);
+bool validasiNama (const char* nama);
+void spasiToGarisBawah (char* nama);
+void garisBawahToSpasi (char* nama);
+void simpanWaktuPendaftaran (char buka[], char tutup[], int maks);
+bool sudahDibuka ();
 
 #endif
