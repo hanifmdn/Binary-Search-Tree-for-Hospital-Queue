@@ -15,7 +15,7 @@ tampilkan antrian di pasien
 rencana
 rapihkan tampilan (
 bug fix, usia tidak terbaca, spasi ga ke ganti ke _
-bikin program baca balik _ ke spasi
+bikin program baca balik _ ke spasi (done)
 handling error input
 
 - usia 3 digit maks (done)
@@ -27,5 +27,5 @@ handling error input
 
 
 rencana sekarang
-ngecek jam pendaftaran dibuka pake file
+ngecek jam pendaftaran dibuka pake file (done)
 

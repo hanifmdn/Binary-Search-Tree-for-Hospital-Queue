@@ -724,12 +724,12 @@ int noAntrianUser (account *sedangLogin) {
 
 bool validasiWaktu(const char* waktu, int* jam, int* menit) {
 	bool valid = true;
-	if (strlen(waktu) != 5) {
+	int pisah = sscanf(waktu, "%2d:%2d", jam, menit);
+    if (pisah != 2) {
         valid = false;
     }
-    
-    int ret = sscanf(waktu, "%2d:%2d", jam, menit);
-    if (ret != 2) {
+	
+	if (strlen(waktu) != 5) {
         valid = false;
     }
     
@@ -737,6 +737,24 @@ bool validasiWaktu(const char* waktu, int* jam, int* menit) {
         valid = false;
     }
     return valid;
+}
+
+bool validasiWaktuBuka(int jam, int menit) {
+	bool valid = true;
+	updateTime();
+	if (jam * 60 + menit < timeSekarang.tm_hour * 60 + timeSekarang.tm_min) {
+		valid = false;
+	}
+	return valid;
+}
+
+bool validasiWaktuTutup(int jam, int menit, int jBuka, int mBuka) {
+	bool valid = false;
+	updateTime();
+	if (jam * 60 + menit > timeSekarang.tm_hour * 60 + timeSekarang.tm_min && jam * 60 + menit > jBuka * 60 + mBuka) {
+		valid = true;
+	}
+	return valid;
 }
 
 bool isAngka (const char* str) {
@@ -842,9 +860,10 @@ void garisBawahToSpasi (char *nama) { // dipake saat baca tree (passing paramete
 }
 
 void simpanWaktuPendaftaran (char buka[], char tutup[], int maks) {
-	FILE *filePendaftaran = fopen("Data_Pembukaan", "a");
+	FILE *filePendaftaran; 
 	char tanggalToday[11];
 	
+	filePendaftaran = fopen("Data_Pembukaan.txt", "a");
 	if (filePendaftaran == NULL) {
 		printf("|+|Gagal membuka file!\n");
 	} else {
@@ -857,7 +876,7 @@ void simpanWaktuPendaftaran (char buka[], char tutup[], int maks) {
 }
 
 bool sudahDibuka () {
-	FILE *filePendaftaran = fopen("Data_Pembukaan", "r");
+	FILE *filePendaftaran = fopen("Data_Pembukaan.txt", "r");
 	char tanggalToday[11];
 	char tanggalCari[11];
 	bool ditemukan = false;
@@ -876,4 +895,55 @@ bool sudahDibuka () {
 		}		
 	}
 	return ditemukan;
+}
+
+void buatFilePembukaan() {
+    FILE *file = fopen("Data_Pembukaan.txt", "r");
+    if (file == NULL) {
+        // File tidak ada, buat file baru
+        file = fopen("Data_Pembukaan.txt", "w");
+        if (file == NULL) {
+            printf("|+|Gagal membuat file Data_Pembukaan.txt");
+        }
+    }
+    fclose(file);
+}
+
+void buatFilePasien() {
+	char filename[30];
+	updateTime();
+	strftime(filename, sizeof(filename), "Data_Pasien_%d-%m-%Y.txt", &timeSekarang);
+	
+	FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        // File tidak ada, buat file baru
+        file = fopen(filename, "w");
+        if (file == NULL) {
+            printf("|+|Gagal membuat file Data_Pembukaan.txt");
+        }
+    }
+    fclose(file);
+}
+
+void dataPendaftaranToday (char waktuBuka[], char waktuTutup[], int *maks) {
+	FILE *filePendaftaran = fopen("Data_Pembukaan.txt", "r");
+	char tanggalToday[11];
+	char tanggalCari[11];
+	updateTime();
+	strftime(tanggalToday, sizeof(tanggalToday), "%d-%m-%Y", &timeSekarang);
+
+	if (filePendaftaran == NULL) {
+		printf("|+|Gagal membuka file!\n");
+	} else {
+		while (fscanf(filePendaftaran, "%s %s %s %d", tanggalCari, waktuBuka, waktuTutup, maks) == 4) {
+			if (strcmp(tanggalCari, tanggalToday) == 0) {
+				break;
+			}
+		}		
+	}
+}
+
+void aturJamMenit (char waktuBuka[], char waktuTutup[], int *jBuka, int *mBuka, int *jTutup, int *mTutup) {
+	sscanf(waktuBuka, "%2d:%2d", jBuka, mBuka);
+	sscanf(waktuTutup, "%2d:%2d", jTutup, mTutup);
 }

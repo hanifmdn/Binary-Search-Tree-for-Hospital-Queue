@@ -61,6 +61,8 @@ void displayTree(address root);
 void antrianSekarang (Pasien pasien, int *display);
 int noAntrianUser (account *sedangLogin);
 bool validasiWaktu(const char* waktu, int* jam, int* menit);
+bool validasiWaktuBuka(int jam, int menit);
+bool validasiWaktuTutup(int jam, int menit, int jBuka, int mBuka);
 bool validasiUsia (const char* usia);
 bool validasiUsername (const char* username);
 bool validasiPassword (const char* password);
@@ -71,5 +73,9 @@ void spasiToGarisBawah (char* nama);
 void garisBawahToSpasi (char* nama);
 void simpanWaktuPendaftaran (char buka[], char tutup[], int maks);
 bool sudahDibuka ();
+void buatFilePembukaan();
+void buatFilePasien();
+void dataPendaftaranToday (char waktuBuka[], char waktuTutup[], int *maks);
+void aturJamMenit (char waktuBuka[], char waktuTutup[], int *jBuka, int *mBuka, int *jTutup, int *mTutup);
 
 #endif
