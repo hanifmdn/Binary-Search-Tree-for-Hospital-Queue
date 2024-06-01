@@ -34,7 +34,7 @@ void displaySignUp (int *display, bool *running) {
 				printf("|+|Pilih opsi: ");
 				valid = false;
 				do {
-			        if (scanf("%d", &opsi) == 1) {
+			        if (scanf("%d", &opsi) == 1 && opsi >= 0 && opsi < 3) {
 			            valid = true;
 			        } else {
 			            printf("|+|Input tidak valid. Mohon masukkan input yang sesuai!\n");
@@ -43,6 +43,7 @@ void displaySignUp (int *display, bool *running) {
 			        }
 			    } while (!valid);
 				
+
 				if (opsi == 1) {
 					//system("cls");
 					*display = 4;
@@ -53,6 +54,8 @@ void displaySignUp (int *display, bool *running) {
 				} else
 				if (opsi == 0) {
 					*running = false;
+				} else {
+					printf("|+|Input tidak valid. Mohon masukkan input yang sesuai!\n");
 				}
 }
 
@@ -126,7 +129,7 @@ void displayMenuPengguna (int *display, int *noAntrian) {
 				printf("|+|Pilih opsi: ");
 				valid = false;
 				do {
-			        if (scanf("%d", &opsi) == 1) {
+			        if (scanf("%d", &opsi) == 1 && opsi >= 0 && opsi < 3) {
 			            valid = true;
 			        } else {
 			            printf("|+|Input tidak valid. Mohon masukkan input yang sesuai!\n");
@@ -147,13 +150,14 @@ void displayMenuPengguna (int *display, int *noAntrian) {
 				if (opsi == 0) {
 					//system("cls");
 					*display  = 2;
+				} else {
+					printf("|+|Input tidak valid. Mohon masukkan input yang sesuai!\n");
 				}
 }
 
-void displayMenuAdmin(int *display, int *jamBuka, int *menitBuka, int *jamTutup, int *menitTutup, int *noAntrian, address *root, char waktuBuka[6], char waktuTutup[6]) {
-    int opsi, maksPasien;
+void displayMenuAdmin(int *display, int *jamBuka, int *menitBuka, int *jamTutup, int *menitTutup, int *noAntrian, address *root, char waktuBuka[], char waktuTutup[], bool *setTree, int maksPasien) {
+    int opsi;
     char edit;
-    bool setTree;
     bool valid;
     Pasien pasienSelesai;
 
@@ -176,7 +180,7 @@ void displayMenuAdmin(int *display, int *jamBuka, int *menitBuka, int *jamTutup,
     printf("|+|Pilih opsi: ");
     valid = false;
     do {
-        if (scanf("%d", &opsi) == 1) {
+        if (scanf("%d", &opsi) == 1 && opsi >= 0 && opsi < 5) {
             valid = true;
         } else {
             printf("|+|Input tidak valid. Mohon masukkan input yang sesuai!\n");
@@ -219,7 +223,7 @@ void displayMenuAdmin(int *display, int *jamBuka, int *menitBuka, int *jamTutup,
                 printf("|+|");
                 system("pause");
                 *display = 5;
-                setTree = true;
+                *setTree = true;
             }
         }
     } else if (opsi == 4) {
@@ -297,11 +301,12 @@ void displayDaftarPengguna(int *display, int *jamBuka, int *menitBuka, int *jamT
     }
 }
 
-void displayMenuAntrianSekarang(int *display, int *jamBuka, int *menitBuka, int *jamTutup, int *menitTutup, account *sedangLogin) {
-    bool setTree = false;
+void displayAntrianPengguna(int *display, int *jamBuka, int *menitBuka, int *jamTutup, int *menitTutup, account *sedangLogin, bool setTree) {
+    pasienAkun akun = noAntrianUser(sedangLogin);
     updateTime();
-
-    if (setTree && (timeSekarang.tm_hour * 60 + timeSekarang.tm_min) >= (*jamTutup * 60 + *menitTutup)) {
+	garisBawahToSpasi(akun.pasien.nama);
+	bool sudahDaftar = cekTodayList(sedangLogin->username);
+    if (sudahDaftar && setTree && (timeSekarang.tm_hour * 60 + timeSekarang.tm_min) >= (*jamTutup * 60 + *menitTutup)) {
         printf("|+|======================================================================================|+|\n");
         printf("|+|                                                                                      |+|\n");
         printf("|+|                                        GaAntre                                       |+|\n");
@@ -310,10 +315,16 @@ void displayMenuAntrianSekarang(int *display, int *jamBuka, int *menitBuka, int 
         printf("|+|======================================================================================|+|\n");
         printf("|+|                                                                                      |+|\n");
         printf("|+|                                   Nomor Antrian Anda                                 |+|\n");
-        printf("|+|                                         %04d                                         |+|\n", noAntrianUser(sedangLogin));
+        printf("|+|                                         %04d                                         |+|\n", akun.pasien.urutan);
         printf("|+|                                                                                      |+|\n");
         printf("|+|======================================================================================|+|\n");
-        printf("|+|Nomor antrian anda adalah %d", noAntrianUser(sedangLogin));
+        printf("|+|Nama : %s                                                                              \n", akun.pasien.nama);
+        printf("|+|Usia : %s                                                                              \n", akun.pasien.usia);
+    	printf("|+|Telp : %s                                                                              \n", akun.pasien.noTelp);
+        printf("|+|Jam  : %s                                                                              \n", akun.pasien.jamDaftar);
+		printf("|+|======================================================================================|+|\n");
+
+ 
         *display = 7;
     } else {
         if (!sudahDibuka()) {
@@ -322,8 +333,10 @@ void displayMenuAntrianSekarang(int *display, int *jamBuka, int *menitBuka, int 
             printf("|+|Mohon maaf antrian belum bisa ditampilkan. Coba lagi setelah pendaftaran ditutup pukul %2d:%2d\n", *jamTutup, *menitTutup);
         } else if ((timeSekarang.tm_hour * 60 + timeSekarang.tm_min) <= (*jamBuka * 60 + *menitBuka)) {
             printf("|+|Pendaftaran belum dibuka! Tidak dapat menampilkan antrian!\n");
-        } else {
-            printf("|+|Mohon maaf antrian belum bisa ditampilkan karena antrian belum dibangun\n"); // admin belum membangun antrian
+        } else if (!sudahDaftar) {
+        	printf("|+|Anda belum melakukan pendaftaran, tidak dapat menampilkan nomor antrian!\n");
+        } else {	
+		    printf("|+|Mohon maaf antrian belum bisa ditampilkan karena antrian belum dibangun\n"); // admin belum membangun antrian
         }
         *display = 7;
     }

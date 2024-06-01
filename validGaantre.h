@@ -19,12 +19,14 @@ bool cariAkun (FILE *dataAkun, account *cek, char cariUsername[]);
 /*
 Digunakan untuk menentukan akun pengguna apakah ada di file atau tidak saat ingin login
 IS : tidak diketahui sudah ada akun pengguna atau belum
-FS :  mengembalikan boolean apakah ada atau tidaknya akun pengguna tersebut
+FS : mengembalikan boolean apakah ada atau tidaknya akun pengguna tersebut
 */
 
 bool cekNoTelp(char *noTelp);
 /*
-
+Digunakan untuk memvalidasi nomor telepon berdasarkan nomor telepon yang sebenarnya yang ada di Indonesia
+IS : nomor telepon belum di validasi
+FS : mengembalikan true jika nomor telepon benar.
 */
 
 bool cekTodayList (char namaCari[]);

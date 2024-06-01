@@ -103,16 +103,15 @@ int totalBarisFile(char filename[]) {
     if (file == NULL) {
         printf("Tidak dapat membuka file %s\n", filename);
     } else {
-    	while (fscanf(file, "%s %s %s %s %s %s %d %d %d\n", 
+    	while (fscanf(file, "%s %s %s %s %s %s %d %d\n", 
 					temp.akun.username,
 					temp.akun.password,
 					temp.pasien.nama,
 					temp.pasien.usia,
 					temp.pasien.noTelp,
 					temp.pasien.jamDaftar,
-					&temp.pasien.penyakit,
 					&temp.pasien.prioritas,
-					&temp.pasien.urutan) == 9) {
+					&temp.pasien.urutan) == 8) {
 					totBaris++;
 					}
 		fclose(file);
@@ -141,16 +140,15 @@ void sortAntrian(address *root) {
     } else {
 //	    	printf("masuk else scan file\n");
     	i = 0;
-    	while (fscanf(todayList, "%s %s %s %s %s %s %d %d %d\n", 
+    	while (fscanf(todayList, "%s %s %s %s %s %s %d %d\n", 
 					operasiFile[i].akun.username,
 					operasiFile[i].akun.password,
 					operasiFile[i].pasien.nama,
 					operasiFile[i].pasien.usia,
 					operasiFile[i].pasien.noTelp,
 					operasiFile[i].pasien.jamDaftar,
-					&operasiFile[i].pasien.penyakit,
 					&operasiFile[i].pasien.prioritas,
-					&operasiFile[i].pasien.urutan) == 9) {
+					&operasiFile[i].pasien.urutan) == 8) {
 					i++;
 					}
 		fclose(todayList);
@@ -195,14 +193,13 @@ void sortAntrian(address *root) {
   		} else {
 //  			printf("siap menulis ulang");
   				for (i = 0; i < len; i++) {
-					fprintf(todayList, "%s %s %s %s %s %s %d %d %d\n", 
+					fprintf(todayList, "%s %s %s %s %s %s %d %d\n", 
 						operasiFile[i].akun.username,
 						operasiFile[i].akun.password,
 						operasiFile[i].pasien.nama,
 						operasiFile[i].pasien.usia,
 						operasiFile[i].pasien.noTelp,
 						operasiFile[i].pasien.jamDaftar,
-						operasiFile[i].pasien.penyakit,
 						operasiFile[i].pasien.prioritas,
 						operasiFile[i].pasien.urutan);
 				}
@@ -233,16 +230,15 @@ void buildBST(address *root) {
         return;
     } else {
 //    	printf("masuk else scan file\n");
-    	while (fscanf(todayList, "%s %s %s %s %s %s %d %d %d\n", 
+    	while (fscanf(todayList, "%s %s %s %s %s %s %d %d\n", 
 					buatTree.akun.username,
 					buatTree.akun.password,
 					buatTree.pasien.nama,
 					buatTree.pasien.usia,
 					buatTree.pasien.noTelp,
 					buatTree.pasien.jamDaftar,
-					&buatTree.pasien.penyakit,
 					&buatTree.pasien.prioritas,
-					&buatTree.pasien.urutan) == 9) {
+					&buatTree.pasien.urutan) == 8) {
 					*root = push (*root, buatTree.pasien);
 					}
 		fclose(todayList);
@@ -384,20 +380,18 @@ void daftarAdmin (address *root, account *sedangLogin, int *display) {
 	//			printf("waktu daftar: %s", daftar.jamDaftar);
 				strftime(filename, sizeof(filename), "Data_Pasien_%d-%m-%Y.txt", &timeSekarang);
 				
-				daftar.penyakit = 0;
 				daftar.urutan = 0;
 				todayList = fopen(filename, "a");
 				if (todayList == NULL) {
 					printf("|+|Gagal menyimpan data Pasien!\n");
 				} else {
-					fprintf(todayList, "%s %s %s %s %s %s %d %d %d\n", 
+					fprintf(todayList, "%s %s %s %s %s %s %d %d\n", 
 						sedangLogin->username,
 						sedangLogin->password,
 						daftar.nama,
 						daftar.usia,
 						daftar.noTelp,
 						daftar.jamDaftar,
-						daftar.penyakit,
 						daftar.prioritas,
 						daftar.urutan);
 						
@@ -445,6 +439,7 @@ void daftarPengguna (address *root, account *sedangLogin, int *display, int maks
     char filename[30];
     bool sudahDaftar;
 	bool valid = false;
+	int penyakitDiderita;
 	
 	do {
 	    if (sudahDaftar = cekTodayList (sedangLogin->username)) {
@@ -518,9 +513,9 @@ void daftarPengguna (address *root, account *sedangLogin, int *display, int maks
 			printf("|+|--------------------------------------------------------------------------------------|+|\n");
 			while (true) {
 				printf("|+|Pilih opsi: "); 
-				scanf("%d", &daftar.penyakit);
+				scanf("%d", &penyakitDiderita);
 				clearBuffer();
-				if (validasiPenyakit(daftar.penyakit)) {
+				if (validasiPenyakit(penyakitDiderita)) {
 					break;
 				} else {
 					printf("|+|Pilih opsi yang sesuai!\n");
@@ -534,7 +529,7 @@ void daftarPengguna (address *root, account *sedangLogin, int *display, int maks
 			if (opsi == 'y' || opsi == 'Y') {
 				valid = false;
 			} else {
-				daftar.prioritas = setPriority(daftar.penyakit);
+				daftar.prioritas = setPriority(penyakitDiderita);
 				
 				updateTime();
 				strftime(daftar.jamDaftar, sizeof(daftar.jamDaftar), "%H:%M:%S", &timeSekarang);
@@ -549,7 +544,7 @@ void daftarPengguna (address *root, account *sedangLogin, int *display, int maks
 				if (urutanTerakhir() >= maks) {
 					printf("|+|Mohon maaf antrian sudah penuh!");
 				} else {
-					fprintf(todayList, "%s %s %s %s %s %s %d %d %d\n", 
+					fprintf(todayList, "%s %s %s %s %s %s %d %d\n", 
 		
 						sedangLogin->username,
 						sedangLogin->password,
@@ -557,7 +552,6 @@ void daftarPengguna (address *root, account *sedangLogin, int *display, int maks
 						daftar.usia,
 						daftar.noTelp,
 						daftar.jamDaftar,
-						daftar.penyakit,
 						daftar.prioritas,
 						daftar.urutan);
 						
@@ -582,16 +576,15 @@ int urutanTerakhir() {
     if (file == NULL) {
         printf("Tidak dapat membuka file %s\n", filename);
     } else {
-    	while (fscanf(file, "%s %s %s %s %s %s %d %d %d\n", 
+    	while (fscanf(file, "%s %s %s %s %s %s %d %d\n", 
 					temp.akun.username,
 					temp.akun.password,
 					temp.pasien.nama,
 					temp.pasien.usia,
 					temp.pasien.noTelp,
 					temp.pasien.jamDaftar,
-					&temp.pasien.penyakit,
 					&temp.pasien.prioritas,
-					&temp.pasien.urutan) == 9) {
+					&temp.pasien.urutan) == 8) {
 					}
 		fclose(file);
 	}
@@ -599,7 +592,7 @@ int urutanTerakhir() {
 }
 
 
-int noAntrianUser (account *sedangLogin) {
+pasienAkun noAntrianUser (account *sedangLogin) {
 	char filename[30];
 	updateTime();
 	pasienAkun temp;
@@ -609,23 +602,22 @@ int noAntrianUser (account *sedangLogin) {
     if (file == NULL) {
         printf("|+|Tidak dapat membuka file %s\n", filename);
     } else {
-    	while (fscanf(file, "%s %s %s %s %s %s %d %d %d\n", 
+    	while (fscanf(file, "%s %s %s %s %s %s %d %d\n", 
 					temp.akun.username,
 					temp.akun.password,
 					temp.pasien.nama,
 					temp.pasien.usia,
 					temp.pasien.noTelp,
 					temp.pasien.jamDaftar,
-					&temp.pasien.penyakit,
 					&temp.pasien.prioritas,
-					&temp.pasien.urutan) == 9) {
+					&temp.pasien.urutan) == 8) {
 						if (strcmp(temp.akun.username, sedangLogin->username) == 0) {
 							break;
 						}
 					}
 		fclose(file);
 	}
-	return temp.pasien.urutan;
+	return temp;
 }
 
 void spasiToGarisBawah (char* nama) {
