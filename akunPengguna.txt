@@ -10,4 +10,5 @@ user7 123 0
 user8 123 0
 user9 123 0naufal ahmad 0
 udin 123 0
-user100 123 0
+user100 123 0akun_baru123 SesuaiKriteria123 0
+akun_baru123 SesuaiKriteria123 0

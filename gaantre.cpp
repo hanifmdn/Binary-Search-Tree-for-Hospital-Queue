@@ -49,13 +49,13 @@ void membuatAkun (int *display) {
 		
 	if (ditemukan) {
 		printf("|+|Username sudah tersedia!                                                              |+|\n");
-		sleep(1);
+		sleep(2);
 		system("cls");
 		*display = 3;
 	} else {
 		fprintf(akunPengguna, "%s %s %d\n", akun.username, akun.password, 0);
 		printf("|+|Akun berhasil dibuat!                                                                 |+|\n");
-		sleep(1);
+		sleep(2);
 		system("cls");
 		*display = 4;
 		fclose(akunPengguna);
@@ -81,6 +81,7 @@ void login (int *display, account *sedangLogin) {
 		*sedangLogin = cek;
 		if (strcmp(cek.password, masuk.password) == 0) {
 			printf("|+|Berhasil Masuk                                                                        |+|\n");
+			sleep(1);
 			if (cek.identifier == 1) {
 				system("cls");
 				*display = 5;
@@ -89,11 +90,12 @@ void login (int *display, account *sedangLogin) {
 				*display = 10;
 			}
 		} else {
-			printf("|+|Password Salah!                                                                       |+|\n");	
+			printf("|+|Password Salah!                                                                       |+|\n");
+			sleep(2);
 		}
 	} else {
 		printf("|+|Username tidak ada! Silahkan buat akun terlebih dahulu!                               |+|\n");
-		sleep(1);
+		sleep(2);
 		system("cls");
 		*display = 2;
 	}
@@ -144,6 +146,7 @@ void sortAntrian(address *root) {
 	todayList = fopen(filename, "r");
     if (todayList == NULL) {
         printf("|+|Tidak dapat membuka file %s\n", filename);
+        sleep(2);
         return;
     } else {
 //	    	printf("masuk else scan file\n");
@@ -197,6 +200,7 @@ void sortAntrian(address *root) {
 		todayList = fopen(filename, "w");
 		if (todayList == NULL) {
         printf("|+|Tidak dapat membuka file %s\n", filename);
+        sleep(2);
         return;
   		} else {
 //  			printf("siap menulis ulang");
@@ -225,6 +229,7 @@ void buildBST(address *root) {
 	
 	if (*root != NULL) {
 		printf("|+|Antrian sudah di bangun!                                                              |+|\n");
+		sleep(2);
 		return;
 	} 
 	
@@ -235,6 +240,7 @@ void buildBST(address *root) {
 	todayList = fopen(filename, "r");
     if (todayList == NULL) {
         printf("|+|Tidak dapat membuka file %s\n", filename);
+        sleep(2);
         return;
     } else {
 //    	printf("masuk else scan file\n");
@@ -355,7 +361,7 @@ void daftarAdmin (address *root, account *sedangLogin, int *display) {
 		    if (cekNoTelp(daftar.noTelp)) {
 		        break;
 		    } else {
-		        printf("|+|Nomor telepon tidak valid. Silakan masukkan nomor telepon yang valid.                 |+|\n");
+		        printf("|+|Nomor telepon tidak valid. Silahkan masukkan nomor telepon yang valid.                 |+|\n");
 		    }
 		}
 		printf("|+|                                                                                      |+|\n");
@@ -373,6 +379,7 @@ void daftarAdmin (address *root, account *sedangLogin, int *display) {
 				break;
 			} else {
 				printf("|+|Pilih opsi yang sesuai!                                                               |+|\n");
+				sleep(2);
 			}
 		}
 	
@@ -392,6 +399,7 @@ void daftarAdmin (address *root, account *sedangLogin, int *display) {
 				todayList = fopen(filename, "a");
 				if (todayList == NULL) {
 					printf("|+|Gagal menyimpan data Pasien!                                                          |+|\n");
+					sleep(2);
 				} else {
 					fprintf(todayList, "%s %s %s %s %s %s %d %d\n", 
 						sedangLogin->username,
@@ -415,6 +423,7 @@ void daftarAdmin (address *root, account *sedangLogin, int *display) {
 				break;
 			} else {
 				printf("|+|Input tidak valid! Mohon masukan input yang sesuai!                                   |+|\n");
+				sleep(2);
 			}	
 			
 	} while (!valid);
@@ -453,7 +462,7 @@ void daftarPengguna (address *root, account *sedangLogin, int *display, int maks
 	do {
 	    if (sudahDaftar = cekTodayList (sedangLogin->username)) {
 	    	printf("|+|Anda sudah melakukan pendaftaran hari ini!                                            |+|\n");
-	    	sleep(1);
+	    	sleep(2);
 	    	system("cls");
 	    	*display = 10;
 	    	return;
@@ -478,6 +487,7 @@ void daftarPengguna (address *root, account *sedangLogin, int *display, int maks
 					break;
 				} else {
 					printf("|+|Nama tidak valid! Masukan nama yang sesuai!                                           |+|\n");
+					sleep(2);
 				} 
 			} 
 			spasiToGarisBawah(daftar.nama);
@@ -490,6 +500,7 @@ void daftarPengguna (address *root, account *sedangLogin, int *display, int maks
 					break;
 				} else {
 					printf("|+|Usia tidak valid! Usia maksimum 3 digit dan harus berupa angka                        |+|\n");
+					sleep(2);
 				}
 			}
 			
@@ -502,6 +513,7 @@ void daftarPengguna (address *root, account *sedangLogin, int *display, int maks
 		            break;
 		        } else {
 		            printf("|+|Nomor telepon tidak valid. Silakan masukkan nomor telepon yang valid.                 |+|\n");
+		            sleep(2);
 		        }
 		    }
 		    
@@ -530,6 +542,7 @@ void daftarPengguna (address *root, account *sedangLogin, int *display, int maks
 					break;
 				} else {
 					printf("|+|Pilih opsi yang sesuai!                                                               |+|\n");
+					sleep(2);
 				}
 			}	
 			
@@ -551,9 +564,11 @@ void daftarPengguna (address *root, account *sedangLogin, int *display, int maks
 				todayList = fopen(filename, "a");
 				if (todayList == NULL) {
 					printf("|+|Gagal menyimpan data!                                                                 |+|\n");
+					sleep(2);
 				} else
 				if (urutanTerakhir() >= maks) {
 					printf("|+|Mohon maaf antrian sudah penuh!                                                       |+|\n");
+					sleep(2);
 				} else {
 					fprintf(todayList, "%s %s %s %s %s %s %d %d\n", 
 		
@@ -587,6 +602,7 @@ int urutanTerakhir() {
 
     if (file == NULL) {
         printf("|+|Tidak dapat membuka file %s\n", filename);
+        sleep(2);
     } else {
     	while (fscanf(file, "%s %s %s %s %s %s %d %d\n", 
 					temp.akun.username,
@@ -613,6 +629,7 @@ pasienAkun noAntrianUser (account *sedangLogin) {
 
     if (file == NULL) {
         printf("|+|Tidak dapat membuka file %s\n", filename);
+        sleep(2);
     } else {
     	while (fscanf(file, "%s %s %s %s %s %s %d %d\n", 
 					temp.akun.username,
@@ -641,7 +658,7 @@ void spasiToGarisBawah (char* nama) {
 	}
 }
 
-void garisBawahToSpasi (char *nama) { // dipake saat baca tree (passing parameter nama)
+void garisBawahToSpasi (char *nama) {
 	int len = strlen(nama);
 	for (int i = 0; i < len; i++) {
 		if (nama[i] == '_') {
@@ -657,6 +674,7 @@ void simpanWaktuPendaftaran (char buka[], char tutup[], int maks) {
 	filePendaftaran = fopen("Data_Pembukaan.txt", "a");
 	if (filePendaftaran == NULL) {
 		printf("|+|Gagal membuka file!                                                                   |+|\n");
+		sleep(2);
 	} else {
 		updateTime();
 		strftime(tanggalToday, sizeof(tanggalToday), "%d-%m-%Y", &timeSekarang);
@@ -673,6 +691,7 @@ void buatFilePembukaan() {
         file = fopen("Data_Pembukaan.txt", "w");
         if (file == NULL) {
             printf("|+|Gagal membuat file Data_Pembukaan.txt                                                 |+|\n");
+            sleep(2);
         }
     }
     fclose(file);
@@ -689,6 +708,7 @@ void buatFilePasien() {
         file = fopen(filename, "w");
         if (file == NULL) {
             printf("|+|Gagal membuat file Data_Pembukaan.txt                                                 |+|\n");
+            sleep(2);
         }
     }
     fclose(file);
@@ -703,6 +723,7 @@ void dataPendaftaranToday (char waktuBuka[], char waktuTutup[], int *maks) {
 
 	if (filePendaftaran == NULL) {
 		printf("|+|Gagal membuka file!                                                                   |+|\n");
+		sleep(2);
 	} else {
 		while (fscanf(filePendaftaran, "%s %s %s %d", tanggalCari, waktuBuka, waktuTutup, maks) == 4) {
 			if (strcmp(tanggalCari, tanggalToday) == 0) {

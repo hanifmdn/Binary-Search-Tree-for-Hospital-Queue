@@ -24,6 +24,7 @@ bool cariUsername (FILE *dataAkun, char namaCari[]) {
 	
 	if (dataAkun == NULL) {
 		printf("|+|Tidak dapat membuka file akunPengguna.txt                                             |+|\n");
+		sleep(2);
 	} else {
 		while (fscanf(dataAkun, "%s", username) == 1) {
 			if (strcmp(username, namaCari) == 0) {
@@ -39,6 +40,7 @@ bool cariAkun (FILE *dataAkun, account *cek, char cariUsername[20]) {
 	bool ditemukan;
 	if (dataAkun == NULL) {
 		printf("|+|Tidak dapat membuka file akunPengguna.txt                                             |+|\n");
+		sleep(2);
 	} else {
 		while (fscanf(dataAkun, "%s %s %d", &cek->username, &cek->password, &cek->identifier) == 3) {
 			if (strcmp(cek->username, cariUsername) == 0) {
@@ -63,6 +65,7 @@ bool cekTodayList (char namaCari[]) {
 	todayList = fopen(filename, "a+");
 	if (todayList == NULL) {
 		printf("|+|Tidak dapat membuka file %s                                                           |+|\n", filename);
+		sleep(2);
 	} else {
 		while (fscanf(todayList, "%s%*[^\n]", username) == 1) {
 				if (strcmp(username, namaCari) == 0) {
@@ -84,6 +87,12 @@ bool cekNoTelp(char *noTelp) {
     if (strlen(noTelp) < 10 || strlen(noTelp) > 15) {
         return false;
     }
+    
+    for (int i = 0; i < strlen(noTelp); i++) {
+		if (!isdigit(noTelp[i])) {
+			return false;
+		}
+	}
 
 	int cekNomor = sizeof(listNomor) / sizeof(listNomor[0]);
 	
@@ -92,6 +101,8 @@ bool cekNoTelp(char *noTelp) {
         return true;
     	}
 	}
+	
+
 
     return false;
 }
@@ -171,9 +182,9 @@ bool validasiUsername (const char* username) {
 bool validasiPassword (const char* password) {
 	int len = strlen(password);
 	bool adaUpper, adaLower, adaAngka = false;
-	
-	if (len < 8 && len > 20) {
-		return false;
+	bool valid = true;
+	if (len < 8 || len > 20) {
+		valid = false;
 	}
 	
 	for (int i = 0; i < len; i++) {
@@ -188,7 +199,17 @@ bool validasiPassword (const char* password) {
 		}
 	}
 	
-	return adaUpper && adaLower && adaAngka;
+	for (int i = 0; i < len; i++) {
+		if (password[i] == ' ') {
+			valid = false;
+		}
+	}
+	for (int i = 0; i < len; i++) {
+		if (!isalnum(password[i])) {
+			valid = false;
+		}
+	}
+	return adaUpper && adaLower && adaAngka && valid;
 }
 
 bool validasiPrioritas (int pilihan) {
@@ -226,6 +247,7 @@ bool sudahDibuka () {
 	
 	if (filePendaftaran == NULL) {
 		printf("|+|Gagal membuka file!                                                                   |+|\n");
+		sleep(2);
 	} else {
 		while (fscanf(filePendaftaran, "%s", tanggalCari) == 1) {
 			if (strcmp(tanggalCari, tanggalToday) == 0) {
