@@ -40,7 +40,8 @@ typedef struct {
 	
 void clearBuffer();
 /*
-Digunakan untuk menghilangkan buffer dari input pengguna, untuk menghindari error dari kesalahan input pengguna
+Digunakan untuk menghilangkan buffer dari input pengguna, untuk menghindari error dari kesalahan input pengguna.
+Diimplementasikan dalam setiap input yang telah dilakukan oleh pengguna.
 */
 
 void updateTime();
@@ -50,20 +51,6 @@ IS : variabel timeSekarang tidak sesuai dengan waktu asli di dunianyata.
 FS : variabel timeSekarang sesuai dengan waktu asli di dunianyata.
 */
 
-bool waktuPendaftaran(int jamBuka, int menitBuka, int jamTutup, int menitTutup);
-/* 
-Digunakan untuk mengetahui waktu pendaftaran sedang dibuka atau tidak.
-IS : tidak diketahui apakah sekarang sedang waktu pendaftaran atau tidak.
-FS : diketahui sekarang sedang waktu daftar atau tidak.
-*/
-
-bool cariUsername (FILE *dataAkun, char namaCari[]);
-/*
-Digunakan untuk mencari apakah username yang di masukan oleh pengguna ada di file atau tidak
-IS : username ada atau tidaknya tidak diketahui
-FS : username ada atau tidaknya diketahui
-*/
-
 void membuatAkun(int *display);
 /*
 Digunakan untuk membuat akun khusus untuk pengguna dan menyimpannya kedalam file
@@ -71,20 +58,6 @@ IS : akun pengguna tidak ada di dalam file
 FS : akun pengguna yang berhasil dibuat ada di dalam file
 */
 
-bool cariAkun (FILE *dataAkun, account *cek, char cariUsername[]);
-/*
-Digunakan untuk menentukan akun pengguna apakah ada di file atau tidak saat ingin login
-IS : tidak diketahui sudah ada akun pengguna atau belum
-FS : diketahui ada atau tidaknya akun pengguna tersebut
-*/
-
-bool cekTodayList (char namaCari[]);
-/*
-Digunakan untuk mengecek apakah pengguna dengan username tersebut sudah mendaftar di hari ini atau belum
-dengan cara mengecek apakah akun dia ada di file pendaftaran hari ini atau tidak
-IS : tidak diketahui pengguna sudah daftar atau belum
-FS : diketahui pengguna sudah daftar atau belum
-*/
 void login (int *display, account *sedangLogin);
 /*
 Digunakan untuk melakukan login baik itu pengguna atau admin dengan mengecek ke file akunPengguna.txt
@@ -113,7 +86,7 @@ Digunakan untuk menentukan banyaknya baris dari file Data_Pasien
 untuk membuat array sesuai banyaknya baris di file.
 Dipanggil di modul sortAntrian untuk mengolah data tersebut.
 IS : tidak diketahui banyaknya baris di dalam file
-FS : diketahui banyaknya baris di dalam file
+FS : mengembalikan banyaknya baris di dalam file
 */
 
 
@@ -122,45 +95,50 @@ int urutanTerakhir();
 Digunakan untuk mencari banyaknya pendaftar dari file.
 Digunakan untuk menentukan batas maksimal pengguna yang bisa daftar di hari itu
 IS : tidak diketahui banyaknya pendaftar
-FS : diketahui banyaknya pendaftar
+FS : mengembalikan banyaknya pendaftar
 */
 
-void sortAntrian(address *root);
-/*
-
-*/
-void buildBST(address *root);
-address createNode (Pasien info);
-bool cekKosong (address *root);
-address push (address root, Pasien info);
-address pop (address root, Pasien *info);
-void displayPreorder(address root); 
-void displayTree(address root);
 void antrianSekarang (Pasien pasien, int *display);
+/*
+digunakan untuk menampilkan nomor antrian pasien yang sedang konsultasi.
+IS: Informasi pasien yang sedang konsultasi sudah tersedia.
+FS: Nomor antrian pasien yang sedang konsultasi ditampilkan.
+*/
+
 int noAntrianUser (account *sedangLogin);
-bool validasiWaktu(const char* waktu, int* jam, int* menit);
-bool validasiWaktuBuka(int jam, int menit);
-bool validasiWaktuTutup(int jam, int menit, int jBuka, int mBuka);
-bool validasiUsia (const char* usia);
-bool validasiUsername (const char* username);
-bool validasiPassword (const char* password);
-bool validasiPrioritas (int pilihan);
-bool validasiPenyakit (int pilihan);
-bool validasiNama (const char* nama);
+/*
+Digunakan untuk mencari nomor antrian yang dimiliki oleh pengguna berdasarkan akun nya di dalam file Data_Pasien.
+Hanya bisa ditampilkan ketika antrian/tree sudah dibuat oleh admin.
+IS : nomor antrian pengguna yang bersangkutan tidak diketahui
+FS : nomor antrian pengguna yang bersangkutan diketahui
+*/
+
 void spasiToGarisBawah (char* nama);
 void garisBawahToSpasi (char* nama);
+
 void simpanWaktuPendaftaran (char buka[], char tutup[], int maks);
-bool sudahDibuka ();
+/*
+digunakan untuk menyimpan waktu pembukaan dan penutupan pendaftaran ke dalam file.
+IS: Waktu pembukaan dan penutupan pendaftaran belum disimpan.
+FS: Waktu pembukaan dan penutupan pendaftaran telah disimpan ke dalam file.
+*/
+
 void buatFilePembukaan();
+/*
+digunakan untuk membuat file pembukaan pendaftaran dan file pasien baru jika belum ada.
+IS: File pembukaan pendaftaran atau file pasien belum ada.
+FS: File pembukaan pendaftaran atau file pasien sudah dibuat.
+*/
+
 void buatFilePasien();
+/*
+digunakan untuk mendapatkan data pendaftaran hari ini dari file.
+IS: Data pendaftaran hari ini belum diambil dari file.
+FS: Data pendaftaran hari ini sudah diambil dari file dan disimpan.
+
+*/
+
 void dataPendaftaranToday (char waktuBuka[], char waktuTutup[], int *maks);
 void aturJamMenit (char waktuBuka[], char waktuTutup[], int *jBuka, int *mBuka, int *jTutup, int *mTutup);
-void displayAwal (int *display);
-void displaySignUp (bool *valid, int *display, bool *running);
-void displayBuatAkun (int *display);
-void displayLogin (int *display, account *sedangLogin);
-void displayDaftarAdmin (address root, account *sedangLogin, int *display);
-void displayMenuPengguna (int *display, bool *valid, int *noAntrian);
-void displayAkhir ();
 
 #endif
