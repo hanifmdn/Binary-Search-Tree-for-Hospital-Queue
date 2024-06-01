@@ -23,7 +23,7 @@ bool cariUsername (FILE *dataAkun, char namaCari[]) {
 	char username[17];
 	
 	if (dataAkun == NULL) {
-		printf("|+|\n|+|Tidak dapat membuka file akunPengguna.txt\n");
+		printf("|+|Tidak dapat membuka file akunPengguna.txt                                             |+|\n");
 	} else {
 		while (fscanf(dataAkun, "%s", username) == 1) {
 			if (strcmp(username, namaCari) == 0) {
@@ -38,7 +38,7 @@ bool cariUsername (FILE *dataAkun, char namaCari[]) {
 bool cariAkun (FILE *dataAkun, account *cek, char cariUsername[20]) {
 	bool ditemukan;
 	if (dataAkun == NULL) {
-		printf("|+|\n|+|Tidak dapat membuka file akunPengguna.txt");
+		printf("|+|Tidak dapat membuka file akunPengguna.txt                                             |+|\n");
 	} else {
 		while (fscanf(dataAkun, "%s %s %d", &cek->username, &cek->password, &cek->identifier) == 3) {
 			if (strcmp(cek->username, cariUsername) == 0) {
@@ -62,7 +62,7 @@ bool cekTodayList (char namaCari[]) {
 	
 	todayList = fopen(filename, "a+");
 	if (todayList == NULL) {
-		printf("|+|\n|+|Tidak dapat membuka file %s\n", filename);
+		printf("|+|Tidak dapat membuka file %s                                                           |+|\n", filename);
 	} else {
 		while (fscanf(todayList, "%s%*[^\n]", username) == 1) {
 				if (strcmp(username, namaCari) == 0) {
@@ -225,7 +225,7 @@ bool sudahDibuka () {
 	strftime(tanggalToday, sizeof(tanggalToday), "%d-%m-%Y", &timeSekarang);
 	
 	if (filePendaftaran == NULL) {
-		printf("|+|Gagal membuka file!\n");
+		printf("|+|Gagal membuka file!                                                                   |+|\n");
 	} else {
 		while (fscanf(filePendaftaran, "%s", tanggalCari) == 1) {
 			if (strcmp(tanggalCari, tanggalToday) == 0) {

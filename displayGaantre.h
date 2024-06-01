@@ -31,17 +31,27 @@ void displayMenuPengguna (int *display, int *noAntrian);
 Digunakan untuk menampilkan tampilan menu pengguna
 */
 
-void displayAkhir ();
-/*
-digunakan untuk menampilkan tampilan setelah memutuskan untuk keluar program.
-*/
-
 void displayMenuAdmin(int *display, int *jamBuka, int *menitBuka, int *jamTutup, int *menitTutup, int *noAntrian, address *root, char waktuBuka[], char waktuTutup[], bool *setTree, int maksPasien);
 /*
 Digunakan untuk menampilkan tampilan menu admin
 */
 
-void displayDaftarPengguna(int *display, int *jamBuka, int *menitBuka, int *jamTutup, int *menitTutup, int *maksPasien, address *root, account *sedangLogin, char waktuBuka[], char waktuTutup[]);
+void displayPop(int *display, address *root, int *noAntrian);
+/*
+Digunakan untuk menampilkan tampilan menu saat melakukan pop
+*/
+
+void displayBangunAntrian(int *display, int *jamBuka, int *menitBuka, int *jamTutup, int *menitTutup,address *root, char waktuBuka[6], char waktuTutup[6]);
+/*
+Digunakan untuk menampilkan urutan nama dan prioritas yang telah terurut
+*/
+
+void displayBukaTutupDaftar(int *display, int *jamBuka, int *menitBuka, int *jamTutup, int *menitTutup, address *root, char waktuBuka[6], char waktuTutup[6]);
+/*
+Digunakan untuk menampilkan tampilan penentuan jumlah pasien waktu buka dan waktu tutup
+*/
+
+void displayDaftarPengguna(int *display, int *jamBuka, int *menitBuka, int *jamTutup, int *menitTutup, int *maksPasien, address *root, account *sedangLogin, char waktuBuka[6], char waktuTutup[6]);
 /*
 Digunakan untuk menampilkan tampilan mendaftarkan oleh daftar pengguna 
 */
@@ -49,6 +59,11 @@ Digunakan untuk menampilkan tampilan mendaftarkan oleh daftar pengguna
 void displayAntrianPengguna(int *display, int *jamBuka, int *menitBuka, int *jamTutup, int *menitTutup, account *sedangLogin, bool setTree);
 /*
 Digunakan untuk menampilkan nomor antrian pengguna yang telah mendaftar
+*/
+
+void displayAkhir ();
+/*
+digunakan untuk menampilkan tampilan setelah memutuskan untuk keluar program.
 */
 
 #endif

@@ -45,19 +45,31 @@ int main() {
                 break;
 				
 			case 7:
-				displayMenuPengguna (&display, &noAntrian);
+				displayPop(&display, &root, &noAntrian);
 				break;
 				
 			case 8:
+				displayBangunAntrian(&display, &jamBuka, &menitBuka, &jamTutup, &menitTutup, &root, waktuBuka, waktuTutup);
+				break;
+				
+			case 9:
+				displayBukaTutupDaftar(&display, &jamBuka, &menitBuka, &jamTutup, &menitTutup, &root, waktuBuka, waktuTutup);
+				break;
+				
+			case 10:
+				displayMenuPengguna (&display, &noAntrian);
+				break;
+				
+			case 11:
 				displayDaftarPengguna(&display, &jamBuka, &menitBuka, &jamTutup, &menitTutup, &maksPasien, &root, &sedangLogin, waktuBuka, waktuTutup);
 				break;
 		
-			case 9:
+			case 12:
 				displayAntrianPengguna(&display, &jamBuka, &menitBuka, &jamTutup, &menitTutup, &sedangLogin, setTree);
                 break;
                 
 			default:
-				printf("|+|Input tidak valid. Mohon masukkan input yang sesuai!\n");
+				printf("|+|                Input tidak valid. Mohon masukkan input yang sesuai!                  |+|\n");
 				break;
 		}
 	}

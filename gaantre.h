@@ -162,7 +162,7 @@ IS: Informasi pasien yang sedang konsultasi sudah tersedia.
 FS: Nomor antrian pasien yang sedang konsultasi ditampilkan.
 */
 
-int noAntrianUser (account *sedangLogin);
+pasienAkun noAntrianUser (account *sedangLogin);
 /*
 Digunakan untuk mencari nomor antrian yang dimiliki oleh pengguna berdasarkan akun nya di dalam file Data_Pasien.
 Hanya bisa ditampilkan ketika antrian/tree sudah dibuat oleh admin.
