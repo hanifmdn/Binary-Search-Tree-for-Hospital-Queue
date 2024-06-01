@@ -28,8 +28,8 @@ typedef struct Tree {
 } Tree;
 
 typedef struct {
-		char username[20];
-		char password[20];	
+		char username[17];
+		char password[21];	
 		bool identifier;
 } account;
 
@@ -39,18 +39,96 @@ typedef struct {
 } pasienAkun;
 	
 void clearBuffer();
+/*
+Digunakan untuk menghilangkan buffer dari input pengguna, untuk menghindari error dari kesalahan input pengguna
+*/
+
 void updateTime();
+/*
+Digunakan untuk mengupdate Waktu dari variabel timeSekarang 
+IS : variabel timeSekarang tidak sesuai dengan waktu asli di dunianyata.
+FS : variabel timeSekarang sesuai dengan waktu asli di dunianyata.
+*/
+
 bool waktuPendaftaran(int jamBuka, int menitBuka, int jamTutup, int menitTutup);
-bool cariUsername (FILE *dataAkun, char namaCari[20]);
+/* 
+Digunakan untuk mengetahui waktu pendaftaran sedang dibuka atau tidak.
+IS : tidak diketahui apakah sekarang sedang waktu pendaftaran atau tidak.
+FS : diketahui sekarang sedang waktu daftar atau tidak.
+*/
+
+bool cariUsername (FILE *dataAkun, char namaCari[]);
+/*
+Digunakan untuk mencari apakah username yang di masukan oleh pengguna ada di file atau tidak
+IS : username ada atau tidaknya tidak diketahui
+FS : username ada atau tidaknya diketahui
+*/
+
 void membuatAkun(int *display);
-bool cariAkun (FILE *dataAkun, account *cek, char cariUsername[20]);
-bool cekTodayList (char namaCari[20]);
+/*
+Digunakan untuk membuat akun khusus untuk pengguna dan menyimpannya kedalam file
+IS : akun pengguna tidak ada di dalam file
+FS : akun pengguna yang berhasil dibuat ada di dalam file
+*/
+
+bool cariAkun (FILE *dataAkun, account *cek, char cariUsername[]);
+/*
+Digunakan untuk menentukan akun pengguna apakah ada di file atau tidak saat ingin login
+IS : tidak diketahui sudah ada akun pengguna atau belum
+FS : diketahui ada atau tidaknya akun pengguna tersebut
+*/
+
+bool cekTodayList (char namaCari[]);
+/*
+Digunakan untuk mengecek apakah pengguna dengan username tersebut sudah mendaftar di hari ini atau belum
+dengan cara mengecek apakah akun dia ada di file pendaftaran hari ini atau tidak
+IS : tidak diketahui pengguna sudah daftar atau belum
+FS : diketahui pengguna sudah daftar atau belum
+*/
 void login (int *display, account *sedangLogin);
+/*
+Digunakan untuk melakukan login baik itu pengguna atau admin dengan mengecek ke file akunPengguna.txt
+IS : belum login
+FS : berhasil login dan diketahui itu akun admin atau akun pengguna
+*/
+
 void daftarAdmin (address *root, account *sedangLogin, int *display);
+/*
+Digunakan untuk mendaftarkan pasien ke antrian oleh admin, lalu disimpan di file.
+Jika antrian tree sudah dibuat maka akan langsung dimasukan kedalam tree
+IS : pasien belum didaftarkan ke antrian
+FS : pasien sudah didaftarkan ke antrian dan tercatat di dalam file
+*/
+
 void daftarPengguna (address *root, account *sedangLogin, int *display, int maks);
+/*
+Digunakan untuk mendaftarkan pasien ke antrian oleh pengguna sendiri, lalu disimpan di file.
+IS : pasien belum didaftarkan ke antrian
+FS : pasien sudah didaftarkan ke antrian dan tercatat di dalam file
+*/
+
 int totalBarisFile(char filename);
+/*
+Digunakan untuk menentukan banyaknya baris dari file Data_Pasien
+untuk membuat array sesuai banyaknya baris di file.
+Dipanggil di modul sortAntrian untuk mengolah data tersebut.
+IS : tidak diketahui banyaknya baris di dalam file
+FS : diketahui banyaknya baris di dalam file
+*/
+
+
 int urutanTerakhir();
+/*
+Digunakan untuk mencari banyaknya pendaftar dari file.
+Digunakan untuk menentukan batas maksimal pengguna yang bisa daftar di hari itu
+IS : tidak diketahui banyaknya pendaftar
+FS : diketahui banyaknya pendaftar
+*/
+
 void sortAntrian(address *root);
+/*
+
+*/
 void buildBST(address *root);
 address createNode (Pasien info);
 bool cekKosong (address *root);
@@ -77,5 +155,12 @@ void buatFilePembukaan();
 void buatFilePasien();
 void dataPendaftaranToday (char waktuBuka[], char waktuTutup[], int *maks);
 void aturJamMenit (char waktuBuka[], char waktuTutup[], int *jBuka, int *mBuka, int *jTutup, int *mTutup);
+void displayAwal (int *display);
+void displaySignUp (bool *valid, int *display, bool *running);
+void displayBuatAkun (int *display);
+void displayLogin (int *display, account *sedangLogin);
+void displayDaftarAdmin (address root, account *sedangLogin, int *display);
+void displayMenuPengguna (int *display, bool *valid, int *noAntrian);
+void displayAkhir ();
 
 #endif

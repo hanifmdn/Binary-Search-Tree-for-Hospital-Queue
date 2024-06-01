@@ -3,7 +3,7 @@
 int main() {
 	int opsi = 1, display = 1, jamBuka, menitBuka, jamTutup, menitTutup, maksPasien, noAntrian = 0, urutUser;
 	bool running = true;
-	bool valid, setWaktu, setTree = false;
+	bool valid, setTree = false;
 	char edit;
 	char waktuBuka[6], waktuTutup[6];
 	address root = NULL;
@@ -19,90 +19,18 @@ int main() {
 	while (running) {
 		switch (display) {
 			case 1:
-				printf("|+|======================================================================================|+|\n");
-                printf("|+|                                                                                      |+|\n");
-                printf("|+|                                Selamat Datang di GaAntre                             |+|\n");
-                printf("|+|                             Kamu Ga Perlu CAPE-CAPE Ngantre                          |+|\n");
-                printf("|+|                                                                                      |+|\n");
-                printf("|+|--------------------------------------------------------------------------------------|+|\n|+|");
-                system("pause");
-                system("cls");
-                display = 2;
-                
-				break;
-
-
-			case 2:
-				printf("|+|======================================================================================|+|\n");
-				printf("|+|                                                                                      |+|\n");
-				printf("|+|                                         GaAntre                                      |+|\n");
-				printf("|+|                             Kamu Ga Perlu CAPE-CAPE Ngantre                          |+|\n");
-				printf("|+|                                                                                      |+|\n");
-				printf("|+|======================================================================================|+|\n");
-				printf("|+|                                                                                      |+|\n");
-				printf("|+|                                         Sign Up                                      |+|\n");
-				printf("|+|                                                                                      |+|\n");
-				printf("|+|======================================================================================|+|\n");
-				printf("|+|1. Log In                                                                             |+|\n");
-				printf("|+|2. Sign Up                                                                            |+|\n");
-				printf("|+|0. Keluar                                                                             |+|\n");
-				printf("|+|--------------------------------------------------------------------------------------|+|\n");
-				printf("|+|Pilih opsi: ");
-				valid = false;
-				do {
-			        if (scanf("%d", &opsi) == 1) {
-			            valid = true;
-			        } else {
-			            printf("|+|Input tidak valid. Mohon masukkan input yang sesuai!\n");
-			            printf("|+|Pilih Opsi: ");
-			            clearBuffer();
-			        }
-			    } while (!valid);
+				displayAwal (&display);
 				
-				if (opsi == 1) {
-					//system("cls");
-					display = 4;
-				} else 
-				if (opsi == 2) {
-					//system("cls");
-					display = 3;
-				} else
-				if (opsi == 0) {
-					running = false;
-				}
+			case 2:
+				displaySignUp (&valid, &display, &running);
 				break;
 				
 			case 3:
-				printf("|+|======================================================================================|+|\n");
-				printf("|+|                                                                                      |+|\n");
-				printf("|+|                                       GaAntre                                        |+|\n");
-				printf("|+|                             Kamu Ga Perlu CAPE-CAPE Ngantre                          |+|\n");
-				printf("|+|                                                                                      |+|\n");
-				printf("|+|======================================================================================|+|\n");
-				printf("|+|                                                                                      |+|\n");
-				printf("|+|                                      Buat Akun                                       |+|\n");
-				printf("|+|                                                                                      |+|\n");
-				printf("|+|======================================================================================|+|\n");
-				printf("|+|Silahkan buat akun baru                                                               |+|\n");
-				membuatAkun(&display);
-				//system("cls");
+				displayBuatAkun (&display);
 				break;
 				
-
 			case 4:
-				printf("|+|======================================================================================|+|\n");
-				printf("|+|                                                                                      |+|\n");
-				printf("|+|                                        GaAntre                                       |+|\n");
-				printf("|+|                                Ga Perlu CAPE-CAPE Ngantre                            |+|\n");
-				printf("|+|                                                                                      |+|\n");
-				printf("|+|======================================================================================|+|\n");                                                                                                                                                                   
-				printf("|+|                                                                                      |+|\n");
-				printf("|+|                                         LOGIN                                        |+|\n");
-				printf("|+|                                                                                      |+|\n");
-				printf("|+|======================================================================================|+|\n");
-				printf("|+|Silahkan Login                                                                        |+|\n");
-				login(&display, &sedangLogin);
-				//system("cls");
+				displayLogin (&display, &sedangLogin);
 				break;
 	
 			case 5:
@@ -129,7 +57,7 @@ int main() {
 			            valid = true;
 			        } else {
 			            printf("|+|Input tidak valid. Mohon masukkan input yang sesuai!\n");
-			            printf("|+|Pilih Opsi: ");
+			            printf("|+|Pilih opsi: ");
 			            clearBuffer();
 			        }
 			    } while (!valid);
@@ -141,18 +69,18 @@ int main() {
                 } else
 				if (opsi == 2) {
 					if (!sudahDibuka()) {
-						printf("|+| Mohon tentukan waktu buka dan waktu tutup pendaftaran terlebih dahulu!\n");
+						printf("|+|Mohon tentukan waktu buka dan waktu tutup pendaftaran terlebih dahulu!\n");
 					} else
 					if (!setTree) {
-						printf("|+| Antrian belum dibangun! Bangun antrian terlebih dahulu!\n");
+						printf("|+|Antrian belum dibangun! Bangun antrian terlebih dahulu!\n");
 					} else
 					if (root != NULL) {
 						root = pop(root, &pasienSelesai);
-						printf("|+| Pasien yang sedang konsultasi\n");
-                   		printf("|+| Nama: %s (%d)\n|+|\n|+|\n", pasienSelesai.nama, pasienSelesai.prioritas);
+						printf("|+|Pasien yang sedang konsultasi\n");
+                   		printf("|+|Nama: %s (%d)\n|+|\n|+|\n", pasienSelesai.nama, pasienSelesai.prioritas);
                    		noAntrian = pasienSelesai.urutan;
 					} else {
-						printf("|+| Antrian sudah kosong!");
+						printf("|+|Antrian sudah kosong!");
 					}
                     
                     
@@ -234,15 +162,14 @@ int main() {
 
 													
 						
-							printf("|+|[INFO] Anda tidak dapat mengubah waktu pendaftaran lagi\n");
+							printf("|+|[INFO] Anda tidak bisa mengubah waktu pendaftaran lagi setelah di submit\n");
 							printf("|+|Edit? (y/n) ");
 							scanf(" %c", &edit);
 								
 							if (edit == 'n' || edit == 'N') {
 								waktuPendaftaran(jamBuka, menitBuka, jamTutup, menitTutup);
 								simpanWaktuPendaftaran (waktuBuka, waktuTutup, maksPasien);
-//								setWaktu = true;
-								
+ 								
 							} 
 						} 
 					display = 5;
@@ -257,68 +184,14 @@ int main() {
 				break;
 					
 			case 6:
-                printf("|+|======================================================================================|+|\n");
-                printf("|+|                                                                                      |+|\n");
-                printf("|+|                                        GaAntre                                       |+|\n");
-                printf("|+|                               Ga Perlu CAPE-CAPE Ngantre                             |+|\n");
-                printf("|+|                                                                                      |+|\n");
-                printf("|+|======================================================================================|+|\n");
-                printf("|+|                                                                                      |+|\n");
-                printf("|+|                                        Daftar                                        |+|\n");
-                printf("|+|                                                                                      |+|\n");
-                printf("|+|======================================================================================|+|\n");
-                printf("|+|Isi Formulir di bawah ini                                                             |+|\n");
-                daftarAdmin(&root, &sedangLogin, &display);
-                displayTree(root);
-                system("pause");
-                //system("cls");
-                opsi = 0;
+				displayDaftarAdmin (root, &sedangLogin, &display);
                 break;
 				
 			case 7:
-				printf("|+|======================================================================================|+|\n");
-				printf("|+|                                                                                      |+|\n");
-				printf("|+|                                        GaAntre                                       |+|\n");
-				printf("|+|                               Ga Perlu CAPE-CAPE Ngantre                             |+|\n");
-                printf("|+|No Antrian Sekarang: %04d                                                             |+|\n", noAntrian);
-				printf("|+|======================================================================================|+|\n");
-				printf("|+|                                                                                      |+|\n");
-				printf("|+|                                         MENU                                         |+|\n");
-				printf("|+|                                                                                      |+|\n");
-				printf("|+|======================================================================================|+|\n");
-				printf("|+|1. Daftar Antrian                                                                     |+|\n");
-				printf("|+|2. Tampilkan Nomor Antrian Anda                                                       |+|\n");
-				printf("|+|0. Keluar                                                                             |+|\n");
-				printf("|+|--------------------------------------------------------------------------------------|+|\n");
-				printf("|+|Pilih opsi: ");
-				valid = false;
-				do {
-			        if (scanf("%d", &opsi) == 1) {
-			            valid = true;
-			        } else {
-			            printf("|+|Input tidak valid. Mohon masukkan input yang sesuai!\n");
-			            printf("|+|Pilih Opsi: ");
-			            fflush(stdin);
-			        }
-			    } while (!valid);
-			    
-			    
-				if (opsi == 1) {
-					//system("cls");
-					display = 8;
-				} else
-				if (opsi == 2) {
-					//system("cls");
-					display = 9;
-				} else
-				if (opsi == 0) {
-					//system("cls");
-					display  = 2;
-				}
+				displayMenuPengguna (&display, &valid, &noAntrian);
 				break;
 				
 			case 8:
-				printf("yang lagi login: %s %s\n", sedangLogin.username, sedangLogin.password);
 				if (waktuPendaftaran(jamBuka, menitBuka, jamTutup, menitTutup)) {
 					daftarPengguna(&root, &sedangLogin, &display, maksPasien);
 	                //system("cls");
@@ -335,7 +208,8 @@ int main() {
 					}
 	                display = 7;
 				}
-				break;	
+				break;
+		
 			case 9:
 				updateTime();
 				if (setTree && (timeSekarang.tm_hour * 60 + timeSekarang.tm_min) >= (jamTutup * 60 + menitTutup)) {
@@ -367,19 +241,13 @@ int main() {
 					display = 7;
 				}
                 break;
+                
 			default:
 				printf("|+|Input tidak valid. Mohon masukkan input yang sesuai!\n");
 				break;
 		}
 	}
-	system("cls");
-	printf("|+|======================================================================================|+|\n");
-    printf("|+|                                                                                      |+|\n");
-    printf("|+|                          Terimakasih Telah Menggunakan GaAntre                       |+|\n");
-    printf("|+|                             Kamu Ga Perlu CAPE-CAPE Ngantre                          |+|\n");
-    printf("|+|                                                                                      |+|\n");
-    printf("|+|--------------------------------------------------------------------------------------|+|\n");
-    sleep(3);
+	displayAkhir();
 	return 0;
 }
 

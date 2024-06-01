@@ -21,15 +21,15 @@ bool waktuPendaftaran(int jamBuka, int menitBuka, int jamTutup, int menitTutup) 
     int sekarangDalamMenit = timeSekarang.tm_hour * 60 + timeSekarang.tm_min;
     
 
-	if (sekarangDalamMenit >= bukaDalamMenit && sekarangDalamMenit <= tutupDalamMenit ) { // waktu daftar dibuka dan tutup
+	if (sekarangDalamMenit >= bukaDalamMenit && sekarangDalamMenit <= tutupDalamMenit ) { 
 		buka = true;
 	}
 	return buka;
 }
 
-bool cariUsername (FILE *dataAkun, char namaCari[20]) {
-	bool ditemukan;
-	char username[20];
+bool cariUsername (FILE *dataAkun, char namaCari[]) {
+	bool ditemukan = false;
+	char username[17];
 	
 	if (dataAkun == NULL) {
 		printf("|+|\n|+|Tidak dapat membuka file akunPengguna.txt\n");
@@ -50,7 +50,7 @@ void membuatAkun (int *display) {
 	account akun;
 	bool valid = false;
 
-	printf("|+|Username terdiri dari 3-6 karakter, huruf, angka, dan '_'\n");
+	printf("|+|Username terdiri dari 3-16 karakter, huruf, angka, dan garis bawah (_)\n");
 	while (!valid) {	
 		printf("|+|Username: "); 
 		scanf(" %[^\n]", akun.username);
@@ -106,11 +106,11 @@ bool cariAkun (FILE *dataAkun, account *cek, char cariUsername[20]) {
 	return ditemukan;	
 }
 
-bool cekTodayList (char namaCari[20]) {
+bool cekTodayList (char namaCari[]) {
 	bool ditemukan = false;
 	FILE *todayList;
 	char filename[30];
-	char username[20];
+	char username[17];
 	
 	updateTime();
 	strftime(filename, sizeof(filename), "Data_Pasien_%d-%m-%Y.txt", &timeSekarang);
@@ -946,4 +946,162 @@ void dataPendaftaranToday (char waktuBuka[], char waktuTutup[], int *maks) {
 void aturJamMenit (char waktuBuka[], char waktuTutup[], int *jBuka, int *mBuka, int *jTutup, int *mTutup) {
 	sscanf(waktuBuka, "%2d:%2d", jBuka, mBuka);
 	sscanf(waktuTutup, "%2d:%2d", jTutup, mTutup);
+}
+
+void displayAwal (int *display) {
+				printf("|+|======================================================================================|+|\n");
+                printf("|+|                                                                                      |+|\n");
+                printf("|+|                                Selamat Datang di GaAntre                             |+|\n");
+                printf("|+|                             Kamu Ga Perlu CAPE-CAPE Ngantre                          |+|\n");
+                printf("|+|                                                                                      |+|\n");
+                printf("|+|--------------------------------------------------------------------------------------|+|\n|+|");
+                system("pause");
+                system("cls");
+                *display = 2;
+}
+
+void displaySignUp (bool *valid, int *display, bool *running) {
+				int opsi;
+				printf("|+|======================================================================================|+|\n");
+				printf("|+|                                                                                      |+|\n");
+				printf("|+|                                         GaAntre                                      |+|\n");
+				printf("|+|                             Kamu Ga Perlu CAPE-CAPE Ngantre                          |+|\n");
+				printf("|+|                                                                                      |+|\n");
+				printf("|+|======================================================================================|+|\n");
+				printf("|+|                                                                                      |+|\n");
+				printf("|+|                                         Sign Up                                      |+|\n");
+				printf("|+|                                                                                      |+|\n");
+				printf("|+|======================================================================================|+|\n");
+				printf("|+|1. Log In                                                                             |+|\n");
+				printf("|+|2. Sign Up                                                                            |+|\n");
+				printf("|+|0. Keluar                                                                             |+|\n");
+				printf("|+|--------------------------------------------------------------------------------------|+|\n");
+				printf("|+|Pilih opsi: ");
+				*valid = false;
+				do {
+			        if (scanf("%d", &opsi) == 1) {
+			            *valid = true;
+			        } else {
+			            printf("|+|Input tidak valid. Mohon masukkan input yang sesuai!\n");
+			            printf("|+|Pilih opsi: ");
+			            clearBuffer();
+			        }
+			    } while (!*valid);
+				
+				if (opsi == 1) {
+					//system("cls");
+					*display = 4;
+				} else 
+				if (opsi == 2) {
+					//system("cls");
+					*display = 3;
+				} else
+				if (opsi == 0) {
+					*running = false;
+				}
+}
+
+void displayBuatAkun (int *display) {
+				printf("|+|======================================================================================|+|\n");
+				printf("|+|                                                                                      |+|\n");
+				printf("|+|                                       GaAntre                                        |+|\n");
+				printf("|+|                             Kamu Ga Perlu CAPE-CAPE Ngantre                          |+|\n");
+				printf("|+|                                                                                      |+|\n");
+				printf("|+|======================================================================================|+|\n");
+				printf("|+|                                                                                      |+|\n");
+				printf("|+|                                      Buat Akun                                       |+|\n");
+				printf("|+|                                                                                      |+|\n");
+				printf("|+|======================================================================================|+|\n");
+				printf("|+|Silahkan buat akun baru                                                               |+|\n");
+				membuatAkun(display);
+				//system("cls");
+}
+
+
+void displayLogin (int *display, account *sedangLogin) {
+				printf("|+|======================================================================================|+|\n");
+				printf("|+|                                                                                      |+|\n");
+				printf("|+|                                        GaAntre                                       |+|\n");
+				printf("|+|                                Ga Perlu CAPE-CAPE Ngantre                            |+|\n");
+				printf("|+|                                                                                      |+|\n");
+				printf("|+|======================================================================================|+|\n");                                                                                                                                                                   
+				printf("|+|                                                                                      |+|\n");
+				printf("|+|                                         LOGIN                                        |+|\n");
+				printf("|+|                                                                                      |+|\n");
+				printf("|+|======================================================================================|+|\n");
+				printf("|+|Silahkan Login                                                                        |+|\n");
+				login(display, sedangLogin);
+				//system("cls");
+}
+
+void displayDaftarAdmin (address root, account *sedangLogin, int *display) {
+	            printf("|+|======================================================================================|+|\n");
+                printf("|+|                                                                                      |+|\n");
+                printf("|+|                                        GaAntre                                       |+|\n");
+                printf("|+|                               Ga Perlu CAPE-CAPE Ngantre                             |+|\n");
+                printf("|+|                                                                                      |+|\n");
+                printf("|+|======================================================================================|+|\n");
+                printf("|+|                                                                                      |+|\n");
+                printf("|+|                                        Daftar                                        |+|\n");
+                printf("|+|                                                                                      |+|\n");
+                printf("|+|======================================================================================|+|\n");
+                printf("|+|Isi Formulir di bawah ini                                                             |+|\n");
+                daftarAdmin(&root, sedangLogin, display);
+//                displayTree(root);
+                system("pause");
+                //system("cls");
+}
+
+void displayMenuPengguna (int *display, bool *valid, int *noAntrian) {
+				int opsi;
+				printf("|+|======================================================================================|+|\n");
+				printf("|+|                                                                                      |+|\n");
+				printf("|+|                                        GaAntre                                       |+|\n");
+				printf("|+|                               Ga Perlu CAPE-CAPE Ngantre                             |+|\n");
+                printf("|+|No Antrian Sekarang: %04d                                                             |+|\n", *noAntrian);
+				printf("|+|======================================================================================|+|\n");
+				printf("|+|                                                                                      |+|\n");
+				printf("|+|                                         MENU                                         |+|\n");
+				printf("|+|                                                                                      |+|\n");
+				printf("|+|======================================================================================|+|\n");
+				printf("|+|1. Daftar Antrian                                                                     |+|\n");
+				printf("|+|2. Tampilkan Nomor Antrian Anda                                                       |+|\n");
+				printf("|+|0. Keluar                                                                             |+|\n");
+				printf("|+|--------------------------------------------------------------------------------------|+|\n");
+				printf("|+|Pilih opsi: ");
+				*valid = false;
+				do {
+			        if (scanf("%d", &opsi) == 1) {
+			            *valid = true;
+			        } else {
+			            printf("|+|Input tidak valid. Mohon masukkan input yang sesuai!\n");
+			            printf("|+|Pilih opsi: ");
+			            clearBuffer();
+			        }
+			    } while (!*valid);
+			    
+			    
+				if (opsi == 1) {
+					//system("cls");
+					*display = 8;
+				} else
+				if (opsi == 2) {
+					//system("cls");
+					*display = 9;
+				} else
+				if (opsi == 0) {
+					//system("cls");
+					*display  = 2;
+				}
+}
+
+void displayAkhir () {
+	system("cls");
+	printf("|+|======================================================================================|+|\n");
+    printf("|+|                                                                                      |+|\n");
+    printf("|+|                          Terimakasih Telah Menggunakan GaAntre                       |+|\n");
+    printf("|+|                             Kamu Ga Perlu CAPE-CAPE Ngantre                          |+|\n");
+    printf("|+|                                                                                      |+|\n");
+    printf("|+|--------------------------------------------------------------------------------------|+|\n");
+    sleep(3);
 }
