@@ -1,9 +1,7 @@
 #include "GAANTRE.h"
 #include "DISPLAYGAANTRE.h"
 #include "VALIDGAANTRE.h"
-#include "TREEGAANTRE.h"
 
-waktu timeSekarang;
 
 bool waktuPendaftaran(int jamBuka, int menitBuka, int jamTutup, int menitTutup) {
 	bool buka = false;

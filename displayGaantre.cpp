@@ -1,9 +1,6 @@
 #include "GAANTRE.h"
 #include "DISPLAYGAANTRE.h"
 #include "VALIDGAANTRE.h"
-#include "TREEGAANTRE.h"
-
-waktu timeSekarang;
 
 void displayAwal (int *display) {
 				printf("|+|======================================================================================|+|\n");
@@ -156,7 +153,7 @@ void displayMenuPengguna (int *display, int *noAntrian) {
 void displayMenuAdmin(int *display, int *jamBuka, int *menitBuka, int *jamTutup, int *menitTutup, int *noAntrian, address *root, char waktuBuka[6], char waktuTutup[6]) {
     int opsi, maksPasien;
     char edit;
-    bool setTree = false;
+    bool setTree;
     bool valid;
     Pasien pasienSelesai;
 
