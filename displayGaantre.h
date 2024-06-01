@@ -30,11 +30,14 @@ FS: Tampilan login ditampilkan kepada pengguna atau admin berdasarkan login.
 */
 
 void displayDaftarAdmin (address root, account *sedangLogin, int *display);
-void displayMenuAdmin(int *display, int *jamBuka, int *menitBuka, int *jamTutup, int *menitTutup, int *noAntrian, address *root, char waktuBuka[6], char waktuTutup[6]);
-void displayPop(int *display, address *root, int *noAntrian);
-void displayBangunAntrian(int *display, int *jamBuka, int *menitBuka, int *jamTutup, int *menitTutup,address *root, char waktuBuka[6], char waktuTutup[6]);
-void displayBukaTutupDaftar(int *display, int *jamBuka, int *menitBuka, int *jamTutup, int *menitTutup, address *root, char waktuBuka[6], char waktuTutup[6]);
+/*
+
+*/
+
 void displayMenuPengguna (int *display, int *noAntrian);
+/*
+
+*/
 
 void displayAkhir ();
 /*
@@ -44,7 +47,18 @@ FS: Tampilan keluar program ditampilkan ke layar.
 */
 
 void displayMenuAdmin(int *display, int *jamBuka, int *menitBuka, int *jamTutup, int *menitTutup, int *noAntrian, address *root, char waktuBuka[6], char waktuTutup[6]);
+/*
+
+*/
+
 void displayDaftarPengguna(int *display, int *jamBuka, int *menitBuka, int *jamTutup, int *menitTutup, int *maksPasien, address *root, account *sedangLogin, char waktuBuka[6], char waktuTutup[6]);
+/*
+
+*/
+
 void displayMenuAntrianSekarang(int *display, int *jamBuka, int *menitBuka, int *jamTutup, int *menitTutup, account *sedangLogin);
+/*
+
+*/
 
 #endif
