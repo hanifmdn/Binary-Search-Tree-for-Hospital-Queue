@@ -1,7 +1,6 @@
 #include "GAANTRE.h"
 #include "DISPLAYGAANTRE.h"
 #include "VALIDGAANTRE.h"
-#include "TREEGAANTRE.h"
 
 int main() {
 	int opsi = 1, display = 1, jamBuka = 0, menitBuka = 0, jamTutup = 0, menitTutup = 0, maksPasien, noAntrian = 0, urutUser;
@@ -42,18 +41,30 @@ int main() {
 				break;
 				
 			case 6:
-				displayDaftarAdmin (root, &sedangLogin, &display);
+				displayDaftarAdmin(root, &sedangLogin, &display);
                 break;
 				
 			case 7:
-				displayMenuPengguna (&display, &noAntrian);
+				displayPop(&display, &root, &noAntrian);
 				break;
 				
 			case 8:
+				displayBangunAntrian(&display, &jamBuka, &menitBuka, &jamTutup, &menitTutup, &root, waktuBuka, waktuTutup);
+				break;
+				
+			case 9:
+				displayBukaTutupDaftar(&display, &jamBuka, &menitBuka, &jamTutup, &menitTutup, &root, waktuBuka, waktuTutup);
+				break;
+				
+			case 10:
+				displayMenuPengguna (&display, &noAntrian);
+				break;
+				
+			case 11:
 				displayDaftarPengguna(&display, &jamBuka, &menitBuka, &jamTutup, &menitTutup, &maksPasien, &root, &sedangLogin, waktuBuka, waktuTutup);
 				break;
 		
-			case 9:
+			case 12:
 				displayMenuAntrianSekarang(&display, &jamBuka, &menitBuka, &jamTutup, &menitTutup, &sedangLogin);
                 break;
                 

@@ -80,7 +80,7 @@ void login (int *display, account *sedangLogin) {
 			if (cek.identifier == 1) {
 				*display = 5;
 			} else {
-				*display = 7;
+				*display = 10;
 			}
 		} else {
 			printf("|+|Password Salah!\n\n");	
@@ -219,7 +219,7 @@ void buildBST(address *root) {
 	pasienAkun buatTree;
 	
 	if (*root != NULL) {
-		printf("|+|Antrian sudah di bangun!\n|+|\n|+|\n");
+		printf("|+|Antrian sudah di bangun!\n|+|");
 		return;
 	} 
 	
@@ -297,7 +297,7 @@ void displayPop(address root) {
         return;
     }
 	displayTree(root->kiri);
-	printf("|+|%d %s [%d]\n", root->info.urutan, root->info.nama, root->info.prioritas);
+	printf("                                    %d %s [%d]                                      \n", root->info.urutan, root->info.nama, root->info.prioritas);
 	displayTree(root->kanan);
 }
 
@@ -449,7 +449,7 @@ void daftarPengguna (address *root, account *sedangLogin, int *display, int maks
 	do {
 	    if (sudahDaftar = cekTodayList (sedangLogin->username)) {
 	    	printf("|+|Anda sudah melakukan pendaftaran hari ini!\n");
-	    	*display = 7;
+	    	*display = 10;
 	    	return;
 		} else {
 			printf("|+|======================================================================================|+|\n");
@@ -562,7 +562,7 @@ void daftarPengguna (address *root, account *sedangLogin, int *display, int maks
 						daftar.urutan);
 						
 						fclose(todayList);
-					*display = 7;
+					*display = 10;
 				}
 					// tampilkan nomor antrian dia
 			}

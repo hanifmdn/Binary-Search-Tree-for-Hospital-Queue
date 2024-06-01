@@ -138,11 +138,11 @@ void displayMenuPengguna (int *display, int *noAntrian) {
 			    
 				if (opsi == 1) {
 					//system("cls");
-					*display = 8;
+					*display = 11;
 				} else
 				if (opsi == 2) {
 					//system("cls");
-					*display = 9;
+					*display = 12;
 				} else
 				if (opsi == 0) {
 					//system("cls");
@@ -153,7 +153,7 @@ void displayMenuPengguna (int *display, int *noAntrian) {
 void displayMenuAdmin(int *display, int *jamBuka, int *menitBuka, int *jamTutup, int *menitTutup, int *noAntrian, address *root, char waktuBuka[6], char waktuTutup[6]) {
     int opsi, maksPasien;
     char edit;
-    bool setTree;
+    bool setTree = false;
     bool valid;
     Pasien pasienSelesai;
 
@@ -193,16 +193,10 @@ void displayMenuAdmin(int *display, int *jamBuka, int *menitBuka, int *jamTutup,
         } else if (!setTree) {
             printf("|+|Antrian belum dibangun! Bangun antrian terlebih dahulu!\n");
         } else if (*root != NULL) {
-            *root = pop(*root, &pasienSelesai);
-            printf("|+|Pasien yang sedang konsultasi\n");
-            printf("|+|Nama: %s (%d)\n|+|\n|+|\n", pasienSelesai.nama, pasienSelesai.prioritas);
-            *noAntrian = pasienSelesai.urutan;
+			*display = 7;
         } else {
             printf("|+|Antrian sudah kosong!");
         }
-        printf("|+|");
-        system("pause");
-        *display = 5;
     } else if (opsi == 3) {
         updateTime();
         if (!sudahDibuka()) {
@@ -214,11 +208,7 @@ void displayMenuAdmin(int *display, int *jamBuka, int *menitBuka, int *jamTutup,
             if ((timeSekarang.tm_hour * 60 + timeSekarang.tm_min) <= (*jamBuka * 60 + *menitBuka)) {
                 printf("|+|Pendaftaran belum dibuka! Tidak dapat membangun antrian!\n");
             } else if ((timeSekarang.tm_hour * 60 + timeSekarang.tm_min) >= (*jamTutup * 60 + *menitTutup)) {
-                sortAntrian(root);
-                displayTree(*root);
-                printf("|+|");
-                system("pause");
-                *display = 5;
+				*display = 8;
                 setTree = true;
             }
         }
@@ -227,64 +217,110 @@ void displayMenuAdmin(int *display, int *jamBuka, int *menitBuka, int *jamTutup,
             printf("|+|Waktu pendaftaran hari ini telah ditentukan! %s - %s\n", waktuBuka, waktuTutup);
             system("pause");
         } else {
-            while (!sudahDibuka()) {
-                printf("|+|Masukan maksimal jumlah pasien: ");
-                scanf("%d", &maksPasien);
-                clearBuffer();
-                valid = false;
-                while (!valid) {
-                    printf("|+|Masukan waktu buka pendaftaran (HH:MM): ");
-                    scanf("%s", waktuBuka);
-                    clearBuffer();
-                    if (validasiWaktu(waktuBuka, jamBuka, menitBuka)) {
-                        if (validasiWaktuBuka(*jamBuka, *menitBuka)) {
-                            valid = true;
-                            break;
-                        } else {
-                            printf("|+|Waktu pembukaan harus lebih dari waktu sekarang!\n");
-                        }
-                    } else {
-                        printf("|+|Format waktu tidak valid\n");
-                    }
-                }
-
-                valid = false;
-                while (!valid) {
-                    printf("|+|Masukan waktu tutup pendaftaran (HH:MM): ");
-                    scanf("%s", waktuTutup);
-                    clearBuffer();
-                    if (validasiWaktu(waktuTutup, jamTutup, menitTutup)) {
-                        if (validasiWaktuTutup(*jamTutup, *menitTutup, *jamBuka, *menitBuka)) {
-                            valid = true;
-                            break;
-                        } else {
-                            printf("|+|Waktu penutupan harus lebih dari waktu sekarang dan waktu buka!\n");
-                        }
-                    } else {
-                        printf("|+|Format waktu tidak valid\n");
-                    }
-                }
-
-                printf("|+|[INFO] Anda tidak bisa mengubah waktu pendaftaran lagi setelah di submit\n");
-                printf("|+|Edit? (y/n) ");
-                scanf(" %c", &edit);
-
-                if (edit == 'n' || edit == 'N') {
-                    waktuPendaftaran(*jamBuka, *menitBuka, *jamTutup, *menitTutup);
-                    simpanWaktuPendaftaran(waktuBuka, waktuTutup, maksPasien);
-                }
-            }
-            *display = 5;
+            *display = 9;
         }
     } else if (opsi == 0) {
         *display = 2;
     }
 }
 
+void displayPop(int *display, address *root, int *noAntrian) {
+    bool valid;
+    Pasien pasienSelesai;
+    
+	    *root = pop(*root, &pasienSelesai);
+	    printf("|+|======================================================================================|+|\n");
+        printf("|+|                                                                                      |+|\n");
+        printf("|+|                                        GaAntre                                       |+|\n");
+        printf("|+|                               Ga Perlu CAPE-CAPE Ngantre                             |+|\n");
+        printf("|+|                                                                                      |+|\n");
+        printf("|+|======================================================================================|+|\n");
+        printf("|+|                                                                                      |+|\n");
+        printf("|+|                              Pasien yang telah konsultasi                            |+|\n");
+        printf("|+|                                    Nama: %s (%d)                                     |+|\n", pasienSelesai.nama, pasienSelesai.prioritas);
+        printf("|+|                                                                                      |+|\n");
+        printf("|+|======================================================================================|+|\n");
+	    *noAntrian = pasienSelesai.urutan;
+        system("pause");
+        *display = 5;
+}
+
+void displayBangunAntrian(int *display, int *jamBuka, int *menitBuka, int *jamTutup, int *menitTutup,address *root, char waktuBuka[6], char waktuTutup[6]){
+    bool valid;
+    Pasien pasienSelesai;
+    
+	printf("|+|======================================================================================|+|\n");
+    printf("|+|                                                                                      |+|\n");
+    printf("|+|                                        GaAntre                                       |+|\n");
+    printf("|+|                               Ga Perlu CAPE-CAPE Ngantre                             |+|\n");
+    printf("|+|                                                                                      |+|\n");
+    printf("|+|======================================================================================|+|\n");
+    sortAntrian(root);
+    displayTree(*root);
+    printf("|+|======================================================================================|+|\n");
+    system("pause");
+    *display = 5;
+}
+
+void displayBukaTutupDaftar(int *display, int *jamBuka, int *menitBuka, int *jamTutup, int *menitTutup, address *root, char waktuBuka[6], char waktuTutup[6]){
+	int maksPasien;
+    char edit;
+    bool setTree, valid;
+    
+	while (!sudahDibuka()) {
+        printf("|+|Masukan maksimal jumlah pasien: ");
+        scanf("%d", &maksPasien);
+        clearBuffer();
+        valid = false;
+        while (!valid) {
+            printf("|+|Masukan waktu buka pendaftaran (HH:MM): ");
+            scanf("%s", waktuBuka);
+            clearBuffer();
+            if (validasiWaktu(waktuBuka, jamBuka, menitBuka)) {
+                if (validasiWaktuBuka(*jamBuka, *menitBuka)) {
+                    valid = true;
+                    break;
+                } else {
+                    printf("|+|Waktu pembukaan harus lebih dari waktu sekarang!\n");
+                }
+            } else {
+                printf("|+|Format waktu tidak valid\n");
+            }
+        }
+
+        valid = false;
+        while (!valid) {
+            printf("|+|Masukan waktu tutup pendaftaran (HH:MM): ");
+            scanf("%s", waktuTutup);
+            clearBuffer();
+            if (validasiWaktu(waktuTutup, jamTutup, menitTutup)) {
+                if (validasiWaktuTutup(*jamTutup, *menitTutup, *jamBuka, *menitBuka)) {
+                    valid = true;
+                    break;
+                } else {
+                    printf("|+|Waktu penutupan harus lebih dari waktu sekarang dan waktu buka!\n");
+                }
+            } else {
+                printf("|+|Format waktu tidak valid\n");
+            }
+        }
+
+        printf("|+|[INFO] Anda tidak bisa mengubah waktu pendaftaran lagi setelah di submit\n");
+        printf("|+|Edit? (y/n) ");
+        scanf(" %c", &edit);
+
+        if (edit == 'n' || edit == 'N') {
+            waktuPendaftaran(*jamBuka, *menitBuka, *jamTutup, *menitTutup);
+            simpanWaktuPendaftaran(waktuBuka, waktuTutup, maksPasien);
+        }
+    }
+    *display = 5;
+}
+
 void displayDaftarPengguna(int *display, int *jamBuka, int *menitBuka, int *jamTutup, int *menitTutup, int *maksPasien, address *root, account *sedangLogin, char waktuBuka[6], char waktuTutup[6]) {
     if (waktuPendaftaran(*jamBuka, *menitBuka, *jamTutup, *menitTutup)) {
         daftarPengguna(root, sedangLogin, display, *maksPasien);
-        *display = 7;
+        *display = 10;
     } else {
         if (!sudahDibuka()) {
             printf("|+|Admin belum mengatur pembukaan pendaftaran, tidak dapat melakukan pendaftaran!\n");
@@ -293,12 +329,12 @@ void displayDaftarPengguna(int *display, int *jamBuka, int *menitBuka, int *jamT
         } else if ((timeSekarang.tm_hour * 60 + timeSekarang.tm_min) >= (*jamTutup * 60 + *menitTutup)) {
             printf("|+|Mohon maaf pendaftaran hari ini telah ditutup pada pukul %s\n", waktuTutup);
         }
-        *display = 7;
+        *display = 10;
     }
 }
 
 void displayMenuAntrianSekarang(int *display, int *jamBuka, int *menitBuka, int *jamTutup, int *menitTutup, account *sedangLogin) {
-    bool setTree = false;
+    bool setTree;
     updateTime();
 
     if (setTree && (timeSekarang.tm_hour * 60 + timeSekarang.tm_min) >= (*jamTutup * 60 + *menitTutup)) {
@@ -313,8 +349,8 @@ void displayMenuAntrianSekarang(int *display, int *jamBuka, int *menitBuka, int 
         printf("|+|                                         %04d                                         |+|\n", noAntrianUser(sedangLogin));
         printf("|+|                                                                                      |+|\n");
         printf("|+|======================================================================================|+|\n");
-        printf("|+|Nomor antrian anda adalah %d", noAntrianUser(sedangLogin));
-        *display = 7;
+        system("pause");
+        *display = 10;
     } else {
         if (!sudahDibuka()) {
             printf("|+|Admin belum mengatur pembukaan pendaftaran, tidak dapat menampilkan antrian!\n");
@@ -325,7 +361,7 @@ void displayMenuAntrianSekarang(int *display, int *jamBuka, int *menitBuka, int 
         } else {
             printf("|+|Mohon maaf antrian belum bisa ditampilkan karena antrian belum dibangun\n"); // admin belum membangun antrian
         }
-        *display = 7;
+        *display = 10;
     }
 }
 
